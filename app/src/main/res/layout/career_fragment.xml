@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textStyle="normal"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:layout_marginTop="30dp"
+            android:text="@string/success_is_where"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textStyle="normal"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:text="@string/main_sport"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:textStyle="normal"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textStyle="normal"
+                android:layout_gravity="center"
+                android:layout_marginRight="40dp"
+                android:text="@string/coach"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:textStyle="normal"
+                android:inputType="number"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textStyle="normal"
+                android:layout_gravity="center"
+                android:layout_marginRight="55dp"
+                android:text="@string/club"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:textStyle="normal"
+                android:inputType="number"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+            <TextView
+                android:textStyle="normal"
+                android:layout_marginTop="10dp"
+                android:text="@string/bio"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:background="@drawable/career_fragment_imageview_backgrouond"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="180dp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <Button
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_marginTop="40dp"
+            android:text="back"
+            android:textColor="@color/black"
+            android:background="@drawable/button_background"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <Button
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_marginTop="40dp"
+            android:text="Continue"
+            android:textColor="@color/white"
+            android:background="@drawable/personal_info_fragment_button2"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

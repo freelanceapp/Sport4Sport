@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <Button
+        android:textStyle="bold"
+        android:id="@+id/commentpage"
+        android:textAllCaps="false"
+        android:layout_marginTop="40dp"
+        android:text="@string/no_thanks_just_a_fan"
+        android:background="@drawable/personal_info_button_background"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textStyle="normal"
+        android:padding="5dp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/this_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textStyle="normal"
+            android:layout_gravity="center"
+            android:layout_marginRight="40dp"
+            android:text="Name"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:textStyle="normal"
+            android:textSize="16dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textStyle="normal"
+            android:layout_gravity="center"
+            android:layout_marginRight="40dp"
+            android:text="Birthday"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:textStyle="normal"
+            android:drawablePadding="10dp"
+            android:inputType="number"
+            android:drawableRight="@drawable/ic_calendar"
+            android:textSize="16dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <CheckBox
+        android:textStyle="normal"
+        android:textSize="12dp"
+        android:textColor="@color/white"
+        android:text="@string/i_m_an_athlete_with_disability"
+        android:layout_marginTop="30dp"
+        android:buttonTint="@color/white"
+        android:checked="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:textStyle="normal"
+            android:layout_gravity="center"
+            android:layout_marginRight="40dp"
+            android:textSize="16dp"
+            android:text="Country"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+            <Spinner
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></Spinner>
+        </LinearLayout>
+        <Button
+            android:textStyle="bold"
+            android:id="@+id/netxmypage"
+            android:layout_marginTop="40dp"
+            android:text="Continue"
+            android:textColor="@color/white"
+            android:background="@drawable/personal_info_fragment_button2"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

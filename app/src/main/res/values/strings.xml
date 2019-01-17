@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">SportsforSports</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="username">Username</string>
+    <string name="loin">login</string>
+    <string name="or_connect_with">Or Connect With</string>
+    <string name="facebook">facebook</string>
+    <string name="email">Email</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="don_t_have_an_account">Don\'t have an Account?</string>
+    <string name="already_have_an_account">Already have an Account?</string>
+    <string name="login">LOGIN</string>
+    <string name="no_thanks_just_a_fan">No THANKS, JUST A FAN</string>
+    <string name="this_information">This information will be Displayed as your Personal Data</string>
+    <string name="success_is_where">Success is where preparation and opportunity meet. complete your profile for your Career</string>
+    <string name="name">Name</string>
+    <string name="birthday">Birthday</string>
+    <string name="bio">Bio</string>
+    <string name="club">Club</string>
+    <string name="coach">Coach</string>
+    <string name="main_sport">Main Sport</string>
+    <string name="i_m_an_athlete_with_disability">I\'m an Athlete with disability</string>
+    <string name="fans">Fans</string>
+    <string name="_555">555</string>
+    <string name="demo_text">lkej awjwelkl ajwfewjlk wa jkwlfj lkl ffje ejel kfjekew jkfke jklefj elkfkef fjekf ejfekf</string>
+
+    <string name="timeline">Timeline</string>
+    <string name="profile">Profile</string>
+    <string name="notification">Notification</string>
+    <string name="settings">Settings</string>
+</resources>
