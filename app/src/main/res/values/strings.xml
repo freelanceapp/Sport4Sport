@@ -22,7 +22,8 @@
     <string name="i_m_an_athlete_with_disability">I\'m an Athlete with disability</string>
     <string name="fans">Fans</string>
     <string name="_555">555</string>
-    <string name="demo_text">lkej awjwelkl ajwfewjlk wa jkwlfj lkl ffje ejel kfjekew jkfke jklefj elkfkef fjekf ejfekf</string>
+    <string name="demo_text">Android library used to create an awesome Android UI based on a draggable element similar to the last
+        YouTube graphic component.</string>
 
     <string name="timeline">Timeline</string>
     <string name="profile">Profile</string>

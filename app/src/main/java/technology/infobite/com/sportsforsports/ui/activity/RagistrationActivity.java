@@ -2,24 +2,22 @@ package technology.infobite.com.sportsforsports.ui.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 import technology.infobite.com.sportsforsports.R;
+import technology.infobite.com.sportsforsports.constant.Constant;
+import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitApiClient;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
 import technology.infobite.com.sportsforsports.utils.Alerts;
+import technology.infobite.com.sportsforsports.utils.AppPreference;
 import technology.infobite.com.sportsforsports.utils.ConnectionDetector;
 
 
@@ -38,7 +36,6 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
         cd = new ConnectionDetector(mContext);
         retrofitApiClient = RetrofitService.getRetrofit();
         buttonregester = findViewById(R.id.btn_register);
-
         buttonregester.setOnClickListener(this);
     }
 
@@ -60,22 +57,21 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
             Alerts.show(mContext, "Please enter password!!!");
         } else {
             if (cd.isNetworkAvailable()) {
-                RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.signUp(strname, strEmail, strPassword), new WebResponse() {
+                RetrofitService.getLoginData(new Dialog(mContext), retrofitApiClient.signUp(strname, strEmail,
+                        strPassword), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
-                        ResponseBody responseBody = (ResponseBody) result.body();
-                        try {
-                            JSONObject jsonObject = new JSONObject(responseBody.string());
-                            if (!jsonObject.getBoolean("error")) {
-                                Alerts.show(mContext, jsonObject.getString("message"));
-                                finish();
-                            } else {
-                                Alerts.show(mContext, jsonObject.getString("message"));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        UserDataModal responseBody = (UserDataModal) result.body();
+                        if (!responseBody.getError()) {
+                            Alerts.show(mContext, responseBody.getMessage());
+                            AppPreference.setStringPreference(mContext, Constant.USER_ID, responseBody.getUser().getUserId());
+                            Intent intent = new Intent(mContext, CreateProfileActivity.class);
+                            intent.putExtra("user_id", responseBody.getUser().getUserId());
+                            intent.putExtra("name", responseBody.getUser().getUserName());
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Alerts.show(mContext, responseBody.getMessage());
                         }
                     }
 

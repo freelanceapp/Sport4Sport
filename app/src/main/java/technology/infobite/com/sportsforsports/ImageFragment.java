@@ -16,10 +16,12 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import technology.infobite.com.sportsforsports.adapter.MyPhotoVideoAdapter;
+
 @SuppressLint("ValidFragment")
 class ImageFragment extends Fragment {
 
-    private GalleryAdapter galleryAdapter;
+    private MyPhotoVideoAdapter galleryAdapter;
     private RecyclerView galleryfragmenrclv;
     private List<GalleryModel> galleryModels = new ArrayList<>();
     private Context context;
@@ -30,7 +32,7 @@ class ImageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gallery_layout, container, false);
         galleryfragmenrclv = view.findViewById(R.id.fragment_gallery_rclv);
 
-        galleryAdapter = new GalleryAdapter(galleryModels, context);
+        galleryAdapter = new MyPhotoVideoAdapter(galleryModels, context,"");
         LinearLayoutManager lm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         galleryfragmenrclv.setLayoutManager(lm);
         galleryfragmenrclv.setItemAnimator(new DefaultItemAnimator());

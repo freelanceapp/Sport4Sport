@@ -13,16 +13,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.ResponseBody;
 import retrofit2.Response;
-import technology.infobite.com.sportsforsports.Profile_Camera;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.constant.Constant;
+import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitApiClient;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
@@ -85,23 +79,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Alerts.show(mContext, "Please enter password!!!");
         } else {
             if (cd.isNetworkAvailable()) {
-                RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.signIn(strEmail, strPassword), new WebResponse() {
+                RetrofitService.getLoginData(new Dialog(mContext), retrofitApiClient.signIn(strEmail, strPassword), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
-                        ResponseBody responseBody = (ResponseBody) result.body();
-                        try {
-                            JSONObject jsonObject = new JSONObject(responseBody.string());
-                            if (!jsonObject.getBoolean("error")) {
-                                Alerts.show(mContext, jsonObject.getString("message"));
-                                startActivity(new Intent(mContext, NewPostsActivity.class));
-                                finish();
-                            } else {
-                                Alerts.show(mContext, jsonObject.getString("message"));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        UserDataModal responseBody = (UserDataModal) result.body();
+                        if (!responseBody.getError()) {
+                            AppPreference.setStringPreference(mContext, Constant.USER_ID, responseBody.getUser().getUserId());
+                            Alerts.show(mContext, responseBody.getMessage());
+                            Intent intent = new Intent(mContext, HomeActivity.class);
+                            intent.putExtra("user_id", responseBody.getUser().getUserId());
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Alerts.show(mContext, responseBody.getMessage());
                         }
                     }
 
@@ -119,10 +109,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.cameradata:
-                Intent intent = new Intent(LoginActivity.this, Profile_Camera.class);
-                startActivity(intent);
-                break;
             case R.id.btn_login:
                 if (isLogin) {
                     AppPreference.setBooleanPreference(mContext, Constant.LOGIN_API, true);
