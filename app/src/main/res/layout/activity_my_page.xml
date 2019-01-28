@@ -45,7 +45,7 @@
     </RelativeLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/mypage_img"
+        android:id="@+id/myprofile_img"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
@@ -53,10 +53,13 @@
         android:src="@drawable/profile_image" />
 
     <EditText
-        android:id="@+id/myprofile_et"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/edit_new_headline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mypage_img"
+        android:layout_below="@+id/myprofile_img"
         android:hint="Enter Your Text"
         android:textStyle="normal" />
 
@@ -76,7 +79,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/notification"
+        android:id="@+id/tv_post_feed"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"

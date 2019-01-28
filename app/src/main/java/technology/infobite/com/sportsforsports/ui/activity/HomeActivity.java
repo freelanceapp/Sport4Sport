@@ -188,6 +188,12 @@ public class HomeActivity extends BaseActivity implements OnBMClickListener, Vie
                     .beginTransaction()
                     .replace(R.id.fram_container, new ProfileFragment(),
                             Constant.TimelineFragment).commit();
+        } else if (AppPreference.getBooleanPreference(mContext, "NewPost")) {
+            AppPreference.setBooleanPreference(mContext, "NewPost", false);
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fram_container, new TimelineFragment(),
+                            Constant.TimelineFragment).commit();
         }
     }
 }
