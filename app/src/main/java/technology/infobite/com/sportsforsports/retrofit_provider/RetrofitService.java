@@ -38,6 +38,7 @@ public class RetrofitService {
     }
 
     public static RetrofitApiClient getRetrofit() {
+
         if (client == null)
             new RetrofitService();
         return client;
