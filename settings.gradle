@@ -1,1 +1,1 @@
-include ':app', ':boommenu', ':draggablepanel', ':boommenu2', ':draggableview'
+include ':app', ':draggablepanel', ':boommenu2', ':draggableview'

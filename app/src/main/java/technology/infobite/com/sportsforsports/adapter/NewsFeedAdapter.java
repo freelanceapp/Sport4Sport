@@ -1,6 +1,8 @@
 package technology.infobite.com.sportsforsports.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.Feed;
+import technology.infobite.com.sportsforsports.ui.activity.PostDetailActivity;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHolder> {
 
@@ -43,7 +46,19 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
 
-        Feed newPostModel = newPostModels.get(i);
+        /*send data on post detail actiivity*/
+        final Feed newPostModel = newPostModels.get(i);
+        viewHolder.lloperpostdetailactivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ctx,PostDetailActivity.class);
+                intent.putExtra("post_detail_model", (Parcelable) newPostModel);
+                ctx.startActivity(intent);
+            }
+        });
+
+
+
         if (newPostModel.getAlhleteImages() == null || newPostModel.getAlhleteImages().isEmpty()) {
             String currentString = newPostModel.getAlhleteImages();
             Log.e("image", "..." + currentString);
@@ -51,6 +66,10 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             viewHolder.postImage.setVisibility(View.GONE);
         } else {
             String currentString = newPostModel.getAlhleteImages();
+            /*String[] separated = currentString.split("/",2);
+            String img = separated[1].trim();
+            Log.e("img...","..."+img);*/
+            Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/" + currentString).placeholder(R.drawable.player_image).resize(250, 500).into(viewHolder.postImage);
             String[] separated = currentString.split("/", 2);
             String img = separated[1].trim();
             Log.e("img...", "..." + img);
@@ -66,7 +85,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             viewHolder.postImage.setVisibility(View.GONE);
             viewHolder.tv_headline.setText(newPostModel.getAthleteArticeHeadline());
         }
-        viewHolder.likes.setText("2.206 likes");
+        viewHolder.likes.setText(newPostModel.getLikes()+" likes");
 
         /*(R.drawable.player_image, "David Beckham", R.drawable.player_image
                     , "2.206 likes", "5000 comments", "2 HOURS AGO",
@@ -119,7 +138,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout commentsection, visibesendmessage, llViewUserProfile;
+        LinearLayout commentsection, visibesendmessage, llViewUserProfile,lloperpostdetailactivity;
         ImageView profile, postImage;
         TextView postpersonname, likes, comments, timeduration, description, totalcommentcounts, tv_headline;
         EditText posteditmessage;
@@ -127,7 +146,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            lloperpostdetailactivity = itemView.findViewById(R.id.ll_open_post_detail_activity);
             tv_headline = itemView.findViewById(R.id.tv_headline);
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             profile = itemView.findViewById(R.id.post_person_profile);
@@ -142,6 +161,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             postsend = itemView.findViewById(R.id.post_comment_send);
             commentsection = itemView.findViewById(R.id.commentsection);
             visibesendmessage = itemView.findViewById(R.id.visibesendmessage);
+
         }
     }
 }
