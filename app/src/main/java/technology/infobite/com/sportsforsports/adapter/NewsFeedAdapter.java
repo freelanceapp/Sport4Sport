@@ -1,7 +1,8 @@
 package technology.infobite.com.sportsforsports.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,21 +14,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import technology.infobite.com.sportsforsports.R;
-import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.Feed;
-import technology.infobite.com.sportsforsports.utils.AppPreference;
+import technology.infobite.com.sportsforsports.ui.activity.PostDetailActivity;
 
-import static android.content.ContentValues.TAG;
-import static android.widget.Toast.LENGTH_LONG;
-
-public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHolder>{
+public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHolder> {
 
     private boolean check = false;
     private List<Feed> newPostModels;
@@ -50,22 +46,34 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
 
-        Feed newPostModel = newPostModels.get(i);
-        if (newPostModel.getAlhleteImages() == null || newPostModel.getAlhleteImages().isEmpty()){
+        /*send data on post detail actiivity*/
+        final Feed newPostModel = newPostModels.get(i);
+        viewHolder.lloperpostdetailactivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ctx,PostDetailActivity.class);
+                intent.putExtra("post_detail_model", (Parcelable) newPostModel);
+                ctx.startActivity(intent);
+            }
+        });
+
+
+
+        if (newPostModel.getAlhleteImages() == null || newPostModel.getAlhleteImages().isEmpty()) {
             String currentString = newPostModel.getAlhleteImages();
-            Log.e("image","..."+currentString);
-           // Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/"+currentString).placeholder(R.drawable.player_image).into(viewHolder.postImage);
+            Log.e("image", "..." + currentString);
+            // Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/"+currentString).placeholder(R.drawable.player_image).into(viewHolder.postImage);
             viewHolder.postImage.setVisibility(View.GONE);
-        }else {
+        } else {
             String currentString = newPostModel.getAlhleteImages();
-            String[] separated = currentString.split("/",2);
+            /*String[] separated = currentString.split("/",2);
             String img = separated[1].trim();
-            Log.e("img...","..."+img);
-            Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/"+img).placeholder(R.drawable.player_image).resize(250,500).into(viewHolder.postImage);
+            Log.e("img...","..."+img);*/
+            Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/" + currentString).placeholder(R.drawable.player_image).resize(250, 500).into(viewHolder.postImage);
         }
 
         if (newPostModel.getAthleteArticeHeadline() == null || newPostModel.getAthleteArticeHeadline().isEmpty()) {
-           // viewHolder.postImage.setVisibility(View.VISIBLE);
+            // viewHolder.postImage.setVisibility(View.VISIBLE);
             viewHolder.tv_headline.setVisibility(View.GONE);
             viewHolder.postImage.setImageDrawable(ctx.getResources().getDrawable(R.drawable.player_image));
         } else {
@@ -73,36 +81,35 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             viewHolder.postImage.setVisibility(View.GONE);
             viewHolder.tv_headline.setText(newPostModel.getAthleteArticeHeadline());
         }
-        viewHolder.likes.setText("2.206 likes");
+        viewHolder.likes.setText(newPostModel.getLikes()+" likes");
 
         /*(R.drawable.player_image, "David Beckham", R.drawable.player_image
                     , "2.206 likes", "5000 comments", "2 HOURS AGO",
                     getResources().getString(R.string.demo_text), "View all 24 comment")*/
 
         viewHolder.postpersonname.setText("Virat kohli");
-      //  viewHolder.comments.setText((CharSequence) newPostModel.getComment());
+        //  viewHolder.comments.setText((CharSequence) newPostModel.getComment());
         viewHolder.timeduration.setText("2 HOURS AGO");
         //   viewHolder.totalcommentcounts.setText((Integer) newPostModel.getAthleteArticeUrl());
         viewHolder.postsend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.post_comment_send:
-                        if (viewHolder.postsend.isPressed()){
-                        }
-
-                    break;
+                switch (v.getId()) {
                 }
             }
         });
 
-       viewHolder.visibesendmessage.setOnClickListener(new View.OnClickListener() {
+        viewHolder.visibesendmessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (check) { check = false;
+                if (check) {
+                    check = false;
                     viewHolder.commentsection.setVisibility(View.GONE);
-                } else { check = true;
-                    viewHolder.commentsection.setVisibility(View.VISIBLE); } }
+                } else {
+                    check = true;
+                    viewHolder.commentsection.setVisibility(View.VISIBLE);
+                }
+            }
         });
 
         viewHolder.llViewUserProfile.setTag(i);
@@ -122,7 +129,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout commentsection, visibesendmessage, llViewUserProfile;
+        LinearLayout commentsection, visibesendmessage, llViewUserProfile,lloperpostdetailactivity;
         ImageView profile, postImage;
         TextView postpersonname, likes, comments, timeduration, description, totalcommentcounts, tv_headline;
         EditText posteditmessage;
@@ -130,7 +137,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            lloperpostdetailactivity = itemView.findViewById(R.id.ll_open_post_detail_activity);
             tv_headline = itemView.findViewById(R.id.tv_headline);
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             profile = itemView.findViewById(R.id.post_person_profile);
@@ -145,6 +152,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             postsend = itemView.findViewById(R.id.post_comment_send);
             commentsection = itemView.findViewById(R.id.commentsection);
             visibesendmessage = itemView.findViewById(R.id.visibesendmessage);
+
         }
     }
 }

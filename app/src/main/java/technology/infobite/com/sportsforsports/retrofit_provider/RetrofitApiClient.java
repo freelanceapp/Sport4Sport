@@ -1,10 +1,14 @@
 package technology.infobite.com.sportsforsports.retrofit_provider;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.Comment;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
@@ -33,11 +37,19 @@ public interface RetrofitApiClient {
     @POST(Constant.USER_PROFILE_API)
     Call<UserDataModal> userProfile(@Field("user_id") String user_id);
 
-    @FormUrlEncoded
+    /*
+        @FormUrlEncoded
+        @POST(Constant.NEWPOST_API)
+        Call<ResponseBody> newPostFeed(@Field("user_id") String userid, @Field("athlete_status") String astatus,
+                                       @Field("athlete_video") String avideo, @Field("athlete_artice_url") String aurl,
+                                       @Field("athlete_artice_headline") String aheadline, @Field("alhlete_images") File aimage);
+    */
+    @Multipart
     @POST(Constant.NEWPOST_API)
-    Call<ResponseBody> newPostFeed(@Field("user_id") String userid,@Field("athlete_status") String astatus,
-                                    @Field("athlete_video") String avideo,@Field("athlete_artice_url") String aurl,
-                                    @Field("athlete_artice_headline") String aheadline,@Field("alhlete_images") String aimage);
+    Call<ResponseBody> newPostFeed(@Part("user_id") RequestBody userid, @Part("athlete_status") RequestBody astatus,
+                                   @Part("athlete_video") RequestBody avideo, @Part("athlete_artice_url") RequestBody aurl,
+                                   @Part("athlete_artice_headline") RequestBody aheadline,
+                                   @Part MultipartBody.Part aimage);
 
     @FormUrlEncoded
     @POST(Constant.TIMELINE_API)
@@ -46,6 +58,6 @@ public interface RetrofitApiClient {
     @FormUrlEncoded
     @POST(Constant.POST_COMMENT_API)
     Call<Comment> newPostComment(@Field("post_id") String postId, @Field("user_id") String useId
-                                                    , @Field("comment") String comment);
+            , @Field("comment") String comment);
 
 }
