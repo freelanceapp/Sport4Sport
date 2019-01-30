@@ -1,11 +1,9 @@
 package technology.infobite.com.sportsforsports;
 
-import java.util.StringJoiner;
-
 public class CommentModel {
 
     private String tex1;
-    private  String tex2;
+    private String tex2;
 
     public String getTex1() {
         return tex1;
