@@ -31,11 +31,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         postDetails = intent.getParcelableExtra("post_detail_model");
-        if (postDetails.getAthleteStatus() == null || postDetails.getAthleteStatus().isEmpty()) {
-            showopostlikes.setText("no detail");
-        } else {
-            showoposttime.setText(postDetails.getAthleteStatus());
-        }
+
         if (postDetails.getAthleteArticeHeadline() == null || postDetails.getAthleteArticeHeadline().isEmpty()) {
            showopostheadline.setVisibility(View.GONE);
             showpostimage.setImageDrawable(getResources().getDrawable(R.drawable.player_image));

@@ -18,7 +18,7 @@ public class UserDataModal implements Parcelable
     @SerializedName("user")
     @Expose
     private UserData user;
-    public final static Parcelable.Creator<UserDataModal> CREATOR = new Creator<UserDataModal>() {
+    public final static Creator<UserDataModal> CREATOR = new Creator<UserDataModal>() {
 
 
         @SuppressWarnings({

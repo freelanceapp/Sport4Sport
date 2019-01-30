@@ -43,7 +43,7 @@ public class DailyNewsFeedMainModal implements Serializable, Parcelable
     protected DailyNewsFeedMainModal(Parcel in) {
         this.error = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.feed, (technology.infobite.com.sportsforsports.modal.daily_news_feed.Feed.class.getClassLoader()));
+        in.readList(this.feed, (Feed.class.getClassLoader()));
     }
 
     public DailyNewsFeedMainModal() {

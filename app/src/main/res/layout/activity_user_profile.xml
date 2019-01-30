@@ -23,15 +23,15 @@
             <ImageView
                 android:id="@+id/back_arrow"
                 android:layout_width="34dp"
-                android:layout_centerVertical="true"
                 android:layout_height="34dp"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/ic_back_arrow" />
 
             <TextView
-                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/back_arrow"
                 android:text="David Bekham"
                 android:textSize="16dp" />
@@ -285,15 +285,15 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.github.pedrovgs.DraggablePanel
+    <technology.infobite.com.draggableview.DraggablePanel
         android:id="@+id/draggable_panel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
 
-    </com.github.pedrovgs.DraggablePanel>
+    </technology.infobite.com.draggableview.DraggablePanel>
 
-    <com.github.pedrovgs.DraggableView
+    <technology.infobite.com.draggableview.DraggableView
         android:id="@+id/draggable_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -451,10 +451,10 @@
                     android:id="@+id/post_rclv_rclv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"></android.support.v7.widget.RecyclerView>
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
 
-    </com.github.pedrovgs.DraggableView>
+    </technology.infobite.com.draggableview.DraggableView>
 
 </RelativeLayout>

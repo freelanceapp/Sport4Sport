@@ -70,6 +70,10 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             String img = separated[1].trim();
             Log.e("img...","..."+img);*/
             Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/" + currentString).placeholder(R.drawable.player_image).resize(250, 500).into(viewHolder.postImage);
+            String[] separated = currentString.split("/", 2);
+            String img = separated[1].trim();
+            Log.e("img...", "..." + img);
+            Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/" + img).placeholder(R.drawable.player_image).resize(250, 500).into(viewHolder.postImage);
         }
 
         if (newPostModel.getAthleteArticeHeadline() == null || newPostModel.getAthleteArticeHeadline().isEmpty()) {
@@ -95,6 +99,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
+                    case R.id.post_comment_send:
+                        if (viewHolder.postsend.isPressed()) {
+
+                        }
+                        break;
                 }
             }
         });

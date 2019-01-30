@@ -50,6 +50,9 @@ public interface RetrofitApiClient {
                                    @Part("athlete_video") RequestBody avideo, @Part("athlete_artice_url") RequestBody aurl,
                                    @Part("athlete_artice_headline") RequestBody aheadline,
                                    @Part MultipartBody.Part aimage);
+    Call<ResponseBody> newPostFeed(@Field("user_id") String userid, @Field("athlete_status") String astatus,
+                                   @Field("athlete_video") String avideo, @Field("athlete_artice_url") String aurl,
+                                   @Field("athlete_artice_headline") String aheadline, @Field("alhlete_images") String aimage);
 
     @FormUrlEncoded
     @POST(Constant.TIMELINE_API)
