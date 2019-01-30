@@ -84,7 +84,7 @@ public class UserData implements Parcelable
     @SerializedName("update_entry_date")
     @Expose
     private String updateEntryDate;
-    public final static Parcelable.Creator<UserData> CREATOR = new Creator<UserData>() {
+    public final static Creator<UserData> CREATOR = new Creator<UserData>() {
 
 
         @SuppressWarnings({

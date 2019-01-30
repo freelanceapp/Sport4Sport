@@ -35,9 +35,9 @@ public interface RetrofitApiClient {
 
     @FormUrlEncoded
     @POST(Constant.NEWPOST_API)
-    Call<ResponseBody> newPostFeed(@Field("user_id") String userid,@Field("athlete_status") String astatus,
-                                    @Field("athlete_video") String avideo,@Field("athlete_artice_url") String aurl,
-                                    @Field("athlete_artice_headline") String aheadline,@Field("alhlete_images") String aimage);
+    Call<ResponseBody> newPostFeed(@Field("user_id") String userid, @Field("athlete_status") String astatus,
+                                   @Field("athlete_video") String avideo, @Field("athlete_artice_url") String aurl,
+                                   @Field("athlete_artice_headline") String aheadline, @Field("alhlete_images") String aimage);
 
     @FormUrlEncoded
     @POST(Constant.TIMELINE_API)
@@ -46,6 +46,6 @@ public interface RetrofitApiClient {
     @FormUrlEncoded
     @POST(Constant.POST_COMMENT_API)
     Call<Comment> newPostComment(@Field("post_id") String postId, @Field("user_id") String useId
-                                                    , @Field("comment") String comment);
+            , @Field("comment") String comment);
 
 }

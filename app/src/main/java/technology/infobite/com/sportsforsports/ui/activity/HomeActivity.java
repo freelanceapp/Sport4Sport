@@ -8,12 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
-import com.nightonke.boommenu.BoomButtons.HamButton;
-import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
-import com.nightonke.boommenu.BoomMenuButton;
-import com.nightonke.boommenu.ButtonEnum;
-import com.nightonke.boommenu.Util;
-
+import technology.infobite.com.boommenu2.boom_menu.BoomButtons.HamButton;
+import technology.infobite.com.boommenu2.boom_menu.BoomButtons.OnBMClickListener;
+import technology.infobite.com.boommenu2.boom_menu.BoomMenuButton;
+import technology.infobite.com.boommenu2.boom_menu.ButtonEnum;
+import technology.infobite.com.boommenu2.boom_menu.Util;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.ui.fragment.NotificationFragment;

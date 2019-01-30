@@ -6,10 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.github.pedrovgs.DraggableListener;
-import com.github.pedrovgs.DraggablePanel;
-import com.github.pedrovgs.DraggableView;
 
+import technology.infobite.com.draggableview.DraggablePanel;
+import technology.infobite.com.draggableview.DraggableView;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.ui.fragment.DraggabbleBottomFragment;
 import technology.infobite.com.sportsforsports.ui.fragment.DraggabbleTopFragment;

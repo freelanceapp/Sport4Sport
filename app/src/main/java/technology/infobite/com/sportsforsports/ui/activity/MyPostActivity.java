@@ -121,12 +121,12 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
                     break;
                 case R.id.tv_select_image:
                     Intent i = new Intent(
-                            Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(i, RESULT_LOAD_IMAGE);
                     break;
                 case R.id.tv_select_video:
                     Intent i1 = new Intent(
-                            Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                            Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(i1, RESULT_LOAD_VIDEO);
                     break;
             }
