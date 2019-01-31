@@ -54,7 +54,7 @@ public class PostDetailActivity extends AppCompatActivity {
             showopostlikes.setText(postDetails.getLikes() +" like");
         }
         if (postDetails.getComment() == null || postDetails.getComment().isEmpty()) {
-            showopostlikes.setText("0 comment");
+            showopostcomments.setText("0 comment");
         } else {
             showopostcomments.setText(postDetails.getComment() +" comment");
         }
