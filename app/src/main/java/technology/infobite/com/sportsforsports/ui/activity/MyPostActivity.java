@@ -73,16 +73,16 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
             RequestBody _id = RequestBody.create(MediaType.parse("text/plain"), strId);
             RequestBody _Status = RequestBody.create(MediaType.parse("text/plain"), strAthleteStatus);
             RequestBody _Url = RequestBody.create(MediaType.parse("text/plain"), strArticleUrl);
-            RequestBody _Headline = RequestBody.create(MediaType.parse("text/plain"athlete_video), strArticleHeadline);
+            RequestBody _Headline = RequestBody.create(MediaType.parse("text/plain"), strArticleHeadline);
 
             RequestBody imageBodyFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
             MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("alhlete_images", imageFile.getName(), imageBodyFile);
-            RequestBody videoBodyFile = RequestBody.create(MediaType.parse("video/*"), videofile);
-            MultipartBody.Part videoBodyFile = MultipartBody.Part.createFormData("athlete_video", imageFile.getName(), videoBodyFile);
+          /*  RequestBody videoBodyFile = RequestBody.create(MediaType.parse("video/*"), videofile);
+            MultipartBody.Part videoBodyFile = MultipartBody.Part.createFormData("athlete_video", imageFile.getName(), videoBodyFile);*/
 
 
             RetrofitService.getNewPostData(new Dialog(mContext), retrofitApiClient.newPostFeed(_id, _Status,
-                    _Video, _Url, _Headline, fileToUpload), new WebResponse() {
+                    fileToUpload, _Url, _Headline, fileToUpload), new WebResponse() {
                 @Override
                 public void onResponseSuccess(Response<?> result) {
                     ResponseBody responseBody = (ResponseBody) result.body();
