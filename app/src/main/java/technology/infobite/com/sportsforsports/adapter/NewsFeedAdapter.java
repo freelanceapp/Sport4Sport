@@ -45,35 +45,25 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-
         /*send data on post detail actiivity*/
         final Feed newPostModel = newPostModels.get(i);
         viewHolder.lloperpostdetailactivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ctx,PostDetailActivity.class);
+                Intent intent = new Intent(ctx, PostDetailActivity.class);
                 intent.putExtra("post_detail_model", (Parcelable) newPostModel);
                 ctx.startActivity(intent);
             }
         });
 
-
-
         if (newPostModel.getAlhleteImages() == null || newPostModel.getAlhleteImages().isEmpty()) {
-            String currentString = newPostModel.getAlhleteImages();
-            Log.e("image", "..." + currentString);
-            // Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/"+currentString).placeholder(R.drawable.player_image).into(viewHolder.postImage);
             viewHolder.postImage.setVisibility(View.GONE);
         } else {
             String currentString = newPostModel.getAlhleteImages();
-            /*String[] separated = currentString.split("/",2);
-            String img = separated[1].trim();
-            Log.e("img...","..."+img);*/
-            Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/" + currentString).placeholder(R.drawable.player_image).resize(250, 500).into(viewHolder.postImage);
-            String[] separated = currentString.split("/", 2);
-            String img = separated[1].trim();
-            Log.e("img...", "..." + img);
-            Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/" + img).placeholder(R.drawable.player_image).resize(250, 500).into(viewHolder.postImage);
+            Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/" + currentString)
+                    .placeholder(R.drawable.player_image)
+                    .resize(250, 500)
+                    .into(viewHolder.postImage);
         }
 
         if (newPostModel.getAthleteArticeHeadline() == null || newPostModel.getAthleteArticeHeadline().isEmpty()) {
@@ -85,16 +75,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             viewHolder.postImage.setVisibility(View.GONE);
             viewHolder.tv_headline.setText(newPostModel.getAthleteArticeHeadline());
         }
-        viewHolder.likes.setText(newPostModel.getLikes()+" likes");
-
-        /*(R.drawable.player_image, "David Beckham", R.drawable.player_image
-                    , "2.206 likes", "5000 comments", "2 HOURS AGO",
-                    getResources().getString(R.string.demo_text), "View all 24 comment")*/
-
+        viewHolder.likes.setText(newPostModel.getLikes() + " likes");
         viewHolder.postpersonname.setText("Virat kohli");
-        //  viewHolder.comments.setText((CharSequence) newPostModel.getComment());
         viewHolder.timeduration.setText("2 HOURS AGO");
-        //   viewHolder.totalcommentcounts.setText((Integer) newPostModel.getAthleteArticeUrl());
         viewHolder.postsend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +121,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout commentsection, visibesendmessage, llViewUserProfile,lloperpostdetailactivity;
+        LinearLayout commentsection, visibesendmessage, llViewUserProfile, lloperpostdetailactivity;
         ImageView profile, postImage;
         TextView postpersonname, likes, comments, timeduration, description, totalcommentcounts, tv_headline;
         EditText posteditmessage;

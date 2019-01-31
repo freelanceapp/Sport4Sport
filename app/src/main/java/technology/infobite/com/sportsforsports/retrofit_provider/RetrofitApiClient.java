@@ -37,30 +37,20 @@ public interface RetrofitApiClient {
     @POST(Constant.USER_PROFILE_API)
     Call<UserDataModal> userProfile(@Field("user_id") String user_id);
 
-    /*
-        @FormUrlEncoded
-        @POST(Constant.NEWPOST_API)
-        Call<ResponseBody> newPostFeed(@Field("user_id") String userid, @Field("athlete_status") String astatus,
-                                       @Field("athlete_video") String avideo, @Field("athlete_artice_url") String aurl,
-                                       @Field("athlete_artice_headline") String aheadline, @Field("alhlete_images") File aimage);
-    */
     @Multipart
     @POST(Constant.NEWPOST_API)
     Call<ResponseBody> newPostFeed(@Part("user_id") RequestBody userid, @Part("athlete_status") RequestBody astatus,
                                    @Part("athlete_video") RequestBody avideo, @Part("athlete_artice_url") RequestBody aurl,
                                    @Part("athlete_artice_headline") RequestBody aheadline,
                                    @Part MultipartBody.Part aimage);
-    Call<ResponseBody> newPostFeed(@Field("user_id") String userid, @Field("athlete_status") String astatus,
-                                   @Field("athlete_video") String avideo, @Field("athlete_artice_url") String aurl,
-                                   @Field("athlete_artice_headline") String aheadline, @Field("alhlete_images") String aimage);
-
+    
     @FormUrlEncoded
     @POST(Constant.TIMELINE_API)
     Call<DailyNewsFeedMainModal> showPostTimeLine(@Field("user_id") String userId);
 
     @FormUrlEncoded
     @POST(Constant.POST_COMMENT_API)
-    Call<Comment> newPostComment(@Field("post_id") String postId, @Field("user_id") String useId
-            , @Field("comment") String comment);
+    Call<Comment> newPostComment(@Field("post_id") String postId, @Field("user_id") String useId,
+                                 @Field("comment") String comment);
 
 }
