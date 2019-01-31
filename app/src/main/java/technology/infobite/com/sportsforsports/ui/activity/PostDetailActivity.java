@@ -21,7 +21,7 @@ public class PostDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
-
+        TextView showpostpersonname = findViewById(R.id._showpost_person_name);
         TextView showopostheadline = findViewById(R.id.tv_headline_show);
         ImageView showpostimage = findViewById(R.id.post_image_show);
         VideoView showpostvideo = findViewById(R.id.post_video_show);
@@ -32,6 +32,7 @@ public class PostDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         postDetails = intent.getParcelableExtra("post_detail_model");
 
+        showpostpersonname.setText("Virat Kohli");
         if (postDetails.getAthleteArticeHeadline() == null || postDetails.getAthleteArticeHeadline().isEmpty()) {
            showopostheadline.setVisibility(View.GONE);
             showpostimage.setImageDrawable(getResources().getDrawable(R.drawable.player_image));
@@ -45,8 +46,10 @@ public class PostDetailActivity extends AppCompatActivity {
             Log.e("image", "..." + currentString);
            showpostimage.setVisibility(View.GONE);
         } else {
+            showopostheadline.setVisibility(View.VISIBLE);
+            showpostimage.setVisibility(View.VISIBLE);
             String currentString = postDetails.getAlhleteImages();
-            Picasso.with(getApplicationContext()).load("http://infobitetechnology.in/sportforsport/" + currentString).placeholder(R.drawable.player_image).resize(250, 500).into(showpostimage);
+            Picasso.with(getApplicationContext()).load("http://codeencrypt.in/sport/images/alhlete_images/" + currentString).placeholder(R.drawable.player_image).resize(250, 500).into(showpostimage);
         }
         if (postDetails.getLikes() == null || postDetails.getLikes().isEmpty()) {
             showopostlikes.setText("0 like");
@@ -56,7 +59,7 @@ public class PostDetailActivity extends AppCompatActivity {
         if (postDetails.getComment() == null || postDetails.getComment().isEmpty()) {
             showopostcomments.setText("0 comment");
         } else {
-            showopostcomments.setText(postDetails.getComment() +" comment");
+            showopostcomments.setText(postDetails.getComment().size() +" comment");
         }
         if (postDetails.getEntryDate() == null || postDetails.getEntryDate().isEmpty()) {
             showopostlikes.setText("");

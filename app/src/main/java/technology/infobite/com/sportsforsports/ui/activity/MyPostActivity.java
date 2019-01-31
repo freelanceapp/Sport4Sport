@@ -44,7 +44,7 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
 
     private static final int PICK_FROM_GALLERY = 1;
     private File imageFile = null;
-    private static int RESULT_LOAD_VIDEO = 1;
+    private static int VIDEO_FROM_GALLERY = 1;
     private String imagePath;
 
     @Override
@@ -72,12 +72,14 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
 
             RequestBody _id = RequestBody.create(MediaType.parse("text/plain"), strId);
             RequestBody _Status = RequestBody.create(MediaType.parse("text/plain"), strAthleteStatus);
-            RequestBody _Video = RequestBody.create(MediaType.parse("text/plain"), strAthleteVideo);
             RequestBody _Url = RequestBody.create(MediaType.parse("text/plain"), strArticleUrl);
-            RequestBody _Headline = RequestBody.create(MediaType.parse("text/plain"), strArticleHeadline);
+            RequestBody _Headline = RequestBody.create(MediaType.parse("text/plain"athlete_video), strArticleHeadline);
 
             RequestBody imageBodyFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
             MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("alhlete_images", imageFile.getName(), imageBodyFile);
+            RequestBody videoBodyFile = RequestBody.create(MediaType.parse("video/*"), videofile);
+            MultipartBody.Part videoBodyFile = MultipartBody.Part.createFormData("athlete_video", imageFile.getName(), videoBodyFile);
+
 
             RetrofitService.getNewPostData(new Dialog(mContext), retrofitApiClient.newPostFeed(_id, _Status,
                     _Video, _Url, _Headline, fileToUpload), new WebResponse() {
@@ -149,9 +151,23 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
             case R.id.tv_select_video:
-                Intent i1 = new Intent(
+                try {
+                    if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MyPostActivity.this,
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, VIDEO_FROM_GALLERY);
+                    } else {
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(galleryIntent, VIDEO_FROM_GALLERY);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+              /*  Intent i1 = new Intent(
                         Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i1, RESULT_LOAD_VIDEO);
+                startActivityForResult(i1, RESULT_LOAD_VIDEO);*/
                 break;
         }
     }

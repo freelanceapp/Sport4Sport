@@ -36,27 +36,25 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         this.ctx = ctx;
         this.onClickListener = onClickListener;
     }
-
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater li = LayoutInflater.from(ctx);
         View viewt = li.inflate(R.layout.row_news_item, null);
         return new ViewHolder(viewt);
     }
-
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-
         /*send data on post detail actiivity*/
         final Feed newPostModel = newPostModels.get(i);
         viewHolder.lloperpostdetailactivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ctx,PostDetailActivity.class);
+                Intent intent = new Intent(ctx, PostDetailActivity.class);
                 intent.putExtra("post_detail_model", (Parcelable) newPostModel);
                 ctx.startActivity(intent);
             }
         });
+        viewHolder.postpersonname.setText("Virat kohli");
         if (newPostModel.getAthleteArticeHeadline() == null || newPostModel.getAthleteArticeHeadline().isEmpty()) {
             viewHolder.tv_headline.setVisibility(View.GONE);
         } else {
@@ -65,32 +63,25 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             viewHolder.tv_headline.setText(newPostModel.getAthleteArticeHeadline());
         }
         if (newPostModel.getAlhleteImages() == null || newPostModel.getAlhleteImages().isEmpty()) {
-            String currentString = newPostModel.getAlhleteImages();
-            Log.e("image", "..." + currentString);
             viewHolder.postImage.setVisibility(View.GONE);
         } else {
+            viewHolder.tv_headline.setVisibility(View.VISIBLE);
+            viewHolder.postImage.setVisibility(View.VISIBLE);
             String currentString = newPostModel.getAlhleteImages();
-            /*String[] separated = currentString.split("/",2);
-            String img = separated[1].trim();
-            Log.e("img...","..."+img);*/
-            Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/" + currentString).placeholder(R.drawable.player_image).resize(250, 500).into(viewHolder.postImage);
-            String[] separated = currentString.split("/", 2);
-            String img = separated[1].trim();
-            Log.e("img...", "..." + img);
-            Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/" + img).placeholder(R.drawable.player_image).resize(250, 500).into(viewHolder.postImage);
-        }
-        if (newPostModel.getEntryDate() == null || newPostModel.getEntryDate().isEmpty()) {
-        } else {
-            viewHolder.tv_headline.setText(newPostModel.getAthleteArticeHeadline());
+            Picasso.with(ctx).load("http://codeencrypt.in/sport/images/alhlete_images/" + currentString)
+                    .placeholder(R.drawable.player_image)
+                    .resize(250, 500)
+                    .into(viewHolder.postImage);
         }
         if (newPostModel.getLikes() == null || newPostModel.getLikes().isEmpty()) {
+            viewHolder.likes.setText("0 like");
         } else {
-            viewHolder.likes.setText(newPostModel.getLikes());
+            viewHolder.likes.setText(newPostModel.getLikes() +" like");
         }
         if (newPostModel.getComment() == null || newPostModel.getComment().isEmpty()) {
             viewHolder.comments.setText("0 comment");
         } else {
-            viewHolder.comments.setText(newPostModel.getComment() +" comment");
+            viewHolder.comments.setText(newPostModel.getComment().size() + " comment");
         }
         if (newPostModel.getEntryDate() == null || newPostModel.getEntryDate().isEmpty()) {
             viewHolder.timeduration.setText("");
@@ -101,9 +92,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     , "2.206 likes", "5000 comments", "2 HOURS AGO",
                     getResources().getString(R.string.demo_text), "View all 24 comment")*/
 
-        viewHolder.postpersonname.setText("Virat kohli");
         //  viewHolder.comments.setText((CharSequence) newPostModel.getComment());
         //   viewHolder.totalcommentcounts.setText((Integer) newPostModel.getAthleteArticeUrl());
+
         viewHolder.postsend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,12 +138,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-       private LinearLayout commentsection, visibesendmessage, llViewUserProfile,lloperpostdetailactivity;
+        private LinearLayout commentsection, visibesendmessage, llViewUserProfile, lloperpostdetailactivity;
         private ImageView profile, postImage;
         private TextView postpersonname, likes, comments, timeduration, description, totalcommentcounts, tv_headline;
         private EditText posteditmessage;
         private Button postsend;
-       private VideoView postvideo;
+        private VideoView postvideo;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
