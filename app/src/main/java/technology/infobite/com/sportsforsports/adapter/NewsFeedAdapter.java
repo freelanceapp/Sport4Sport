@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
 
@@ -35,14 +36,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         this.ctx = ctx;
         this.onClickListener = onClickListener;
     }
-
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater li = LayoutInflater.from(ctx);
         View viewt = li.inflate(R.layout.row_news_item, null);
         return new ViewHolder(viewt);
     }
-
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         /*send data on post detail actiivity*/
@@ -55,29 +54,47 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                 ctx.startActivity(intent);
             }
         });
-
-        if (newPostModel.getAlhleteImages() == null || newPostModel.getAlhleteImages().isEmpty()) {
-            viewHolder.postImage.setVisibility(View.GONE);
-        } else {
-            String currentString = newPostModel.getAlhleteImages();
-            Picasso.with(ctx).load("http://infobitetechnology.in/sportforsport/" + currentString)
-                    .placeholder(R.drawable.player_image)
-                    .resize(250, 500)
-                    .into(viewHolder.postImage);
-        }
-
+        viewHolder.postpersonname.setText("Virat kohli");
         if (newPostModel.getAthleteArticeHeadline() == null || newPostModel.getAthleteArticeHeadline().isEmpty()) {
-            // viewHolder.postImage.setVisibility(View.VISIBLE);
             viewHolder.tv_headline.setVisibility(View.GONE);
-            viewHolder.postImage.setImageDrawable(ctx.getResources().getDrawable(R.drawable.player_image));
         } else {
             viewHolder.tv_headline.setVisibility(View.VISIBLE);
             viewHolder.postImage.setVisibility(View.GONE);
             viewHolder.tv_headline.setText(newPostModel.getAthleteArticeHeadline());
         }
-        viewHolder.likes.setText(newPostModel.getLikes() + " likes");
-        viewHolder.postpersonname.setText("Virat kohli");
-        viewHolder.timeduration.setText("2 HOURS AGO");
+        if (newPostModel.getAlhleteImages() == null || newPostModel.getAlhleteImages().isEmpty()) {
+            viewHolder.postImage.setVisibility(View.GONE);
+        } else {
+            viewHolder.tv_headline.setVisibility(View.VISIBLE);
+            viewHolder.postImage.setVisibility(View.VISIBLE);
+            String currentString = newPostModel.getAlhleteImages();
+            Picasso.with(ctx).load("http://codeencrypt.in/sport/images/alhlete_images/" + currentString)
+                    .placeholder(R.drawable.player_image)
+                    .resize(250, 500)
+                    .into(viewHolder.postImage);
+        }
+        if (newPostModel.getLikes() == null || newPostModel.getLikes().isEmpty()) {
+            viewHolder.likes.setText("0 like");
+        } else {
+            viewHolder.likes.setText(newPostModel.getLikes() +" like");
+        }
+        if (newPostModel.getComment() == null || newPostModel.getComment().isEmpty()) {
+            viewHolder.comments.setText("0 comment");
+        } else {
+            viewHolder.comments.setText(newPostModel.getComment().size() + " comment");
+        }
+        if (newPostModel.getEntryDate() == null || newPostModel.getEntryDate().isEmpty()) {
+            viewHolder.timeduration.setText("");
+        } else {
+            viewHolder.timeduration.setText(newPostModel.getEntryDate());
+        }
+        /*(R.drawable.player_image, "David Beckham", R.drawable.player_image
+                    , "2.206 likes", "5000 comments", "2 HOURS AGO",
+                    getResources().getString(R.string.demo_text), "View all 24 comment")*/
+
+        //  viewHolder.comments.setText((CharSequence) newPostModel.getComment());
+        //   viewHolder.totalcommentcounts.setText((Integer) newPostModel.getAthleteArticeUrl());
+
         viewHolder.postsend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,23 +138,25 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout commentsection, visibesendmessage, llViewUserProfile, lloperpostdetailactivity;
-        ImageView profile, postImage;
-        TextView postpersonname, likes, comments, timeduration, description, totalcommentcounts, tv_headline;
-        EditText posteditmessage;
-        Button postsend;
+        private LinearLayout commentsection, visibesendmessage, llViewUserProfile, lloperpostdetailactivity;
+        private ImageView profile, postImage;
+        private TextView postpersonname, likes, comments, timeduration, description, totalcommentcounts, tv_headline;
+        private EditText posteditmessage;
+        private Button postsend;
+        private VideoView postvideo;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             lloperpostdetailactivity = itemView.findViewById(R.id.ll_open_post_detail_activity);
-            tv_headline = itemView.findViewById(R.id.tv_headline);
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             profile = itemView.findViewById(R.id.post_person_profile);
             postpersonname = itemView.findViewById(R.id.post_person_name);
-            postImage = itemView.findViewById(R.id.post_image);
-            likes = itemView.findViewById(R.id.post_no_of_likes);
-            comments = itemView.findViewById(R.id.post_no_of_comments);
-            timeduration = itemView.findViewById(R.id.post_time);
+            tv_headline = itemView.findViewById(R.id.get_tv_headline);
+            postImage = itemView.findViewById(R.id.get_post_image);
+            postvideo = itemView.findViewById(R.id.get_post_video);
+            likes = itemView.findViewById(R.id.get_post_likes);
+            comments = itemView.findViewById(R.id.get_post_comments);
+            timeduration = itemView.findViewById(R.id.get_post_time);
             description = itemView.findViewById(R.id.post_description);
             totalcommentcounts = itemView.findViewById(R.id.post_total_comments);
             posteditmessage = itemView.findViewById(R.id.edit_post_comment);

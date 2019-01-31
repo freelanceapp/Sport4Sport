@@ -35,7 +35,7 @@
                     android:src="@drawable/profile_image" />
 
                 <TextView
-                    android:id="@+id/post_person_name"
+                    android:id="@+id/_showpost_person_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

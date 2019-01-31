@@ -40,7 +40,7 @@ public interface RetrofitApiClient {
     @Multipart
     @POST(Constant.NEWPOST_API)
     Call<ResponseBody> newPostFeed(@Part("user_id") RequestBody userid, @Part("athlete_status") RequestBody astatus,
-                                   @Part("athlete_video") RequestBody avideo, @Part("athlete_artice_url") RequestBody aurl,
+                                   @Part MultipartBody.Part avideo, @Part("athlete_artice_url") RequestBody aurl,
                                    @Part("athlete_artice_headline") RequestBody aheadline,
                                    @Part MultipartBody.Part aimage);
     
