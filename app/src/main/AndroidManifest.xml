@@ -72,6 +72,8 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity android:name=".ui.activity.UpdateProfileActivity" />
+        <activity android:name=".ui.activity.VideoTrimerActivity" />
+        <activity android:name=".ui.activity.VideoGalleryActivity" />
     </application>
 
 </manifest>

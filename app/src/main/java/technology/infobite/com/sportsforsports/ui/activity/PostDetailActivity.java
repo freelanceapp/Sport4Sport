@@ -1,8 +1,8 @@
 package technology.infobite.com.sportsforsports.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,17 +34,17 @@ public class PostDetailActivity extends AppCompatActivity {
 
         showpostpersonname.setText("Virat Kohli");
         if (postDetails.getAthleteArticeHeadline() == null || postDetails.getAthleteArticeHeadline().isEmpty()) {
-           showopostheadline.setVisibility(View.GONE);
+            showopostheadline.setVisibility(View.GONE);
             showpostimage.setImageDrawable(getResources().getDrawable(R.drawable.player_image));
         } else {
             showopostheadline.setVisibility(View.VISIBLE);
             showpostimage.setVisibility(View.GONE);
-           showopostheadline.setText(postDetails.getAthleteArticeHeadline());
+            showopostheadline.setText(postDetails.getAthleteArticeHeadline());
         }
         if (postDetails.getAlhleteImages() == null || postDetails.getAlhleteImages().isEmpty()) {
             String currentString = postDetails.getAlhleteImages();
             Log.e("image", "..." + currentString);
-           showpostimage.setVisibility(View.GONE);
+            showpostimage.setVisibility(View.GONE);
         } else {
             showopostheadline.setVisibility(View.VISIBLE);
             showpostimage.setVisibility(View.VISIBLE);
@@ -54,12 +54,12 @@ public class PostDetailActivity extends AppCompatActivity {
         if (postDetails.getLikes() == null || postDetails.getLikes().isEmpty()) {
             showopostlikes.setText("0 like");
         } else {
-            showopostlikes.setText(postDetails.getLikes() +" like");
+            showopostlikes.setText(postDetails.getLikes() + " like");
         }
         if (postDetails.getComment() == null || postDetails.getComment().isEmpty()) {
             showopostcomments.setText("0 comment");
         } else {
-            showopostcomments.setText(postDetails.getComment().size() +" comment");
+            showopostcomments.setText(postDetails.getComment().size() + " comment");
         }
         if (postDetails.getEntryDate() == null || postDetails.getEntryDate().isEmpty()) {
             showopostlikes.setText("");
@@ -67,9 +67,5 @@ public class PostDetailActivity extends AppCompatActivity {
             showoposttime.setText(postDetails.getEntryDate());
         }
         postDetails.getAthleteVideo();
-
-
-
-
     }
 }

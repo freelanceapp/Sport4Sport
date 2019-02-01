@@ -158,6 +158,7 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.img_Video_Camera:
                 strPostType = "video";
+                startActivity(new Intent(mContext, VideoGalleryActivity.class));
                 (findViewById(R.id.edit_new_headline)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_image)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_video)).setVisibility(View.VISIBLE);
