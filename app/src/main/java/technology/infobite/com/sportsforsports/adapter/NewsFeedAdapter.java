@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import technology.infobite.com.sportsforsports.R;
+import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.Feed;
 import technology.infobite.com.sportsforsports.ui.activity.PostDetailActivity;
 
@@ -36,15 +36,16 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         this.ctx = ctx;
         this.onClickListener = onClickListener;
     }
+
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater li = LayoutInflater.from(ctx);
         View viewt = li.inflate(R.layout.row_news_item, null);
         return new ViewHolder(viewt);
     }
+
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-        /*send data on post detail actiivity*/
         final Feed newPostModel = newPostModels.get(i);
         viewHolder.lloperpostdetailactivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,29 +55,35 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                 ctx.startActivity(intent);
             }
         });
+
         viewHolder.postpersonname.setText("Virat kohli");
+
         if (newPostModel.getAthleteArticeHeadline() == null || newPostModel.getAthleteArticeHeadline().isEmpty()) {
             viewHolder.tv_headline.setVisibility(View.GONE);
         } else {
             viewHolder.tv_headline.setVisibility(View.VISIBLE);
             viewHolder.postImage.setVisibility(View.GONE);
+            viewHolder.postvideo.setVisibility(View.GONE);
             viewHolder.tv_headline.setText(newPostModel.getAthleteArticeHeadline());
         }
+
         if (newPostModel.getAlhleteImages() == null || newPostModel.getAlhleteImages().isEmpty()) {
             viewHolder.postImage.setVisibility(View.GONE);
         } else {
             viewHolder.tv_headline.setVisibility(View.VISIBLE);
+            viewHolder.tv_headline.setText(newPostModel.getAthleteArticeHeadline());
             viewHolder.postImage.setVisibility(View.VISIBLE);
             String currentString = newPostModel.getAlhleteImages();
-            Picasso.with(ctx).load("http://codeencrypt.in/sport/images/alhlete_images/" + currentString)
+            Picasso.with(ctx).load(Constant.IMAGE_BASE_URL + currentString)
                     .placeholder(R.drawable.player_image)
                     .resize(250, 500)
                     .into(viewHolder.postImage);
         }
+
         if (newPostModel.getLikes() == null || newPostModel.getLikes().isEmpty()) {
             viewHolder.likes.setText("0 like");
         } else {
-            viewHolder.likes.setText(newPostModel.getLikes() +" like");
+            viewHolder.likes.setText(newPostModel.getLikes() + " like");
         }
         if (newPostModel.getComment() == null || newPostModel.getComment().isEmpty()) {
             viewHolder.comments.setText("0 comment");
@@ -88,12 +95,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
         } else {
             viewHolder.timeduration.setText(newPostModel.getEntryDate());
         }
-        /*(R.drawable.player_image, "David Beckham", R.drawable.player_image
-                    , "2.206 likes", "5000 comments", "2 HOURS AGO",
-                    getResources().getString(R.string.demo_text), "View all 24 comment")*/
-
-        //  viewHolder.comments.setText((CharSequence) newPostModel.getComment());
-        //   viewHolder.totalcommentcounts.setText((Integer) newPostModel.getAthleteArticeUrl());
 
         viewHolder.postsend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,12 +130,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     public int getItemCount() {
         return newPostModels.size();
     }
-/*
-    private void newPostCommentApi(){
-        String strId = AppPreference.getStringPreference(ctx, Constant.USER_ID);
-
-    }
-*/
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

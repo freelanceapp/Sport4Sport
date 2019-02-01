@@ -36,21 +36,23 @@ import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
+import technology.infobite.com.sportsforsports.upload_with_progress.ProgressRequestBody;
 import technology.infobite.com.sportsforsports.utils.Alerts;
 import technology.infobite.com.sportsforsports.utils.AppPreference;
 import technology.infobite.com.sportsforsports.utils.BaseActivity;
 
-public class MyPostActivity extends BaseActivity implements View.OnClickListener {
+public class NewPostActivity extends BaseActivity implements View.OnClickListener, ProgressRequestBody.UploadCallbacks {
 
     private static final int PICK_FROM_GALLERY = 1;
-    private File imageFile = null;
+    private File imageFile = null, videoFile = null;
     private static int VIDEO_FROM_GALLERY = 1;
-    private String imagePath;
+    private String imagePath = "", strVideoPath = "";
+    private String strPostType = "text";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_page);
+        setContentView(R.layout.activity_new_post);
 
         ((TextView) findViewById(R.id.tv_post_feed)).setOnClickListener(this);
         findViewById(R.id.img_Comment).setOnClickListener(this);
@@ -61,6 +63,29 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
 
     }
 
+    private void checkValidation() {
+        String strNewThoughts = ((EditText) findViewById(R.id.edit_new_headline)).getText().toString();
+        if (strPostType.equals("text")) {
+            if (strNewThoughts.isEmpty()) {
+                Alerts.show(mContext, "Please enter some text for post!!!");
+            } else {
+                newPostFeedApi();
+            }
+        } else if (strPostType.equals("image")) {
+            if (imageFile == null) {
+                Alerts.show(mContext, "Please select image for post!!!");
+            } else {
+                newPostFeedApi();
+            }
+        } else if (strPostType.equals("video")) {
+            if (videoFile == null) {
+                Alerts.show(mContext, "Please select video for post!!!");
+            } else {
+                newPostFeedApi();
+            }
+        }
+    }
+
     private void newPostFeedApi() {
         String strId = AppPreference.getStringPreference(getApplicationContext(), Constant.USER_ID);
         String strAthleteStatus = "y";
@@ -69,7 +94,6 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
         String strArticleHeadline = ((EditText) findViewById(R.id.edit_new_headline)).getText().toString();
 
         if (cd.isNetworkAvailable()) {
-
             RequestBody _id = RequestBody.create(MediaType.parse("text/plain"), strId);
             RequestBody _Status = RequestBody.create(MediaType.parse("text/plain"), strAthleteStatus);
             RequestBody _Url = RequestBody.create(MediaType.parse("text/plain"), strArticleUrl);
@@ -77,12 +101,12 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
 
             RequestBody imageBodyFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
             MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("alhlete_images", imageFile.getName(), imageBodyFile);
-          /*  RequestBody videoBodyFile = RequestBody.create(MediaType.parse("video/*"), videofile);
-            MultipartBody.Part videoBodyFile = MultipartBody.Part.createFormData("athlete_video", imageFile.getName(), videoBodyFile);*/
 
+            ProgressRequestBody fileBody = new ProgressRequestBody(videoFile, "video/mp4", this);
+            MultipartBody.Part videoFileUpload = MultipartBody.Part.createFormData("athlete_video", videoFile.getName(), fileBody);
 
             RetrofitService.getNewPostData(new Dialog(mContext), retrofitApiClient.newPostFeed(_id, _Status,
-                    fileToUpload, _Url, _Headline, fileToUpload), new WebResponse() {
+                    videoFileUpload, _Url, _Headline, fileToUpload), new WebResponse() {
                 @Override
                 public void onResponseSuccess(Response<?> result) {
                     ResponseBody responseBody = (ResponseBody) result.body();
@@ -94,7 +118,7 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
                         } else {
                             AppPreference.setBooleanPreference(mContext, "NewPost", true);
                             Alerts.show(mContext, jsonObject.getString("message"));
-                            finish();
+                            //finish();
                         }
 
                     } catch (JSONException e) {
@@ -109,6 +133,8 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
                     Alerts.show(mContext, error);
                 }
             });
+        } else {
+            cd.show(mContext);
         }
     }
 
@@ -116,35 +142,36 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_post_feed:
-                newPostFeedApi();
+                checkValidation();
                 break;
             case R.id.img_Comment:
+                strPostType = "text";
                 (findViewById(R.id.edit_new_headline)).setVisibility(View.VISIBLE);
-                (findViewById(R.id.rl_image)).setVisibility(View.INVISIBLE);
-                (findViewById(R.id.rl_video)).setVisibility(View.INVISIBLE);
+                (findViewById(R.id.rl_image)).setVisibility(View.GONE);
+                (findViewById(R.id.rl_video)).setVisibility(View.GONE);
                 break;
             case R.id.img_Camera:
-                (findViewById(R.id.edit_new_headline)).setVisibility(View.VISIBLE);
+                strPostType = "image";
+                (findViewById(R.id.edit_new_headline)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_image)).setVisibility(View.VISIBLE);
-                (findViewById(R.id.rl_video)).setVisibility(View.INVISIBLE);
+                (findViewById(R.id.rl_video)).setVisibility(View.GONE);
                 break;
             case R.id.img_Video_Camera:
-                (findViewById(R.id.edit_new_headline)).setVisibility(View.VISIBLE);
-                (findViewById(R.id.rl_image)).setVisibility(View.VISIBLE);
+                strPostType = "video";
+                (findViewById(R.id.edit_new_headline)).setVisibility(View.GONE);
+                (findViewById(R.id.rl_image)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_video)).setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_select_image:
                 try {
                     if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(MyPostActivity.this,
+                        ActivityCompat.requestPermissions(NewPostActivity.this,
                                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                                         Manifest.permission.WRITE_EXTERNAL_STORAGE}, PICK_FROM_GALLERY);
                     } else {
                         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(galleryIntent, PICK_FROM_GALLERY);
-                       /* Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(i, RESULT_LOAD_IMAGE);*/
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -153,7 +180,7 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
             case R.id.tv_select_video:
                 try {
                     if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(MyPostActivity.this,
+                        ActivityCompat.requestPermissions(NewPostActivity.this,
                                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                                         Manifest.permission.WRITE_EXTERNAL_STORAGE}, VIDEO_FROM_GALLERY);
                     } else {
@@ -164,10 +191,6 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-              /*  Intent i1 = new Intent(
-                        Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i1, RESULT_LOAD_VIDEO);*/
                 break;
         }
     }
@@ -202,12 +225,14 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
                 imageFile = new File(imagePath);
                 ((TextView) findViewById(R.id.tv_select_image)).setVisibility(View.INVISIBLE);
             } catch (FileNotFoundException e) {
-                Toast.makeText(this, "Image was not found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
-        if (resultCode == RESULT_OK) {
+        if (requestCode == VIDEO_FROM_GALLERY && resultCode == RESULT_OK) {
             Uri video = data.getData();
+            strVideoPath = getPath(video);
+            videoFile = new File(strVideoPath);
             ((VideoView) findViewById(R.id.vid_upload)).setVideoURI(video);
             ((VideoView) findViewById(R.id.vid_upload)).start();
         }
@@ -221,5 +246,20 @@ public class MyPostActivity extends BaseActivity implements View.OnClickListener
         String strPath = cursor.getString(column_index);
         cursor.close();
         return strPath;
+    }
+
+    @Override
+    public void onProgressUpdate(int percentage) {
+        ((TextView) findViewById(R.id.tvProgress)).setText(percentage + "");
+    }
+
+    @Override
+    public void onError() {
+
+    }
+
+    @Override
+    public void onFinish() {
+        ((TextView) findViewById(R.id.tvProgress)).setText("Finished");
     }
 }

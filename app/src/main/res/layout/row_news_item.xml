@@ -76,10 +76,9 @@
             <TextView
                 android:id="@+id/get_tv_headline"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_margin="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="dsygfhsdgfvdsvds"
                 android:textColor="@color/black"
                 android:textSize="16dp"
                 android:visibility="gone" />
@@ -87,14 +86,14 @@
             <ImageView
                 android:id="@+id/get_post_image"
                 android:layout_width="match_parent"
-                android:layout_height="200sp"
-                android:scaleType="fitXY"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:visibility="gone" />
 
             <VideoView
                 android:id="@+id/get_post_video"
                 android:layout_width="match_parent"
-                android:layout_height="200sp"
+                android:layout_height="200dp"
                 android:scaleType="fitXY"
                 android:visibility="gone" />
         </LinearLayout>

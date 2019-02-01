@@ -139,7 +139,7 @@ public class HomeActivity extends BaseActivity implements OnBMClickListener, Vie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fabNewPost:
-                startActivity(new Intent(getApplicationContext(), MyPostActivity.class));
+                startActivity(new Intent(getApplicationContext(), NewPostActivity.class));
                 break;
             case R.id.imgSearch:
                 startActivity(new Intent(getApplicationContext(), SearchListActivity.class));
