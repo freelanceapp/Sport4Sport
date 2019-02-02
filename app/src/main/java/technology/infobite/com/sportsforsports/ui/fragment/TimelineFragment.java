@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ import retrofit2.Response;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.adapter.NewsFeedAdapter;
 import technology.infobite.com.sportsforsports.constant.Constant;
-import technology.infobite.com.sportsforsports.modal.daily_news_feed.Comment;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.Feed;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
@@ -53,7 +51,6 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
         newpostrclv.setHasFixedSize(true);
         newpostrclv.setLayoutManager(new LinearLayoutManager(mContext));
 
-
         newPostAdapter = new NewsFeedAdapter(newPostModels, mContext, this);
         LinearLayoutManager lm = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         newpostrclv.setLayoutManager(lm);
@@ -67,12 +64,18 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
             case R.id.llViewUserProfile:
                 startActivity(new Intent(mContext, UserProfileActivity.class));
                 break;
+            case R.id.llLikePost:
+                Alerts.show(mContext, "Under development!!!");
+                //startActivity(new Intent(mContext, UserProfileActivity.class));
+                break;
+            case R.id.llPostComment:
+                Alerts.show(mContext, "Under development!!!");
+                break;
         }
     }
 
     private void timelineApi() {
         String strId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
-
         if (cd.isNetworkAvailable()) {
             RetrofitService.showPostTimeLine(new Dialog(mContext), retrofitApiClient.showPostTimeLine(strId), new WebResponse() {
                 @Override
@@ -83,10 +86,9 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
                         Alerts.show(mContext, dailyNewsFeedMainModal.getMessage());
                     } else {
                         newPostModels.addAll(dailyNewsFeedMainModal.getFeed());
-                        Alerts.show(mContext, dailyNewsFeedMainModal.getMessage());
+                        //Alerts.show(mContext, dailyNewsFeedMainModal.getMessage());
                     }
                     newPostAdapter.notifyDataSetChanged();
-
                 }
 
                 @Override
@@ -96,6 +98,7 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
             });
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();

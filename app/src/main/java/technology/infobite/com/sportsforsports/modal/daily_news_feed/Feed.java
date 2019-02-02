@@ -1,21 +1,24 @@
 
 package technology.infobite.com.sportsforsports.modal.daily_news_feed;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Feed implements Serializable, Parcelable
-{
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Feed implements Serializable, Parcelable {
 
     @SerializedName("feed_id")
     @Expose
     private String feedId;
+    @SerializedName("post_user_name")
+    @Expose
+    private String postUserName;
     @SerializedName("athlete_status")
     @Expose
     private String athleteStatus;
@@ -44,7 +47,7 @@ public class Feed implements Serializable, Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public Feed createFromParcel(Parcel in) {
             return new Feed(in);
@@ -54,12 +57,12 @@ public class Feed implements Serializable, Parcelable
             return (new Feed[size]);
         }
 
-    }
-    ;
+    };
     private final static long serialVersionUID = 5278743063907932546L;
 
     protected Feed(Parcel in) {
         this.feedId = ((String) in.readValue((String.class.getClassLoader())));
+        this.postUserName = ((String) in.readValue((String.class.getClassLoader())));
         this.athleteStatus = ((String) in.readValue((String.class.getClassLoader())));
         this.athleteVideo = ((String) in.readValue((String.class.getClassLoader())));
         this.athleteArticeUrl = ((String) in.readValue((String.class.getClassLoader())));
@@ -79,6 +82,14 @@ public class Feed implements Serializable, Parcelable
 
     public void setFeedId(String feedId) {
         this.feedId = feedId;
+    }
+
+    public String getPostUserName() {
+        return postUserName;
+    }
+
+    public void setPostUserName(String postUserName) {
+        this.postUserName = postUserName;
     }
 
     public String getAthleteStatus() {
@@ -148,6 +159,7 @@ public class Feed implements Serializable, Parcelable
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(feedId);
         dest.writeValue(athleteStatus);
+        dest.writeValue(postUserName);
         dest.writeValue(athleteVideo);
         dest.writeValue(athleteArticeUrl);
         dest.writeValue(athleteArticeHeadline);
@@ -158,7 +170,7 @@ public class Feed implements Serializable, Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

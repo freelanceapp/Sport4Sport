@@ -2,6 +2,7 @@ package technology.infobite.com.sportsforsports.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -48,7 +51,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         final Feed newPostModel = newPostModels.get(i);
-        viewHolder.lloperpostdetailactivity.setOnClickListener(new View.OnClickListener() {
+        viewHolder.postpersonname.setText(newPostModel.getPostUserName());
+        viewHolder.description.setText(newPostModel.getAthleteStatus());
+        viewHolder.rlPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ctx, PostDetailActivity.class);
@@ -57,37 +62,37 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             }
         });
 
-        viewHolder.postpersonname.setText("Virat kohli");
-
-        if (newPostModel.getAthleteArticeHeadline() == null || newPostModel.getAthleteArticeHeadline().isEmpty()) {
-            viewHolder.tv_headline.setVisibility(View.GONE);
-        } else {
+        if (!newPostModel.getAthleteArticeHeadline().isEmpty()) {
             viewHolder.tv_headline.setVisibility(View.VISIBLE);
             viewHolder.postImage.setVisibility(View.GONE);
             viewHolder.postvideo.setVisibility(View.GONE);
+            viewHolder.progressBar.setVisibility(View.GONE);
             viewHolder.tv_headline.setText(newPostModel.getAthleteArticeHeadline());
-        }
-
-        if (newPostModel.getAlhleteImages() == null || newPostModel.getAlhleteImages().isEmpty()) {
-            viewHolder.postImage.setVisibility(View.GONE);
-        } else {
-            viewHolder.tv_headline.setVisibility(View.VISIBLE);
-            viewHolder.tv_headline.setText(newPostModel.getAthleteArticeHeadline());
+        } else if (!newPostModel.getAlhleteImages().isEmpty()) {
             viewHolder.postImage.setVisibility(View.VISIBLE);
+            viewHolder.tv_headline.setVisibility(View.GONE);
+            viewHolder.postvideo.setVisibility(View.GONE);
+            viewHolder.progressBar.setVisibility(View.GONE);
             String currentString = newPostModel.getAlhleteImages();
             Picasso.with(ctx).load(Constant.IMAGE_BASE_URL + currentString)
-                    .placeholder(R.drawable.player_image)
-                    .resize(250, 500)
+                    .placeholder(R.drawable.app_logo)
+                    //.resize(250, 350)
                     .into(viewHolder.postImage);
-        }
-
-        if (newPostModel.getAthleteVideo() == null || newPostModel.getAthleteVideo().isEmpty()) {
-            viewHolder.postvideo.setVisibility(View.GONE);
-        } else {
+        } else if (!newPostModel.getAthleteVideo().isEmpty()) {
             viewHolder.postvideo.setVisibility(View.VISIBLE);
+            viewHolder.tv_headline.setVisibility(View.GONE);
+            viewHolder.postImage.setVisibility(View.GONE);
+            viewHolder.progressBar.setVisibility(View.VISIBLE);
             String strVideoUrl = newPostModel.getAthleteVideo();
             Uri uri = Uri.parse(Constant.VIDEO_BASE_URL + strVideoUrl);
             viewHolder.postvideo.setVideoURI(uri);
+            viewHolder.postvideo.start();
+            viewHolder.postvideo.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    viewHolder.progressBar.setVisibility(View.GONE);
+                }
+            });
         }
 
         if (newPostModel.getLikes() == null || newPostModel.getLikes().isEmpty()) {
@@ -106,34 +111,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             viewHolder.timeduration.setText(newPostModel.getEntryDate());
         }
 
-        viewHolder.postsend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.post_comment_send:
-                        if (viewHolder.postsend.isPressed()) {
-
-                        }
-                        break;
-                }
-            }
-        });
-
-        viewHolder.visibesendmessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (check) {
-                    check = false;
-                    viewHolder.commentsection.setVisibility(View.GONE);
-                } else {
-                    check = true;
-                    viewHolder.commentsection.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
         viewHolder.llViewUserProfile.setTag(i);
         viewHolder.llViewUserProfile.setOnClickListener(onClickListener);
+        viewHolder.llPostComment.setTag(i);
+        viewHolder.llPostComment.setOnClickListener(onClickListener);
+        viewHolder.llLikePost.setTag(i);
+        viewHolder.llLikePost.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -143,16 +126,21 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private LinearLayout commentsection, visibesendmessage, llViewUserProfile, lloperpostdetailactivity;
+        private RelativeLayout rlPost;
+        private LinearLayout llViewUserProfile, llPostComment, llLikePost;
         private ImageView profile, postImage;
         private TextView postpersonname, likes, comments, timeduration, description, totalcommentcounts, tv_headline;
         private EditText posteditmessage;
         private Button postsend;
         private VideoView postvideo;
+        private ProgressBar progressBar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            lloperpostdetailactivity = itemView.findViewById(R.id.ll_open_post_detail_activity);
+            progressBar = itemView.findViewById(R.id.progressBar);
+            llPostComment = itemView.findViewById(R.id.llPostComment);
+            llLikePost = itemView.findViewById(R.id.llLikePost);
+            rlPost = itemView.findViewById(R.id.rlPost);
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             profile = itemView.findViewById(R.id.post_person_profile);
             postpersonname = itemView.findViewById(R.id.post_person_name);
@@ -166,8 +154,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             totalcommentcounts = itemView.findViewById(R.id.post_total_comments);
             posteditmessage = itemView.findViewById(R.id.edit_post_comment);
             postsend = itemView.findViewById(R.id.post_comment_send);
-            commentsection = itemView.findViewById(R.id.commentsection);
-            visibesendmessage = itemView.findViewById(R.id.visibesendmessage);
         }
     }
 }

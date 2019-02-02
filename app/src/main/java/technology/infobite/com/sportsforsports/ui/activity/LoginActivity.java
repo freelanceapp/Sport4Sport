@@ -86,7 +86,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if (!responseBody.getError()) {
                             AppPreference.setStringPreference(mContext, Constant.USER_ID, responseBody.getUser().getUserId());
                             Alerts.show(mContext, responseBody.getMessage());
-
                             if (responseBody.getUser().getDob() == null || responseBody.getUser().getDob().isEmpty()) {
                                 Alerts.show(mContext, "Please create profile first");
                                 Intent intent = new Intent(mContext, CreateProfileActivity.class);

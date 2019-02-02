@@ -152,6 +152,7 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.img_Comment:
                 strPostType = "text";
+                ((EditText) findViewById(R.id.edtPostDescription)).setText("");
                 (findViewById(R.id.edit_new_headline)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.viewBottom)).setVisibility(View.GONE);
                 (findViewById(R.id.edtPostDescription)).setVisibility(View.GONE);
@@ -160,6 +161,7 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.img_Camera:
                 strPostType = "image";
+                ((EditText) findViewById(R.id.edit_new_headline)).setText("");
                 (findViewById(R.id.viewBottom)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.edtPostDescription)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.edit_new_headline)).setVisibility(View.GONE);
@@ -168,6 +170,7 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.img_Video_Camera:
                 strPostType = "video";
+                ((EditText) findViewById(R.id.edit_new_headline)).setText("");
                 (findViewById(R.id.viewBottom)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.edtPostDescription)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.edit_new_headline)).setVisibility(View.GONE);

@@ -67,8 +67,8 @@
                 android:visibility="gone" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_open_post_detail_activity"
+        <RelativeLayout
+            android:id="@+id/rlPost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -76,9 +76,9 @@
             <TextView
                 android:id="@+id/get_tv_headline"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:layout_margin="16dp"
-                android:layout_marginBottom="8dp"
                 android:textColor="@color/black"
                 android:textSize="16dp"
                 android:visibility="gone" />
@@ -86,17 +86,33 @@
             <ImageView
                 android:id="@+id/get_post_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="350dp"
+                android:layout_centerHorizontal="true"
                 android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nature1"
                 android:visibility="gone" />
 
             <VideoView
                 android:id="@+id/get_post_video"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="fitXY"
+                android:layout_height="350dp"
+                android:layout_centerHorizontal="true"
                 android:visibility="gone" />
-        </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorPrimary"
+                android:indeterminateTintMode="src_atop"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,9 +120,12 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/llLikePost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:orientation="horizontal"
                 android:padding="10dp">
 
@@ -129,10 +148,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/visibesendmessage"
+                android:id="@+id/llPostComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:orientation="horizontal"
                 android:padding="10dp">
 
@@ -238,7 +259,6 @@
                 android:id="@+id/post_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="This is demo text."
                 android:textColor="@color/gray_a"
                 android:textSize="14dp"
                 android:textStyle="normal" />

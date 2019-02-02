@@ -110,9 +110,9 @@
                 <ImageView
                     android:id="@+id/img_upload"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="250dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/profile_image" />
 
                 <TextView
@@ -138,15 +138,15 @@
                 <ImageView
                     android:id="@+id/imgVideoThumb"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="250dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/profile_image" />
 
                 <VideoView
                     android:id="@+id/vid_upload"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="250dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
                     android:visibility="gone" />

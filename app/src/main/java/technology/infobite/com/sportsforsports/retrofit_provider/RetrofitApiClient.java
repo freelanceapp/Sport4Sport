@@ -10,7 +10,6 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import technology.infobite.com.sportsforsports.constant.Constant;
-import technology.infobite.com.sportsforsports.modal.daily_news_feed.Comment;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
 import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 
@@ -43,14 +42,14 @@ public interface RetrofitApiClient {
                                    @Part MultipartBody.Part avideo, @Part("athlete_artice_url") RequestBody aurl,
                                    @Part("athlete_artice_headline") RequestBody aheadline,
                                    @Part MultipartBody.Part aimage);
-    
+
     @FormUrlEncoded
     @POST(Constant.TIMELINE_API)
     Call<DailyNewsFeedMainModal> showPostTimeLine(@Field("user_id") String userId);
 
     @FormUrlEncoded
     @POST(Constant.POST_COMMENT_API)
-    Call<Comment> newPostComment(@Field("post_id") String postId, @Field("user_id") String useId,
-                                 @Field("comment") String comment);
+    Call<ResponseBody> newPostComment(@Field("post_id") String postId, @Field("user_id") String useId,
+                                      @Field("comment") String comment);
 
 }
