@@ -86,10 +86,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if (!responseBody.getError()) {
                             AppPreference.setStringPreference(mContext, Constant.USER_ID, responseBody.getUser().getUserId());
                             Alerts.show(mContext, responseBody.getMessage());
-                            Intent intent = new Intent(mContext, HomeActivity.class);
-                            intent.putExtra("user_id", responseBody.getUser().getUserId());
-                            startActivity(intent);
-                            finish();
+
+                            if (responseBody.getUser().getDob() == null || responseBody.getUser().getDob().isEmpty()) {
+                                Alerts.show(mContext, "Please create profile first");
+                                Intent intent = new Intent(mContext, CreateProfileActivity.class);
+                                intent.putExtra("user_id", responseBody.getUser().getUserId());
+                                intent.putExtra("name", responseBody.getUser().getUserName());
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(mContext, HomeActivity.class);
+                                intent.putExtra("user_id", responseBody.getUser().getUserId());
+                                startActivity(intent);
+                                finish();
+                            }
                         } else {
                             Alerts.show(mContext, responseBody.getMessage());
                         }

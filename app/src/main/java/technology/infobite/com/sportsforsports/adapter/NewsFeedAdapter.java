@@ -2,6 +2,7 @@ package technology.infobite.com.sportsforsports.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -78,6 +79,15 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
                     .placeholder(R.drawable.player_image)
                     .resize(250, 500)
                     .into(viewHolder.postImage);
+        }
+
+        if (newPostModel.getAthleteVideo() == null || newPostModel.getAthleteVideo().isEmpty()) {
+            viewHolder.postvideo.setVisibility(View.GONE);
+        } else {
+            viewHolder.postvideo.setVisibility(View.VISIBLE);
+            String strVideoUrl = newPostModel.getAthleteVideo();
+            Uri uri = Uri.parse(Constant.VIDEO_BASE_URL + strVideoUrl);
+            viewHolder.postvideo.setVideoURI(uri);
         }
 
         if (newPostModel.getLikes() == null || newPostModel.getLikes().isEmpty()) {
@@ -158,7 +168,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.ViewHo
             postsend = itemView.findViewById(R.id.post_comment_send);
             commentsection = itemView.findViewById(R.id.commentsection);
             visibesendmessage = itemView.findViewById(R.id.visibesendmessage);
-
         }
     }
 }

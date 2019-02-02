@@ -151,7 +151,16 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
     }
 
     private void clickNoThanks() {
+        String strName = ((EditText) findViewById(R.id.edtName)).getText().toString();
+        String strDateOfBirth = edtBirthday.getText().toString();
 
+        if (strName.isEmpty()) {
+            Alerts.show(mContext, "Please enter name first !!!");
+        } else if (strDateOfBirth.isEmpty()) {
+            Alerts.show(mContext, "Please select date of birth !!!");
+        } else {
+            clickContinueB();
+        }
     }
 
     private void clickContinue() {

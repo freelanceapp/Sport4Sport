@@ -1,7 +1,6 @@
-package technology.infobite.com.sportsforsports.ui.activity;
+package technology.infobite.com.sportsforsports.ui.fragment;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,18 +11,24 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.adapter.VideoListAdapter;
+import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.VideoListModel;
-import technology.infobite.com.sportsforsports.utils.BaseActivity;
+import technology.infobite.com.sportsforsports.utils.BaseFragment;
 
-public class VideoGalleryActivity extends BaseActivity implements View.OnClickListener {
+import static technology.infobite.com.sportsforsports.ui.activity.VideoActivity.videoFragmentManager;
 
+public class VideoGalleryFragment extends BaseFragment implements View.OnClickListener {
+
+    private View rootView;
     private VideoListAdapter obj_adapter;
     private ArrayList<VideoListModel> al_video = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -31,32 +36,33 @@ public class VideoGalleryActivity extends BaseActivity implements View.OnClickLi
     private static final int REQUEST_PERMISSIONS = 100;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_video_gallery);
-        mContext = this;
+
+        rootView = inflater.inflate(R.layout.fragment_video_gallery, container, false);
+        mContext = getActivity();
         init();
+        return rootView;
     }
 
     private void init() {
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view1);
-        recyclerViewLayoutManager = new GridLayoutManager(getApplicationContext(), 3);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view1);
+        recyclerViewLayoutManager = new GridLayoutManager(mContext, 3);
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
-
         fn_checkpermission();
     }
 
     private void fn_checkpermission() {
         /*RUN TIME PERMISSIONS*/
-        if ((ContextCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-            if ((ActivityCompat.shouldShowRequestPermissionRationale(VideoGalleryActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) && (ActivityCompat.shouldShowRequestPermissionRationale(VideoGalleryActivity.this,
+        if ((ContextCompat.checkSelfPermission(mContext,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) &&
+                (ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+            if ((ActivityCompat.shouldShowRequestPermissionRationale(activity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) && (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                     Manifest.permission.READ_EXTERNAL_STORAGE))) {
             } else {
-                ActivityCompat.requestPermissions(VideoGalleryActivity.this,
+                ActivityCompat.requestPermissions(activity,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                         REQUEST_PERMISSIONS);
             }
@@ -66,10 +72,7 @@ public class VideoGalleryActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-
     public void fn_video() {
-
-        int int_position = 0;
         Uri uri;
         Cursor cursor;
         int column_index_data, column_index_folder_name, column_id, thum;
@@ -80,7 +83,7 @@ public class VideoGalleryActivity extends BaseActivity implements View.OnClickLi
         String[] projection = {MediaStore.MediaColumns.DATA, MediaStore.Video.Media.BUCKET_DISPLAY_NAME, MediaStore.Video.Media._ID, MediaStore.Video.Thumbnails.DATA};
 
         final String orderBy = MediaStore.Images.Media.DATE_TAKEN;
-        cursor = getApplicationContext().getContentResolver().query(uri, projection, null, null, orderBy + " DESC");
+        cursor = mContext.getContentResolver().query(uri, projection, null, null, orderBy + " DESC");
 
         column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
         column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME);
@@ -100,7 +103,7 @@ public class VideoGalleryActivity extends BaseActivity implements View.OnClickLi
             obj_model.setStr_thumb(cursor.getString(thum));
             al_video.add(obj_model);
         }
-        obj_adapter = new VideoListAdapter(getApplicationContext(), al_video, VideoGalleryActivity.this, this);
+        obj_adapter = new VideoListAdapter(mContext, al_video, activity, this);
         recyclerView.setAdapter(obj_adapter);
     }
 
@@ -113,7 +116,7 @@ public class VideoGalleryActivity extends BaseActivity implements View.OnClickLi
                     if (grantResults.length > 0 && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                         fn_video();
                     } else {
-                        Toast.makeText(VideoGalleryActivity.this, "The app was not allowed to read or write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "The app was not allowed to read or write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -126,11 +129,18 @@ public class VideoGalleryActivity extends BaseActivity implements View.OnClickLi
             case R.id.rl_select:
                 int pos = Integer.parseInt(v.getTag().toString());
                 String strVideoPath = al_video.get(pos).getStr_path();
-                Intent intent_gallery = new Intent(mContext, VideoTrimerActivity.class);
-                intent_gallery.putExtra("video_path", strVideoPath);
-                startActivity(intent_gallery);
+                String strVideoThumb = al_video.get(pos).getStr_thumb();
+                VideoTrimmerFragment videoTrimmerFragment = new VideoTrimmerFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("video_path", strVideoPath);
+                bundle.putString("video_thumb", strVideoThumb);
+                videoTrimmerFragment.setArguments(bundle);
+
+                videoFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fram_container, videoTrimmerFragment,
+                                Constant.VideoTrimmerFragment).commit();
                 break;
         }
     }
 }
-

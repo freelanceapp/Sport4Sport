@@ -1,36 +1,49 @@
-package technology.infobite.com.sportsforsports.ui.activity;
+package technology.infobite.com.sportsforsports.ui.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import life.knowledge4.videotrimmer.K4LVideoTrimmer;
 import life.knowledge4.videotrimmer.interfaces.OnTrimVideoListener;
 import technology.infobite.com.sportsforsports.R;
+import technology.infobite.com.sportsforsports.constant.Constant;
+import technology.infobite.com.sportsforsports.utils.BaseFragment;
 
-public class VideoTrimerActivity extends Activity implements OnTrimVideoListener {
+import static technology.infobite.com.sportsforsports.ui.activity.VideoActivity.videoFragmentManager;
 
-    private String str_video;
-    // VideoView vv_video;
+public class VideoTrimmerFragment extends BaseFragment implements OnTrimVideoListener {
+
+    private View rootView;
+    private String str_video, strVideoThumb;
     private K4LVideoTrimmer videoTrimmer;
     private ProgressDialog mProgressDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_video_trimer);
+
+        rootView = inflater.inflate(R.layout.fragment_video_trimer, container, false);
+        activity = getActivity();
+        mContext = getActivity();
         init();
+        return rootView;
     }
 
     private void init() {
-        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog = new ProgressDialog(mContext);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setMessage("Start progress");
 
-        videoTrimmer = ((K4LVideoTrimmer) findViewById(R.id.videoTrimmer));
-        str_video = getIntent().getStringExtra("video");
+        videoTrimmer = rootView.findViewById(R.id.videoTrimmer);
+        str_video = getArguments().getString("video_path");
+        strVideoThumb = getArguments().getString("video_thumb");
        /* vv_video.setVideoPath(str_video);
         vv_video.start();*/
 
@@ -45,22 +58,11 @@ public class VideoTrimerActivity extends Activity implements OnTrimVideoListener
         }
     }
 
-   /* @Override
-    public void onTrimStarted() {
-        mProgressDialog.show();
-    }*/
-
     @Override
-    public void getResult(final Uri uri) {
+    public void getResult(Uri uri) {
         mProgressDialog.cancel();
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // Toast.makeText(VideoTrimerActivity.this, getString(R.string.video_saved_at, uri.getPath()), Toast.LENGTH_SHORT).show();
-            }
-        });
         Log.e("Video Path ", "..." + uri.getPath());
+
         /*Intent intent_gallery = new Intent(VideoTrimerActivity.this,UploadVideoActivity.class);
         intent_gallery.putExtra("video1",uri.getPath());
         startActivity(intent_gallery);*/
@@ -68,36 +70,22 @@ public class VideoTrimerActivity extends Activity implements OnTrimVideoListener
        /* Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setDataAndType(uri, "video/mp4");
         startActivity(intent);*/
-        finish();
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("crop_video", uri.getPath());
+        returnIntent.putExtra("video_thumb", strVideoThumb);
+        activity.setResult(Activity.RESULT_OK, returnIntent);
+        activity.finish();
     }
 
     @Override
     public void cancelAction() {
         mProgressDialog.cancel();
         videoTrimmer.destroy();
-        finish();
+
+        videoFragmentManager
+                .beginTransaction()
+                .replace(R.id.fram_container, new VideoGalleryFragment(),
+                        Constant.VideoGalleryFragment).commit();
     }
-
-    /*@Override
-    public void onError(final String message) {
-        mProgressDialog.cancel();
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(VideoTrimerActivity.this, message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    @Override
-    public void onVideoPrepared() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(VideoTrimerActivity.this, "onVideoPrepared", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
-
 }

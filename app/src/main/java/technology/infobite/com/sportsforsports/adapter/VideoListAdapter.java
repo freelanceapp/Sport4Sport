@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 
@@ -17,24 +18,28 @@ import technology.infobite.com.sportsforsports.modal.VideoListModel;
 
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.ViewHolder> {
 
-    ArrayList<VideoListModel> al_video;
-    Context context;
-    Activity activity;
+    private ArrayList<VideoListModel> al_video;
+    private Context context;
+    private Activity activity;
+    private View.OnClickListener onClickListener;
 
-    public VideoListAdapter(Context context, ArrayList<VideoListModel> al_video, Activity activity) {
+    public VideoListAdapter(Context context, ArrayList<VideoListModel> al_video, Activity activity, View.OnClickListener onClickListener) {
 
         this.al_video = al_video;
         this.context = context;
         this.activity = activity;
+        this.onClickListener = onClickListener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView iv_image;
+        private RelativeLayout rl_select;
+        private ImageView iv_image;
 
         public ViewHolder(View v) {
             super(v);
-            iv_image = (ImageView) v.findViewById(R.id.iv_image);
+            rl_select = v.findViewById(R.id.rl_select);
+            iv_image = v.findViewById(R.id.iv_image);
         }
     }
 
@@ -48,17 +53,10 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder Vholder, final int position) {
         Glide.with(context).load("file://" + al_video.get(position).getStr_thumb())
-                //.skipMemoryCache(false)
                 .into(Vholder.iv_image);
 
-        /*Vholder.rl_select.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent_gallery = new Intent(context, VideoGalleryActivity.class);
-                intent_gallery.putExtra("video", al_video.get(position).getStr_path());
-                activity.startActivity(intent_gallery);
-            }
-        });*/
+        Vholder.rl_select.setTag(position);
+        Vholder.rl_select.setOnClickListener(onClickListener);
     }
 
     @Override

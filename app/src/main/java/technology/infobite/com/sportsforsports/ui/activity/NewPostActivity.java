@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,7 +62,6 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
         findViewById(R.id.img_Video_Camera).setOnClickListener(this);
         findViewById(R.id.tv_select_image).setOnClickListener(this);
         findViewById(R.id.tv_select_video).setOnClickListener(this);
-
     }
 
     private void checkValidation() {
@@ -88,8 +89,7 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
 
     private void newPostFeedApi() {
         String strId = AppPreference.getStringPreference(getApplicationContext(), Constant.USER_ID);
-        String strAthleteStatus = "y";
-        String strAthleteVideo = "";
+        String strAthleteStatus = ((EditText) findViewById(R.id.edtPostDescription)).getText().toString();
         String strArticleUrl = Constant.DEMO_URL;
         String strArticleHeadline = ((EditText) findViewById(R.id.edit_new_headline)).getText().toString();
 
@@ -99,11 +99,17 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
             RequestBody _Url = RequestBody.create(MediaType.parse("text/plain"), strArticleUrl);
             RequestBody _Headline = RequestBody.create(MediaType.parse("text/plain"), strArticleHeadline);
 
-            RequestBody imageBodyFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
-            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("alhlete_images", imageFile.getName(), imageBodyFile);
+            MultipartBody.Part fileToUpload = null;
+            MultipartBody.Part videoFileUpload = null;
 
-            ProgressRequestBody fileBody = new ProgressRequestBody(videoFile, "video/mp4", this);
-            MultipartBody.Part videoFileUpload = MultipartBody.Part.createFormData("athlete_video", videoFile.getName(), fileBody);
+            if (strPostType.equals("image")) {
+                RequestBody imageBodyFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
+                fileToUpload = MultipartBody.Part.createFormData("alhlete_images", imageFile.getName(),
+                        imageBodyFile);
+            } else if (strPostType.equals("video")) {
+                ProgressRequestBody fileBody = new ProgressRequestBody(videoFile, "video/mp4", this);
+                videoFileUpload = MultipartBody.Part.createFormData("athlete_video", videoFile.getName(), fileBody);
+            }
 
             RetrofitService.getNewPostData(new Dialog(mContext), retrofitApiClient.newPostFeed(_id, _Status,
                     videoFileUpload, _Url, _Headline, fileToUpload), new WebResponse() {
@@ -118,7 +124,7 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                         } else {
                             AppPreference.setBooleanPreference(mContext, "NewPost", true);
                             Alerts.show(mContext, jsonObject.getString("message"));
-                            //finish();
+                            finish();
                         }
 
                     } catch (JSONException e) {
@@ -147,18 +153,23 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
             case R.id.img_Comment:
                 strPostType = "text";
                 (findViewById(R.id.edit_new_headline)).setVisibility(View.VISIBLE);
+                (findViewById(R.id.viewBottom)).setVisibility(View.GONE);
+                (findViewById(R.id.edtPostDescription)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_image)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_video)).setVisibility(View.GONE);
                 break;
             case R.id.img_Camera:
                 strPostType = "image";
+                (findViewById(R.id.viewBottom)).setVisibility(View.VISIBLE);
+                (findViewById(R.id.edtPostDescription)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.edit_new_headline)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_image)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.rl_video)).setVisibility(View.GONE);
                 break;
             case R.id.img_Video_Camera:
                 strPostType = "video";
-                startActivity(new Intent(mContext, VideoGalleryActivity.class));
+                (findViewById(R.id.viewBottom)).setVisibility(View.VISIBLE);
+                (findViewById(R.id.edtPostDescription)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.edit_new_headline)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_image)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_video)).setVisibility(View.VISIBLE);
@@ -179,7 +190,9 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                 }
                 break;
             case R.id.tv_select_video:
-                try {
+                Intent intent = new Intent(mContext, VideoActivity.class);
+                startActivityForResult(intent, 786);
+                /*try {
                     if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(NewPostActivity.this,
                                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -191,7 +204,7 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
                 break;
         }
     }
@@ -229,13 +242,24 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                 Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
-        }
-        if (requestCode == VIDEO_FROM_GALLERY && resultCode == RESULT_OK) {
+        } else if (requestCode == VIDEO_FROM_GALLERY && resultCode == RESULT_OK) {
             Uri video = data.getData();
             strVideoPath = getPath(video);
             videoFile = new File(strVideoPath);
             ((VideoView) findViewById(R.id.vid_upload)).setVideoURI(video);
             ((VideoView) findViewById(R.id.vid_upload)).start();
+        } else if (requestCode == 786) {
+            if (resultCode == RESULT_OK) {
+                String result = data.getStringExtra("crop_video");
+                String thumb = data.getStringExtra("video_thumb");
+                Uri video = Uri.parse(result);
+                Glide.with(mContext).load("file://" + thumb)
+                        .into(((ImageView) findViewById(R.id.imgVideoThumb)));
+
+                videoFile = new File(result);
+                ((VideoView) findViewById(R.id.vid_upload)).setVideoURI(video);
+                ((VideoView) findViewById(R.id.vid_upload)).start();
+            }
         }
     }
 

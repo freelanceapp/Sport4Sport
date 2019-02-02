@@ -55,12 +55,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/myprofile_img">
+        android:layout_above="@+id/llButtons"
+        android:layout_below="@+id/myprofile_img"
+        android:fillViewport="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <EditText
@@ -71,16 +72,38 @@
                 android:background="@drawable/edittext_back_a"
                 android:gravity="top"
                 android:hint="Share thoughts"
-                android:lines="8"
+                android:padding="16dp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edtPostDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/transparent"
+                android:gravity="top"
+                android:hint="Post description"
                 android:padding="16dp"
                 android:textStyle="normal"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/viewBottom"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/edtPostDescription"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/gray_h"
                 android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rl_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/edit_new_headline"
+                android:layout_below="@id/edtPostDescription"
                 android:layout_margin="16dp"
                 android:visibility="gone">
 
@@ -102,25 +125,31 @@
                     android:text="Share image"
                     android:textAlignment="center"
                     android:textColor="@color/white" />
-
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_video"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rl_image"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_below="@id/edtPostDescription"
+                android:layout_margin="16dp"
                 android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/imgVideoThumb"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/profile_image" />
 
                 <VideoView
                     android:id="@+id/vid_upload"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_select_video"
@@ -137,16 +166,15 @@
                     android:id="@+id/tvProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/vid_upload"
                     android:layout_centerHorizontal="true"
                     android:padding="16dp"
-                    android:text="12"
                     android:textSize="18sp" />
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/llButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/tv_post_feed"
@@ -168,8 +196,7 @@
             android:layout_height="34dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/ic_camera"
-            android:tint="@color/gray_d" />
+            android:src="@drawable/ic_camera" />
 
         <ImageView
             android:id="@+id/img_Video_Camera"
@@ -177,8 +204,7 @@
             android:layout_height="34dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/ic_video_camera"
-            android:tint="@color/gray_d" />
+            android:src="@drawable/ic_video_camera" />
     </LinearLayout>
 
     <TextView

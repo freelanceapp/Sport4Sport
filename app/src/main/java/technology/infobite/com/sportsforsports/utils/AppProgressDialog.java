@@ -17,7 +17,6 @@ public class AppProgressDialog {
         snackbar.show();
     }
 
-
     public static void show(Dialog mProgressDialog) {
         try {
             if (mProgressDialog.isShowing())

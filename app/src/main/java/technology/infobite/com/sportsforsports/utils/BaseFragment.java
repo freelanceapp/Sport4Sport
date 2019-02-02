@@ -27,6 +27,7 @@ public class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        activity = getActivity();
         mContext = getActivity();
         cd = new ConnectionDetector(mContext);
         retrofitApiClient = RetrofitService.getRetrofit();
