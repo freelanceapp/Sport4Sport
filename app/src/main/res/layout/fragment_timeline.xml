@@ -7,7 +7,15 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/new_post_rclv"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <technology.infobite.com.sportsforsports.utils.exoplayer.ExoPlayerRecyclerView
+        android:id="@+id/recyclerViewFeed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#dedede"
+        android:dividerHeight="8dp" />
 
 </RelativeLayout>

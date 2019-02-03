@@ -33,30 +33,3 @@ public class Constant {
     public static final String VIDEO_URL = "https://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4";
     public static final String VIDEO_BASE_URL = "http://codeencrypt.in/sport/images/alhlete_video/";
 }
-
-
-/* viewHolder.postsend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.post_comment_send:
-                        if (viewHolder.postsend.isPressed()) {
-
-                        }
-                        break;
-                }
-            }
-        });
-
-        viewHolder.visibesendmessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (check) {
-                    check = false;
-                    viewHolder.commentsection.setVisibility(View.GONE);
-                } else {
-                    check = true;
-                    viewHolder.commentsection.setVisibility(View.VISIBLE);
-                }
-            }
-        });*/

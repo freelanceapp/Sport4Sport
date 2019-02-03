@@ -19,6 +19,9 @@ public class Feed implements Serializable, Parcelable {
     @SerializedName("post_user_name")
     @Expose
     private String postUserName;
+    @SerializedName("post_user_image")
+    @Expose
+    private String postUserImage;
     @SerializedName("athlete_status")
     @Expose
     private String athleteStatus;
@@ -63,6 +66,7 @@ public class Feed implements Serializable, Parcelable {
     protected Feed(Parcel in) {
         this.feedId = ((String) in.readValue((String.class.getClassLoader())));
         this.postUserName = ((String) in.readValue((String.class.getClassLoader())));
+        this.postUserImage = ((String) in.readValue((String.class.getClassLoader())));
         this.athleteStatus = ((String) in.readValue((String.class.getClassLoader())));
         this.athleteVideo = ((String) in.readValue((String.class.getClassLoader())));
         this.athleteArticeUrl = ((String) in.readValue((String.class.getClassLoader())));
@@ -90,6 +94,14 @@ public class Feed implements Serializable, Parcelable {
 
     public void setPostUserName(String postUserName) {
         this.postUserName = postUserName;
+    }
+
+    public String getPostUserImage() {
+        return postUserImage;
+    }
+
+    public void setPostUserImage(String postUserImage) {
+        this.postUserImage = postUserImage;
     }
 
     public String getAthleteStatus() {
@@ -160,6 +172,7 @@ public class Feed implements Serializable, Parcelable {
         dest.writeValue(feedId);
         dest.writeValue(athleteStatus);
         dest.writeValue(postUserName);
+        dest.writeValue(postUserImage);
         dest.writeValue(athleteVideo);
         dest.writeValue(athleteArticeUrl);
         dest.writeValue(athleteArticeHeadline);
