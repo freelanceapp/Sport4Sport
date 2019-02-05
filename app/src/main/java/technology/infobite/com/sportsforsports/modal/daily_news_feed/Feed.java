@@ -46,6 +46,9 @@ public class Feed implements Serializable, Parcelable {
     @SerializedName("likes")
     @Expose
     private String likes;
+    @SerializedName("is_like")
+    @Expose
+    private String isLike;
     public final static Creator<Feed> CREATOR = new Creator<Feed>() {
 
 
@@ -75,6 +78,7 @@ public class Feed implements Serializable, Parcelable {
         this.entryDate = ((String) in.readValue((String.class.getClassLoader())));
         in.readList(this.comment, (technology.infobite.com.sportsforsports.modal.daily_news_feed.Comment.class.getClassLoader()));
         this.likes = ((String) in.readValue((String.class.getClassLoader())));
+        this.isLike = ((String) in.readValue((String.class.getClassLoader())));
     }
 
     public Feed() {
@@ -168,6 +172,14 @@ public class Feed implements Serializable, Parcelable {
         this.likes = likes;
     }
 
+    public String getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(String isLike) {
+        this.isLike = isLike;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(feedId);
         dest.writeValue(athleteStatus);
@@ -180,6 +192,7 @@ public class Feed implements Serializable, Parcelable {
         dest.writeValue(entryDate);
         dest.writeList(comment);
         dest.writeValue(likes);
+        dest.writeValue(isLike);
     }
 
     public int describeContents() {

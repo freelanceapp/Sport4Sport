@@ -1,15 +1,15 @@
 
 package technology.infobite.com.sportsforsports.modal.daily_news_feed;
 
-import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Comment implements Serializable, Parcelable
-{
+import java.io.Serializable;
+
+public class Comment implements Serializable, Parcelable {
     private String error;
 
     public Comment(String error) {
@@ -32,6 +32,9 @@ public class Comment implements Serializable, Parcelable
     @SerializedName("user_name")
     @Expose
     private String userName;
+    @SerializedName("user_image")
+    @Expose
+    private String userImage;
     @SerializedName("comment")
     @Expose
     private String comment;
@@ -42,7 +45,7 @@ public class Comment implements Serializable, Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public Comment createFromParcel(Parcel in) {
             return new Comment(in);
@@ -52,8 +55,7 @@ public class Comment implements Serializable, Parcelable
             return (new Comment[size]);
         }
 
-    }
-    ;
+    };
     private final static long serialVersionUID = 2307327212151113562L;
 
     protected Comment(Parcel in) {
@@ -61,6 +63,7 @@ public class Comment implements Serializable, Parcelable
         this.postId = ((String) in.readValue((String.class.getClassLoader())));
         this.userId = ((String) in.readValue((String.class.getClassLoader())));
         this.userName = ((String) in.readValue((String.class.getClassLoader())));
+        this.userImage = ((String) in.readValue((String.class.getClassLoader())));
         this.comment = ((String) in.readValue((String.class.getClassLoader())));
         this.date = ((String) in.readValue((String.class.getClassLoader())));
     }
@@ -104,6 +107,14 @@ public class Comment implements Serializable, Parcelable
         return comment;
     }
 
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
     public void setComment(String comment) {
         this.comment = comment;
     }
@@ -121,12 +132,13 @@ public class Comment implements Serializable, Parcelable
         dest.writeValue(postId);
         dest.writeValue(userId);
         dest.writeValue(userName);
+        dest.writeValue(userImage);
         dest.writeValue(comment);
         dest.writeValue(date);
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

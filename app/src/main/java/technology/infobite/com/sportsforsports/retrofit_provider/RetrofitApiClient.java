@@ -11,6 +11,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
+import technology.infobite.com.sportsforsports.modal.post_comment_modal.PostCommentResponseModal;
 import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 
 public interface RetrofitApiClient {
@@ -49,7 +50,13 @@ public interface RetrofitApiClient {
 
     @FormUrlEncoded
     @POST(Constant.POST_COMMENT_API)
-    Call<ResponseBody> newPostComment(@Field("post_id") String postId, @Field("user_id") String useId,
-                                      @Field("comment") String comment);
+    Call<PostCommentResponseModal> newPostComment(@Field("post_id") String postId, @Field("user_id") String useId,
+
+                                                  @Field("comment") String comment);
+
+    @FormUrlEncoded
+    @POST(Constant.PostLikeAPI)
+    Call<ResponseBody> postLike(@Field("post_id") String postId, @Field("user_id") String useId,
+                                @Field("status") String status);
 
 }

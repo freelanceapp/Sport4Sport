@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -158,6 +159,10 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                 (findViewById(R.id.edtPostDescription)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_image)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_video)).setVisibility(View.GONE);
+
+                ((ImageView) findViewById(R.id.img_Comment)).setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+                ((ImageView) findViewById(R.id.img_Camera)).setColorFilter(ContextCompat.getColor(mContext, R.color.gray_a));
+                ((ImageView) findViewById(R.id.img_Video_Camera)).setColorFilter(ContextCompat.getColor(mContext, R.color.gray_a));
                 break;
             case R.id.img_Camera:
                 strPostType = "image";
@@ -167,6 +172,10 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                 (findViewById(R.id.edit_new_headline)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_image)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.rl_video)).setVisibility(View.GONE);
+
+                ((ImageView) findViewById(R.id.img_Camera)).setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+                ((ImageView) findViewById(R.id.img_Comment)).setColorFilter(ContextCompat.getColor(mContext, R.color.gray_a));
+                ((ImageView) findViewById(R.id.img_Video_Camera)).setColorFilter(ContextCompat.getColor(mContext, R.color.gray_a));
                 break;
             case R.id.img_Video_Camera:
                 strPostType = "video";
@@ -176,6 +185,10 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                 (findViewById(R.id.edit_new_headline)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_image)).setVisibility(View.GONE);
                 (findViewById(R.id.rl_video)).setVisibility(View.VISIBLE);
+
+                ((ImageView) findViewById(R.id.img_Camera)).setColorFilter(ContextCompat.getColor(mContext, R.color.gray_a));
+                ((ImageView) findViewById(R.id.img_Comment)).setColorFilter(ContextCompat.getColor(mContext, R.color.gray_a));
+                ((ImageView) findViewById(R.id.img_Video_Camera)).setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
                 break;
             case R.id.tv_select_image:
                 try {

@@ -112,8 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/profile_image" />
+                    android:scaleType="centerCrop" />
 
                 <TextView
                     android:id="@+id/tv_select_image"
@@ -140,8 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/profile_image" />
+                    android:scaleType="centerCrop" />
 
                 <VideoView
                     android:id="@+id/vid_upload"
@@ -166,8 +164,10 @@
                     android:id="@+id/tvProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/imgVideoThumb"
                     android:layout_centerHorizontal="true"
                     android:padding="16dp"
+                    android:textColor="@color/gray_a"
                     android:textSize="18sp" />
             </RelativeLayout>
         </RelativeLayout>
@@ -188,7 +188,7 @@
             android:layout_height="34dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/ic_comment" />
+            android:src="@drawable/ic_text_post" />
 
         <ImageView
             android:id="@+id/img_Camera"
@@ -196,7 +196,7 @@
             android:layout_height="34dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/ic_camera" />
+            android:src="@drawable/ic_image_post" />
 
         <ImageView
             android:id="@+id/img_Video_Camera"
@@ -204,7 +204,7 @@
             android:layout_height="34dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/ic_video_camera" />
+            android:src="@drawable/ic_video_post" />
     </LinearLayout>
 
     <TextView

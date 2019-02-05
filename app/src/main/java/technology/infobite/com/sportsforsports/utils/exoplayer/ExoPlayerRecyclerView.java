@@ -206,7 +206,7 @@ public class ExoPlayerRecyclerView extends RecyclerView {
         }
     }
 
-    private int getVisibleVideoSurfaceHeight(int playPosition) {
+    public int getVisibleVideoSurfaceHeight(int playPosition) {
         int at = playPosition - ((LinearLayoutManager) getLayoutManager()).findFirstVisibleItemPosition();
 
         View child = getChildAt(at);
