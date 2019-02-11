@@ -7,11 +7,11 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/llProfile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/profile_toolbar"
@@ -64,228 +64,236 @@
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_weight="2"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <RelativeLayout
+                        android:id="@+id/rlUpdateProfile"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:orientation="vertical">
+                        android:layout_gravity="center">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/ic_profile_person"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_gravity="center"
                             android:layout_margin="10dp"
                             android:src="@drawable/profile_image" />
 
-                        <TextView
-                            android:id="@+id/txtFansCount"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/_555"
-                            android:textAlignment="center"
-                            android:textColor="@color/orange"
-                            android:textSize="18dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/fans"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:textStyle="normal" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:padding="5dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Bio"
-                            android:textColor="@color/black"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtBio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="4"
-                            android:textStyle="normal" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="bottom"
-                            android:layout_marginTop="10dp"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="50dp"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Born : "
-                                    android:textStyle="normal" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Coach : "
-                                    android:textStyle="normal" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Club : "
-                                    android:textStyle="normal" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/txtDob"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textStyle="normal" />
-
-                                <TextView
-                                    android:id="@+id/txtCoachName"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textStyle="normal" />
-
-                                <TextView
-                                    android:id="@+id/txtSportClub"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textStyle="normal" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/orange"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_alignRight="@+id/ic_profile_person"
+                            android:layout_alignBottom="@+id/ic_profile_person"
+                            android:background="@drawable/circle_background"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_add" />
+                    </RelativeLayout>
 
                     <TextView
+                        android:id="@+id/txtFansCount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1.5"
-                        android:text="View Main Sport"
-                        android:textColor="@color/white"
+                        android:text="@string/_555"
+                        android:textAlignment="center"
+                        android:textColor="@color/orange"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="2.5"
-                        android:gravity="center"
-                        android:text="Swipe Right"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/white"
-                        android:textStyle="normal"
-                        tools:ignore="RtlCompat" />
+                        android:layout_height="wrap_content"
+                        android:text="@string/fans"
+                        android:textAlignment="center"
+                        android:textSize="16dp"
+                        android:textStyle="normal" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/gray_f" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/dark_white"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
-                    <ImageView
-                        android:id="@+id/imgComment"
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_comment" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Bio"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
-                    <ImageView
-                        android:id="@+id/imgCamera"
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_camera"
-                        android:tint="@color/gray_d" />
+                    <TextView
+                        android:id="@+id/txtBio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="4"
+                        android:textStyle="normal" />
 
-                    <ImageView
-                        android:id="@+id/imgVideoCamera"
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_video_camera"
-                        android:tint="@color/gray_d" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Born : "
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Coach : "
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Club : "
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txtDob"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/txtCoachName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/txtSportClub"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/gray_f" />
-
-                <ViewFlipper
-                    android:id="@+id/viewFlipper"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <include layout="@layout/layout_my_post_text" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerViewMyPhotos"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerViewMyVideos"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </ViewFlipper>
             </LinearLayout>
-        </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/orange"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.5"
+                    android:text="View Main Sport"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="2.5"
+                    android:gravity="center"
+                    android:text="Swipe Right"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/white"
+                    android:textStyle="normal"
+                    tools:ignore="RtlCompat" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/gray_f" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_white"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/imgComment"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_text_post"
+                    android:tint="@color/colorPrimary" />
+
+                <ImageView
+                    android:id="@+id/imgCamera"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_image_post" />
+
+                <ImageView
+                    android:id="@+id/imgVideoCamera"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_video_post" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/gray_f" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewHeadlines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewVideos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

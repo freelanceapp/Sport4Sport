@@ -6,10 +6,12 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import technology.infobite.com.sportsforsports.constant.Constant;
+import technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUserMainModal;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
 import technology.infobite.com.sportsforsports.modal.post_comment_modal.PostCommentResponseModal;
 import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
@@ -32,6 +34,14 @@ public interface RetrofitApiClient {
                                      @Field("main_sport") String main_sport, @Field("club") String club,
                                      @Field("bio") String bio, @Field("dob") String dob,
                                      @Field("coach") String coach);
+
+    @Multipart
+    @POST(Constant.UPDATE_PROFILE_API)
+    Call<ResponseBody> updateProfileImage(@Part("user_id") RequestBody user_id, @Part("name") RequestBody name,
+                                          @Part("is_athlete") RequestBody is_athlete, @Part("country") RequestBody country,
+                                          @Part("main_sport") RequestBody main_sport, @Part("club") RequestBody club,
+                                          @Part("bio") RequestBody bio, @Part("dob") RequestBody dob,
+                                          @Part("coach") RequestBody coach, @Part MultipartBody.Part aimage);
 
     @FormUrlEncoded
     @POST(Constant.USER_PROFILE_API)
@@ -58,5 +68,18 @@ public interface RetrofitApiClient {
     @POST(Constant.PostLikeAPI)
     Call<ResponseBody> postLike(@Field("post_id") String postId, @Field("user_id") String useId,
                                 @Field("status") String status);
+
+    @GET(Constant.USER_LIST)
+    Call<AllUserMainModal> getAllUserList();
+
+    @FormUrlEncoded
+    @POST(Constant.FOLLOW_API)
+    Call<ResponseBody> followUser(@Field("fan_user_id") String fan_user_id, @Field("user_id") String useId,
+                                  @Field("following_resuest") String following_request);
+
+    @FormUrlEncoded
+    @POST(Constant.CHECK_FOLLOW)
+    Call<ResponseBody> checkFollow(@Field("fan_user_id") String fan_user_id, @Field("user_id") String useId);
+
 
 }

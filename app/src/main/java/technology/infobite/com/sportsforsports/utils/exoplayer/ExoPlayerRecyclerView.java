@@ -47,13 +47,13 @@ import java.util.List;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.adapter.VideoRecyclerViewAdapter;
 import technology.infobite.com.sportsforsports.constant.Constant;
-import technology.infobite.com.sportsforsports.modal.daily_news_feed.Feed;
+import technology.infobite.com.sportsforsports.modal.daily_news_feed.UserFeed;
 
 public class ExoPlayerRecyclerView extends RecyclerView {
 
     private static final String TAG = "ExoPlayerRecyclerView";
 
-    private List<Feed> videoInfoList = new ArrayList<>();
+    private List<UserFeed> videoInfoList = new ArrayList<>();
     private int videoSurfaceDefaultHeight = 0;
     private int screenDefaultHeight = 0;
     SimpleExoPlayer player;
@@ -109,7 +109,7 @@ public class ExoPlayerRecyclerView extends RecyclerView {
         initialize(context);
     }
 
-    public void setVideoInfoList(List<Feed> videoInfoList) {
+    public void setVideoInfoList(List<UserFeed> videoInfoList) {
         this.videoInfoList = videoInfoList;
 
     }

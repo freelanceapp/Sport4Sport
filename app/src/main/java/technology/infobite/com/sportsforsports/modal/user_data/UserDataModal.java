@@ -1,13 +1,17 @@
 package technology.infobite.com.sportsforsports.modal.user_data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserDataModal implements Parcelable
-{
+import technology.infobite.com.sportsforsports.modal.daily_news_feed.UserFeed;
+
+public class UserDataModal implements Parcelable {
 
     @SerializedName("error")
     @Expose
@@ -18,7 +22,13 @@ public class UserDataModal implements Parcelable
     @SerializedName("user")
     @Expose
     private UserData user;
-    public final static Creator<UserDataModal> CREATOR = new Creator<UserDataModal>() {
+    @SerializedName("feed")
+    @Expose
+    private List<UserFeed> feed = new ArrayList<UserFeed>();
+    @SerializedName("fan")
+    @Expose
+    private List<UserFan> fan = new ArrayList<UserFan>();
+    public final static Parcelable.Creator<UserDataModal> CREATOR = new Creator<UserDataModal>() {
 
 
         @SuppressWarnings({
@@ -32,13 +42,14 @@ public class UserDataModal implements Parcelable
             return (new UserDataModal[size]);
         }
 
-    }
-            ;
+    };
 
     protected UserDataModal(Parcel in) {
         this.error = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
         this.user = ((UserData) in.readValue((UserData.class.getClassLoader())));
+        in.readList(this.feed, (UserFeed.class.getClassLoader()));
+        in.readList(this.fan, (UserFan.class.getClassLoader()));
     }
 
     public UserDataModal() {
@@ -68,10 +79,28 @@ public class UserDataModal implements Parcelable
         this.user = user;
     }
 
+    public List<UserFeed> getFeed() {
+        return feed;
+    }
+
+    public void setFeed(List<UserFeed> feed) {
+        this.feed = feed;
+    }
+
+    public List<UserFan> getFan() {
+        return fan;
+    }
+
+    public void setFan(List<UserFan> fan) {
+        this.fan = fan;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(error);
         dest.writeValue(message);
         dest.writeValue(user);
+        dest.writeList(feed);
+        dest.writeList(fan);
     }
 
     public int describeContents() {

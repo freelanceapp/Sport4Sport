@@ -7,15 +7,21 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/new_post_rclv"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <technology.infobite.com.sportsforsports.utils.exoplayer.ExoPlayerRecyclerView
-        android:id="@+id/recyclerViewFeed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#dedede"
-        android:dividerHeight="8dp" />
+        android:visibility="gone" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_height="match_parent">
+
+        <technology.infobite.com.sportsforsports.utils.exoplayer.ExoPlayerRecyclerView
+            android:id="@+id/recyclerViewFeed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#dedede"
+            android:dividerHeight="8dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

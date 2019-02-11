@@ -65,6 +65,8 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
                         if (!responseBody.getError()) {
                             Alerts.show(mContext, responseBody.getMessage());
                             AppPreference.setStringPreference(mContext, Constant.USER_ID, responseBody.getUser().getUserId());
+                            AppPreference.setStringPreference(mContext, Constant.USER_NAME, responseBody.getUser().getUserName());
+                            AppPreference.setStringPreference(mContext, Constant.USER_IMAGE, responseBody.getUser().getAvtarImg());
                             Intent intent = new Intent(mContext, CreateProfileActivity.class);
                             intent.putExtra("user_id", responseBody.getUser().getUserId());
                             intent.putExtra("name", responseBody.getUser().getUserName());

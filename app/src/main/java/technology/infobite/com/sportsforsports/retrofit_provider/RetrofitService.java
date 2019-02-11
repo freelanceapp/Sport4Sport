@@ -10,6 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import technology.infobite.com.sportsforsports.constant.Constant;
+import technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUserMainModal;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
 import technology.infobite.com.sportsforsports.modal.post_comment_modal.PostCommentResponseModal;
 import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
@@ -101,6 +102,21 @@ public class RetrofitService {
         });
     }
 
+    public static void getRefreshLoginData(final Call<UserDataModal> method, final WebResponse webResponse) {
+
+        method.enqueue(new Callback<UserDataModal>() {
+            @Override
+            public void onResponse(Call<UserDataModal> call, Response<UserDataModal> response) {
+                WebServiceResponse.handleResponse(response, webResponse);
+            }
+
+            @Override
+            public void onFailure(Call<UserDataModal> call, Throwable throwable) {
+                webResponse.onResponseFailed(throwable.getMessage());
+            }
+        });
+    }
+
     public static void getNewPostData(final Dialog dialog, final Call<ResponseBody> method, final WebResponse webResponse) {
         if (dialog != null)
             AppProgressDialog.show(dialog);
@@ -168,6 +184,27 @@ public class RetrofitService {
 
             @Override
             public void onFailure(Call<PostCommentResponseModal> call, Throwable throwable) {
+                webResponse.onResponseFailed(throwable.getMessage());
+            }
+        });
+    }
+
+    public static void getAllUserData(final Dialog dialog, final Call<AllUserMainModal> method, final WebResponse webResponse) {
+        if (dialog != null)
+            AppProgressDialog.show(dialog);
+
+        method.enqueue(new Callback<AllUserMainModal>() {
+            @Override
+            public void onResponse(Call<AllUserMainModal> call, Response<AllUserMainModal> response) {
+                if (dialog != null)
+                    AppProgressDialog.hide(dialog);
+                WebServiceResponse.handleResponse(response, webResponse);
+            }
+
+            @Override
+            public void onFailure(Call<AllUserMainModal> call, Throwable throwable) {
+                if (dialog != null)
+                    AppProgressDialog.hide(dialog);
                 webResponse.onResponseFailed(throwable.getMessage());
             }
         });

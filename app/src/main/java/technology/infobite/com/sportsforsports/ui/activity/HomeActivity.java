@@ -24,7 +24,7 @@ import technology.infobite.com.sportsforsports.utils.BaseActivity;
 
 public class HomeActivity extends BaseActivity implements OnBMClickListener, View.OnClickListener {
 
-    private static FragmentManager fragmentManager;
+    public static FragmentManager fragmentManager;
     private String strUserId = "";
 
     @Override

@@ -6,6 +6,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -23,7 +25,7 @@ import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.adapter.VideoRecyclerViewAdapter;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
-import technology.infobite.com.sportsforsports.modal.daily_news_feed.Feed;
+import technology.infobite.com.sportsforsports.modal.daily_news_feed.UserFeed;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
 import technology.infobite.com.sportsforsports.ui.activity.PostDetailActivity;
@@ -35,16 +37,18 @@ import technology.infobite.com.sportsforsports.utils.ConnectionDetector;
 import technology.infobite.com.sportsforsports.utils.exoplayer.ExoPlayerRecyclerView;
 
 import static android.widget.LinearLayout.VERTICAL;
+import static technology.infobite.com.sportsforsports.ui.activity.HomeActivity.fragmentManager;
 
 public class TimelineFragment extends BaseFragment implements View.OnClickListener {
 
     private VideoRecyclerViewAdapter mAdapter;
     private boolean firstTime = true;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     /***********************************************/
     //private NewsFeedAdapter newPostAdapter;
     private View rootView;
-    private List<Feed> feedList = new ArrayList<>();
+    private List<UserFeed> feedList = new ArrayList<>();
     private DailyNewsFeedMainModal dailyNewsFeedMainModal;
     private ExoPlayerRecyclerView recyclerViewFeed;
     private int playPosition = -1;
@@ -65,6 +69,8 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
 
     private void init() {
         mContext = getActivity();
+        swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         recyclerViewFeed = rootView.findViewById(R.id.recyclerViewFeed);
         recyclerViewFeed.setVideoInfoList(feedList);
         mAdapter = new VideoRecyclerViewAdapter(mContext, feedList, this, retrofitApiClient);
@@ -92,24 +98,55 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
                 }
             });
         }
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                timelineApi();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.llViewUserProfile:
-                startActivity(new Intent(mContext, UserProfileActivity.class));
-                break;
             case R.id.tvTotalComment:
+            case R.id.rlPost:
             case R.id.llPostComment:
                 int position = Integer.parseInt(v.getTag().toString());
                 Gson gson = new GsonBuilder().setLenient().create();
                 String data = gson.toJson(feedList.get(position));
                 AppPreference.setStringPreference(mContext, Constant.POST_DETAIL, data);
                 Intent intent = new Intent(mContext, PostDetailActivity.class);
+                intent.putExtra("from", "timeline");
+                intent.putExtra("post_id", feedList.get(position).getFeedId());
                 startActivity(intent);
                 break;
+            case R.id.llViewUserProfile:
+                int pos = Integer.parseInt(v.getTag().toString());
+                String strPostUserId = feedList.get(pos).getPostUserId();
+                String strUserId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
+                if (strPostUserId.equals(strUserId)) {
+                    Fragment ProfileFragment = fragmentManager.findFragmentByTag(Constant.ProfileFragment);
+                    if (ProfileFragment == null) {
+                        changeFragment(new ProfileFragment(), Constant.ProfileFragment);
+                    }
+                } else {
+                    Intent postUserId = new Intent(mContext, UserProfileActivity.class);
+                    postUserId.putExtra("strPostUserId", strPostUserId);
+                    startActivity(postUserId);
+                }
+                break;
         }
+    }
+
+    private void changeFragment(Fragment fragment, String strTag) {
+        fragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.left_enter, R.anim.right_out)
+                .replace(R.id.fram_container, fragment,
+                        strTag).commit();
     }
 
     public void timelineApi() {

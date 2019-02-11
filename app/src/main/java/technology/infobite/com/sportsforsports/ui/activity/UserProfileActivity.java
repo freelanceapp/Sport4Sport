@@ -1,79 +1,289 @@
 package technology.infobite.com.sportsforsports.ui.activity;
 
+import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
-import technology.infobite.com.draggableview.DraggablePanel;
-import technology.infobite.com.draggableview.DraggableView;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import technology.infobite.com.sportsforsports.R;
-import technology.infobite.com.sportsforsports.ui.fragment.DraggabbleBottomFragment;
-import technology.infobite.com.sportsforsports.ui.fragment.DraggabbleTopFragment;
+import technology.infobite.com.sportsforsports.adapter.UserFeedAdapter;
+import technology.infobite.com.sportsforsports.constant.Constant;
+import technology.infobite.com.sportsforsports.modal.daily_news_feed.UserFeed;
+import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
+import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
+import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
+import technology.infobite.com.sportsforsports.utils.Alerts;
+import technology.infobite.com.sportsforsports.utils.AppPreference;
+import technology.infobite.com.sportsforsports.utils.BaseActivity;
+import technology.infobite.com.sportsforsports.utils.ConnectionDetector;
 
-public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class UserProfileActivity extends BaseActivity implements View.OnClickListener {
 
-    private DraggablePanel draggablePanel;
-    private DraggableView draggableView;
+    private UserDataModal userDataModal;
+    private String strUserId = "", strMyId = "";
+
+    private List<UserFeed> myPhotoList = new ArrayList<>();
+    private List<UserFeed> myVideoList = new ArrayList<>();
+    private List<UserFeed> myTextHeadlineList = new ArrayList<>();
+    private List<UserFeed> originalTimeline = new ArrayList<>();
+
+    private RecyclerView recyclerViewHeadlines, recyclerViewImage, recyclerViewVideos;
+    private UserFeedAdapter headlineAdapter, photoAdapter, videoAdapter;
+
+    private ImageView imgComment, imgCamera, imgVideoCamera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        mContext = this;
+        cd = new ConnectionDetector(mContext);
+        retrofitApiClient = RetrofitService.getRetrofit();
+
+        initView();
+    }
+
+    private void initView() {
+        strMyId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
+        strUserId = getIntent().getStringExtra("strPostUserId");
+
+        recyclerViewHeadlines = findViewById(R.id.recyclerViewHeadlines);
+        recyclerViewImage = findViewById(R.id.recyclerViewImage);
+        recyclerViewVideos = findViewById(R.id.recyclerViewVideos);
+
+        imgComment = findViewById(R.id.imgComment);
+        imgCamera = findViewById(R.id.imgCamera);
+        imgVideoCamera = findViewById(R.id.imgVideoCamera);
+
+        findViewById(R.id.imgBack).setOnClickListener(this);
+        findViewById(R.id.llFollow).setOnClickListener(this);
+        imgComment.setOnClickListener(this);
+        imgCamera.setOnClickListener(this);
+        imgVideoCamera.setOnClickListener(this);
+
+        setMyPhotoVideoData();
+        checkFollowApi();
+    }
+
+    private void setMyPhotoVideoData() {
+        /*Headline list data*/
+        headlineAdapter = new UserFeedAdapter(mContext, myTextHeadlineList, this, retrofitApiClient);
+        recyclerViewHeadlines.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerViewHeadlines.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewHeadlines.setAdapter(headlineAdapter);
+
+        /*Image list data*/
+        photoAdapter = new UserFeedAdapter(mContext, myPhotoList, this, retrofitApiClient);
+        GridLayoutManager photoLayoutManager = new GridLayoutManager(mContext, 4);
+        recyclerViewImage.setLayoutManager(photoLayoutManager);
+        recyclerViewImage.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewImage.setAdapter(photoAdapter);
+
+        /*Video list data*/
+        videoAdapter = new UserFeedAdapter(mContext, myVideoList, this, retrofitApiClient);
+        GridLayoutManager videoLayoutManager = new GridLayoutManager(mContext, 4);
+        recyclerViewVideos.setLayoutManager(videoLayoutManager);
+        recyclerViewVideos.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewVideos.setAdapter(videoAdapter);
+
 
         init();
     }
 
     private void init() {
-       /* draggablePanel = (DraggablePanel) findViewById(R.id.draggable_panel);
-        draggablePanel.setVisibility(View.GONE);
-        draggablePanel.setFragmentManager(getSupportFragmentManager());
-        draggablePanel.setTopFragment(new DraggabbleTopFragment());
-        draggablePanel.setBottomFragment(new DraggabbleBottomFragment());
-        draggablePanel.setTopViewHeight(300);
-        draggablePanel.initializeView();*/
+        if (cd.isNetworkAvailable()) {
+            RetrofitService.getLoginData(new Dialog(mContext), retrofitApiClient.userProfile(strUserId), new WebResponse() {
+                @Override
+                public void onResponseSuccess(Response<?> result) {
+                    userDataModal = (UserDataModal) result.body();
+                    originalTimeline.clear();
+                    myTextHeadlineList.clear();
+                    myPhotoList.clear();
+                    myVideoList.clear();
+                    if (userDataModal != null)
+                        if (!userDataModal.getError()) {
+                            findViewById(R.id.llProfile).setVisibility(View.VISIBLE);
+                            if (userDataModal.getFeed() != null) {
+                                if (userDataModal.getFeed().size() > 0) {
+                                    ((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.GONE);
+                                    originalTimeline.addAll(userDataModal.getFeed());
+                                } else {
+                                    ((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                ((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.VISIBLE);
+                            }
 
+                            if (originalTimeline.size() > 0) {
+                                for (int i = 0; i < originalTimeline.size(); i++) {
+                                    if (!originalTimeline.get(i).getAthleteArticeHeadline().isEmpty()) {
+                                        myTextHeadlineList.add(userDataModal.getFeed().get(i));
+                                    } else if (!originalTimeline.get(i).getAlhleteImages().isEmpty()) {
+                                        myPhotoList.add(userDataModal.getFeed().get(i));
+                                    } else if (!originalTimeline.get(i).getAthleteVideo().isEmpty()) {
+                                        myVideoList.add(userDataModal.getFeed().get(i));
+                                    }
+                                }
+                            }
+                            setViewData();
+                        } else {
+                            findViewById(R.id.llProfile).setVisibility(View.GONE);
+                            Alerts.show(mContext, userDataModal.getMessage());
+                        }
+                    headlineAdapter.notifyDataSetChanged();
+                    photoAdapter.notifyDataSetChanged();
+                    videoAdapter.notifyDataSetChanged();
+                }
 
-        draggableView = (DraggableView) findViewById(R.id.draggable_view);
-        draggableView.setVisibility(View.GONE);
-        draggableView.setClickToMaximizeEnabled(true);
-        draggableView.setClickToMinimizeEnabled(true);
-        draggableView.setTouchEnabled(true);
+                @Override
+                public void onResponseFailed(String error) {
+                    findViewById(R.id.llProfile).setVisibility(View.GONE);
+                    Alerts.show(mContext, error);
+                }
+            });
+        } else {
+            cd.show(mContext);
+        }
+    }
 
-        ((ImageView) findViewById(R.id.imgA)).setOnClickListener(this);
-        ((ImageView) findViewById(R.id.imgB)).setOnClickListener(this);
-        ((ImageView) findViewById(R.id.imgC)).setOnClickListener(this);
-        ((ImageView) findViewById(R.id.imgD)).setOnClickListener(this);
+    private void setViewData() {
+        ((TextView) findViewById(R.id.txtMyName)).setText(userDataModal.getUser().getUserName());
+        ((TextView) findViewById(R.id.txtBio)).setText(userDataModal.getUser().getBio());
+        ((TextView) findViewById(R.id.txtFansCount)).setText(userDataModal.getFan().get(0).getFan());
+        ((TextView) findViewById(R.id.txtDob)).setText(userDataModal.getUser().getDob());
+        ((TextView) findViewById(R.id.txtCoachName)).setText(userDataModal.getUser().getCoach());
+        ((TextView) findViewById(R.id.txtSportClub)).setText(userDataModal.getUser().getClub());
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                draggableView.closeToLeft();
-                //draggablePanel.closeToLeft();
-            }
-        }, 100);
+        Glide.with(mContext)
+                .load(Constant.PROFILE_IMAGE_BASE_URL + userDataModal.getUser().getAvtarImg())
+                .apply(new RequestOptions().optionalCenterCrop())
+                .into(((CircleImageView) findViewById(R.id.ic_profile_person)));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.imgA:
-            case R.id.imgB:
-            case R.id.imgC:
-            case R.id.imgD:
-                /*draggablePanel.setFragmentManager(getSupportFragmentManager());
-                draggablePanel.setTopFragment(new DraggabbleTopFragment());
-                draggablePanel.setBottomFragment(new DraggabbleBottomFragment());
-                draggablePanel.setTopViewHeight(300);
-                draggablePanel.initializeView();*/
-                /*draggablePanel.setVisibility(View.VISIBLE);
-                draggablePanel.maximize();*/
-                draggableView.setVisibility(View.VISIBLE);
-                draggableView.maximize();
+            case R.id.llFollow:
+                followUser();
+                break;
+            case R.id.imgComment:
+                imgComment.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
+                imgCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
+                imgVideoCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
+
+                recyclerViewHeadlines.setVisibility(View.VISIBLE);
+                recyclerViewVideos.setVisibility(View.GONE);
+                recyclerViewImage.setVisibility(View.GONE);
+                break;
+            case R.id.imgCamera:
+                imgComment.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
+                imgCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
+                imgVideoCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
+
+                recyclerViewHeadlines.setVisibility(View.GONE);
+                recyclerViewImage.setVisibility(View.VISIBLE);
+                recyclerViewVideos.setVisibility(View.GONE);
+                break;
+            case R.id.imgVideoCamera:
+                imgComment.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
+                imgCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
+                imgVideoCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
+
+                recyclerViewVideos.setVisibility(View.VISIBLE);
+                recyclerViewHeadlines.setVisibility(View.GONE);
+                recyclerViewImage.setVisibility(View.GONE);
+                break;
+            case R.id.imgBack:
+                finish();
                 break;
         }
     }
+
+    private void followUser() {
+        if (cd.isNetworkAvailable()) {
+            RetrofitService.getLikeResponse(retrofitApiClient.followUser(strUserId, strMyId, "1"), new WebResponse() {
+                @Override
+                public void onResponseSuccess(Response<?> result) {
+                    ResponseBody responseBody = (ResponseBody) result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseBody.string());
+                        if (!jsonObject.getBoolean("error")) {
+                            ((TextView) findViewById(R.id.txtFansCount)).setText(jsonObject.getString("total_fan"));
+                            checkFollowApi();
+                        } else {
+                            Alerts.show(mContext, jsonObject.getString("message"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onResponseFailed(String error) {
+                    Alerts.show(mContext, error);
+                }
+            });
+        } else {
+            cd.show(mContext);
+        }
+    }
+
+    private void checkFollowApi() {
+        if (cd.isNetworkAvailable()) {
+            RetrofitService.getLikeResponse(retrofitApiClient.checkFollow(strUserId, strMyId), new WebResponse() {
+                @Override
+                public void onResponseSuccess(Response<?> result) {
+                    ResponseBody responseBody = (ResponseBody) result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseBody.string());
+                        if (!jsonObject.getBoolean("error")) {
+                            String strStatus = jsonObject.getString("status");
+                            if (strStatus.equalsIgnoreCase("Follow")) {
+                                ((TextView) findViewById(R.id.tvFollow)).setText("Unfollow");
+                                ((ImageView) findViewById(R.id.imgFollow)).setImageDrawable(getResources().getDrawable(R.drawable.ic_heart_fill));
+                            } else {
+                                ((TextView) findViewById(R.id.tvFollow)).setText("Follow");
+                                ((ImageView) findViewById(R.id.imgFollow)).setImageDrawable(getResources().getDrawable(R.drawable.ic_heart_icon));
+                            }
+                        } else {
+                            Alerts.show(mContext, jsonObject.getString("message"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onResponseFailed(String error) {
+                    Alerts.show(mContext, error);
+                }
+            });
+        } else {
+            cd.show(mContext);
+        }
+    }
+
 }

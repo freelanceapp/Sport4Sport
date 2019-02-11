@@ -10,8 +10,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="1dp"
         android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/player_image" />
+        android:scaleType="fitXY" />
 
     <ImageView
         android:id="@+id/imgPlayVideo"

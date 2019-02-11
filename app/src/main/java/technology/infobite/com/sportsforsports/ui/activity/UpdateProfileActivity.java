@@ -212,9 +212,13 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
                         ResponseBody responseBody = (ResponseBody) result.body();
                         try {
                             JSONObject jsonObject = new JSONObject(responseBody.string());
-                            Alerts.show(mContext, "Profile updated");
-                            AppPreference.setBooleanPreference(mContext, "UpdateProfile", true);
-                            finish();
+                            if (!jsonObject.getBoolean("error")) {
+                                Alerts.show(mContext, jsonObject.getString("message"));
+                                AppPreference.setBooleanPreference(mContext, "UpdateProfile", true);
+                                finish();
+                            } else {
+                                Alerts.show(mContext, jsonObject.getString("message"));
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (IOException e) {

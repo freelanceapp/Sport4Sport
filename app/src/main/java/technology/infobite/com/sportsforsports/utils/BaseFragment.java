@@ -2,12 +2,17 @@ package technology.infobite.com.sportsforsports.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.HashMap;
 
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitApiClient;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;

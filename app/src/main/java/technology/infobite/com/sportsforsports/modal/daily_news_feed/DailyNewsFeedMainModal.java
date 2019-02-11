@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -21,7 +21,7 @@ public class DailyNewsFeedMainModal implements Serializable, Parcelable
     private String message;
     @SerializedName("feed")
     @Expose
-    private List<Feed> feed = new ArrayList<Feed>();
+    private List<UserFeed> feed = new ArrayList<UserFeed>();
     public final static Creator<DailyNewsFeedMainModal> CREATOR = new Creator<DailyNewsFeedMainModal>() {
 
 
@@ -43,7 +43,7 @@ public class DailyNewsFeedMainModal implements Serializable, Parcelable
     protected DailyNewsFeedMainModal(Parcel in) {
         this.error = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.feed, (Feed.class.getClassLoader()));
+        in.readList(this.feed, (UserFeed.class.getClassLoader()));
     }
 
     public DailyNewsFeedMainModal() {
@@ -65,11 +65,11 @@ public class DailyNewsFeedMainModal implements Serializable, Parcelable
         this.message = message;
     }
 
-    public List<Feed> getFeed() {
+    public List<UserFeed> getFeed() {
         return feed;
     }
 
-    public void setFeed(List<Feed> feed) {
+    public void setFeed(List<UserFeed> feed) {
         this.feed = feed;
     }
 

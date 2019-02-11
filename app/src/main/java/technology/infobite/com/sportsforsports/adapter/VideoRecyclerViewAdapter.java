@@ -30,7 +30,7 @@ import retrofit2.Response;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
-import technology.infobite.com.sportsforsports.modal.daily_news_feed.Feed;
+import technology.infobite.com.sportsforsports.modal.daily_news_feed.UserFeed;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitApiClient;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
@@ -43,12 +43,12 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public static final int VIEW_TYPE_IMAGE = 1;
     public static final int VIEW_TYPE_VIDEO = 2;
 
-    private List<Feed> mInfoList;
+    private List<UserFeed> mInfoList;
     private Context mContext;
     private View.OnClickListener onClickListener;
     private RetrofitApiClient retrofitApiClient;
 
-    public VideoRecyclerViewAdapter(Context mContext, List<Feed> infoList, View.OnClickListener onClickListener,
+    public VideoRecyclerViewAdapter(Context mContext, List<UserFeed> infoList, View.OnClickListener onClickListener,
                                     RetrofitApiClient retrofitApiClient) {
         this.mContext = mContext;
         this.mInfoList = infoList;
@@ -79,7 +79,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         /*holder.onBind(position);*/
         switch (holder.getItemViewType()) {
             case 0:
-                final Feed feed;
+                final UserFeed feed;
                 if (AppPreference.getBooleanPreference(mContext, "likedPost")) {
                     String strTimelineData = AppPreference.getStringPreference(mContext, Constant.TIMELINE_DATA);
                     Gson getGson = new Gson();
@@ -101,6 +101,10 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 viewHolder.llPostComment.setOnClickListener(onClickListener);
                 viewHolder.tvTotalComment.setTag(position);
                 viewHolder.tvTotalComment.setOnClickListener(onClickListener);
+                viewHolder.rlPost.setTag(position);
+                viewHolder.rlPost.setOnClickListener(onClickListener);
+                viewHolder.llViewUserProfile.setTag(position);
+                viewHolder.llViewUserProfile.setOnClickListener(onClickListener);
 
                 viewHolder.llLikePost.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -153,7 +157,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         .into(viewHolder.imgUserProfile);
                 break;
             case 1:
-                final Feed imageFeed;
+                final UserFeed imageFeed;
 
                 if (AppPreference.getBooleanPreference(mContext, "likedPost")) {
                     String strTimelineData = AppPreference.getStringPreference(mContext, Constant.TIMELINE_DATA);
@@ -179,6 +183,10 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 imageViewHolder.llPostComment.setOnClickListener(onClickListener);
                 imageViewHolder.tvTotalComment.setTag(position);
                 imageViewHolder.tvTotalComment.setOnClickListener(onClickListener);
+                imageViewHolder.rlPost.setTag(position);
+                imageViewHolder.rlPost.setOnClickListener(onClickListener);
+                imageViewHolder.llViewUserProfile.setTag(position);
+                imageViewHolder.llViewUserProfile.setOnClickListener(onClickListener);
 
                 imageViewHolder.llLikePost.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -232,7 +240,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         .into(imageViewHolder.imgUserProfile);
                 break;
             case 2:
-                final Feed videoFeed;
+                final UserFeed videoFeed;
 
                 if (AppPreference.getBooleanPreference(mContext, "likedPost")) {
                     String strTimelineData = AppPreference.getStringPreference(mContext, Constant.TIMELINE_DATA);
@@ -258,6 +266,10 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 videoViewHolder.llPostComment.setOnClickListener(onClickListener);
                 videoViewHolder.tvTotalComment.setTag(position);
                 videoViewHolder.tvTotalComment.setOnClickListener(onClickListener);
+                videoViewHolder.rlPost.setTag(position);
+                videoViewHolder.rlPost.setOnClickListener(onClickListener);
+                videoViewHolder.llViewUserProfile.setTag(position);
+                videoViewHolder.llViewUserProfile.setOnClickListener(onClickListener);
 
                 videoViewHolder.llLikePost.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -310,7 +322,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    private void likeApi(final Feed feed, final ImageView imgLike, final TextView textView) {
+    private void likeApi(final UserFeed feed, final ImageView imgLike, final TextView textView) {
         final String strId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
 
         RetrofitService.getLikeResponse(retrofitApiClient.postLike(feed.getFeedId(), strId, "1"), new WebResponse() {
@@ -398,7 +410,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private RelativeLayout rlPost;
+        private RelativeLayout rlPost, llViewUserProfile;
         private LinearLayout llLikePost, llPostComment;
         private ImageView imgLike;
         private CircleImageView imgUserProfile;
@@ -420,6 +432,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             mProgressBar = itemView.findViewById(R.id.progressBar);
 
             rlPost = itemView.findViewById(R.id.rlPost);
+            llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             imgUserProfile = itemView.findViewById(R.id.imgUserProfile);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             imgLike = itemView.findViewById(R.id.imgLike);
@@ -435,7 +448,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
 
-        private RelativeLayout rlPost;
+        private RelativeLayout rlPost, llViewUserProfile;
         private LinearLayout llLikePost, llPostComment;
         private ImageView imgPostImage, imgLike;
         private CircleImageView imgUserProfile;
@@ -446,6 +459,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             super(itemView);
             viewData = itemView;
             rlPost = itemView.findViewById(R.id.rlPost);
+            llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             imgUserProfile = itemView.findViewById(R.id.imgUserProfile);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             imgPostImage = itemView.findViewById(R.id.imgPostImage);
@@ -462,7 +476,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class HeadlineViewHolder extends RecyclerView.ViewHolder {
 
-        private RelativeLayout rlPost;
+        private RelativeLayout rlPost, llViewUserProfile;
         private LinearLayout llLikePost, llPostComment;
         private ImageView imgLike;
         private CircleImageView imgUserProfile;
@@ -473,6 +487,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             super(itemView);
             viewData = itemView;
             rlPost = itemView.findViewById(R.id.rlPost);
+            llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             imgUserProfile = itemView.findViewById(R.id.imgUserProfile);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             tvHeadline = itemView.findViewById(R.id.tvHeadline);

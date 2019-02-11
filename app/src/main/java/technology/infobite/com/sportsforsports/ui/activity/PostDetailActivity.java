@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,17 +24,22 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.adapter.CommentListAdapter;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.Comment;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
-import technology.infobite.com.sportsforsports.modal.daily_news_feed.Feed;
+import technology.infobite.com.sportsforsports.modal.daily_news_feed.UserFeed;
 import technology.infobite.com.sportsforsports.modal.post_comment_modal.PostCommentResponseModal;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
@@ -43,20 +49,24 @@ import technology.infobite.com.sportsforsports.utils.BaseActivity;
 
 public class PostDetailActivity extends BaseActivity implements View.OnClickListener {
 
-    private Feed newPostModel;
+    private UserFeed newPostModel;
 
-    private LinearLayout llPostComment, llLikePost;
+    private LinearLayout llPostComment;
     private RelativeLayout rlViewUserProfile;
     private ImageView imgPostImage;
     private CircleImageView imgUserProfile;
     private TextView tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvPostDescription, tvHeadline;
-    private EditText posteditmessage;
+
     private Button postsend;
     private VideoView videoViewPost;
     private ProgressBar progressBar;
     private RecyclerView recyclerViewCommentList;
     private CommentListAdapter commentListAdapter;
     private List<Comment> commentList = new ArrayList<>();
+
+    private String strFrom = "";
+    private int postId = 0;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +77,14 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     private void init() {
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        strFrom = getIntent().getStringExtra("from");
+        postId = getIntent().getIntExtra("post_id", 0);
+
         Gson gson = new Gson();
         String strPostDetail = AppPreference.getStringPreference(mContext, Constant.POST_DETAIL);
-        newPostModel = gson.fromJson(strPostDetail, Feed.class);
+        newPostModel = gson.fromJson(strPostDetail, UserFeed.class);
 
         recyclerViewCommentList = findViewById(R.id.recyclerViewCommentList);
         recyclerViewCommentList.setHasFixedSize(true);
@@ -78,7 +93,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
         progressBar = findViewById(R.id.progressBar);
         llPostComment = findViewById(R.id.llPostComment);
-        llLikePost = findViewById(R.id.llLikePost);
+        findViewById(R.id.llLikePost).setOnClickListener(this);
         rlViewUserProfile = findViewById(R.id.rlViewUserProfile);
         imgUserProfile = findViewById(R.id.imgUserProfile);
         tvUserName = findViewById(R.id.tvUserName);
@@ -89,14 +104,33 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         tvCommentCount = findViewById(R.id.tvCommentCount);
         tvPostTime = findViewById(R.id.tvPostTime);
         tvPostDescription = findViewById(R.id.tvPostDescription);
-        posteditmessage = findViewById(R.id.edit_post_comment);
         postsend = findViewById(R.id.post_comment_send);
 
+        final String strId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshTimelineApi(strId);
+                setDataInModal();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        setDataInModal();
+    }
+
+    private void setDataInModal() {
         commentList.clear();
         commentList.addAll(newPostModel.getComment());
 
         findViewById(R.id.post_comment_send).setOnClickListener(this);
         llPostComment.setOnClickListener(this);
+
+        if (newPostModel.getIsLike().equals("unlike")) {
+            ((ImageView) findViewById(R.id.imgLike)).setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_icon));
+        } else {
+            ((ImageView) findViewById(R.id.imgLike)).setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_fill));
+        }
+
         setData();
         setCommentList();
     }
@@ -166,6 +200,9 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.llLikePost:
+                likeApi(newPostModel, ((ImageView) findViewById(R.id.imgLike)), ((TextView) findViewById(R.id.tvPostLikeCount)));
+                break;
             case R.id.llPostComment:
                 ((CardView) findViewById(R.id.cardViewComment)).setVisibility(View.VISIBLE);
                 break;
@@ -189,12 +226,17 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 public void onResponseSuccess(Response<?> result) {
                     PostCommentResponseModal commentResponseModal = (PostCommentResponseModal) result.body();
                     commentList.clear();
-                    AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, true);
+                    if (strFrom.equals("user")) {
+                        AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, false);
+                    } else {
+                        AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, true);
+                    }
                     timelineApi();
                     if (commentResponseModal == null)
                         return;
                     commentList.addAll(commentResponseModal.getComment());
                     commentListAdapter.notifyDataSetChanged();
+                    ((EditText) findViewById(R.id.edit_post_comment)).setText("");
                 }
 
                 @Override
@@ -232,4 +274,72 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    /***********************************************************************/
+    /*
+     * Like/Unlike function
+     * */
+    private void likeApi(final UserFeed feed, final ImageView imgLike, final TextView textView) {
+        final String strId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
+
+        RetrofitService.getLikeResponse(retrofitApiClient.postLike(feed.getFeedId(), strId, "1"), new WebResponse() {
+            @Override
+            public void onResponseSuccess(Response<?> result) {
+                ResponseBody responseBody = (ResponseBody) result.body();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseBody.string());
+                    if (!jsonObject.getBoolean("error")) {
+                        if (feed.getIsLike().equals("unlike")) {
+                            imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_fill));
+                        } else {
+                            imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_icon));
+                        }
+                        textView.setText(jsonObject.getString("total_fan") + " like");
+                        refreshTimelineApi(strId);
+                    } else {
+                        Alerts.show(mContext, jsonObject.getString("message"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onResponseFailed(String error) {
+                Alerts.show(mContext, error);
+            }
+        });
+    }
+
+    private void refreshTimelineApi(String strId) {
+        RetrofitService.refreshTimeLine(retrofitApiClient.showPostTimeLine(strId), new WebResponse() {
+            @Override
+            public void onResponseSuccess(Response<?> result) {
+                DailyNewsFeedMainModal dailyNewsFeedMainModal = (DailyNewsFeedMainModal) result.body();
+                if (dailyNewsFeedMainModal.getError()) {
+                    Alerts.show(mContext, "No data");
+                } else {
+                    Gson gson = new GsonBuilder().setLenient().create();
+                    String data = gson.toJson(dailyNewsFeedMainModal);
+                    /*AppPreference.setStringPreference(mContext, Constant.TIMELINE_DATA, data);
+                    AppPreference.setBooleanPreference(mContext, "likedPost", true);*/
+
+                    if (dailyNewsFeedMainModal.getFeed().size() > 0) {
+                        for (int i = 0; i < dailyNewsFeedMainModal.getFeed().size(); i++) {
+                            if (dailyNewsFeedMainModal.getFeed().get(i).getFeedId().equals(postId)) {
+                                newPostModel = dailyNewsFeedMainModal.getFeed().get(i);
+                            }
+                        }
+                    }
+                    setDataInModal();
+                }
+            }
+
+            @Override
+            public void onResponseFailed(String error) {
+                Alerts.show(mContext, error);
+            }
+        });
+    }
 }

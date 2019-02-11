@@ -6,8 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserData implements Parcelable
-{
+public class UserData implements Parcelable {
 
     @SerializedName("user_id")
     @Expose
@@ -18,9 +17,6 @@ public class UserData implements Parcelable
     @SerializedName("email")
     @Expose
     private String email;
-    @SerializedName("password")
-    @Expose
-    private String password;
     @SerializedName("country")
     @Expose
     private String country;
@@ -78,13 +74,7 @@ public class UserData implements Parcelable
     @SerializedName("social_type")
     @Expose
     private String socialType;
-    @SerializedName("entry_date")
-    @Expose
-    private String entryDate;
-    @SerializedName("update_entry_date")
-    @Expose
-    private String updateEntryDate;
-    public final static Creator<UserData> CREATOR = new Creator<UserData>() {
+    public final static Parcelable.Creator<UserData> CREATOR = new Creator<UserData>() {
 
 
         @SuppressWarnings({
@@ -98,14 +88,12 @@ public class UserData implements Parcelable
             return (new UserData[size]);
         }
 
-    }
-            ;
+    };
 
     protected UserData(Parcel in) {
         this.userId = ((String) in.readValue((String.class.getClassLoader())));
         this.userName = ((String) in.readValue((String.class.getClassLoader())));
         this.email = ((String) in.readValue((String.class.getClassLoader())));
-        this.password = ((String) in.readValue((String.class.getClassLoader())));
         this.country = ((String) in.readValue((String.class.getClassLoader())));
         this.dob = ((String) in.readValue((String.class.getClassLoader())));
         this.mainSport = ((String) in.readValue((String.class.getClassLoader())));
@@ -125,8 +113,6 @@ public class UserData implements Parcelable
         this.fans = ((String) in.readValue((String.class.getClassLoader())));
         this.socialId = ((String) in.readValue((String.class.getClassLoader())));
         this.socialType = ((String) in.readValue((String.class.getClassLoader())));
-        this.entryDate = ((String) in.readValue((String.class.getClassLoader())));
-        this.updateEntryDate = ((String) in.readValue((String.class.getClassLoader())));
     }
 
     public UserData() {
@@ -154,14 +140,6 @@ public class UserData implements Parcelable
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getCountry() {
@@ -316,27 +294,10 @@ public class UserData implements Parcelable
         this.socialType = socialType;
     }
 
-    public String getEntryDate() {
-        return entryDate;
-    }
-
-    public void setEntryDate(String entryDate) {
-        this.entryDate = entryDate;
-    }
-
-    public String getUpdateEntryDate() {
-        return updateEntryDate;
-    }
-
-    public void setUpdateEntryDate(String updateEntryDate) {
-        this.updateEntryDate = updateEntryDate;
-    }
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(userId);
         dest.writeValue(userName);
         dest.writeValue(email);
-        dest.writeValue(password);
         dest.writeValue(country);
         dest.writeValue(dob);
         dest.writeValue(mainSport);
@@ -356,8 +317,6 @@ public class UserData implements Parcelable
         dest.writeValue(fans);
         dest.writeValue(socialId);
         dest.writeValue(socialType);
-        dest.writeValue(entryDate);
-        dest.writeValue(updateEntryDate);
     }
 
     public int describeContents() {

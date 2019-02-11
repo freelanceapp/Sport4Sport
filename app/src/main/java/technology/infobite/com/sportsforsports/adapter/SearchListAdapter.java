@@ -7,29 +7,39 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import technology.infobite.com.sportsforsports.NotificationModel;
 import technology.infobite.com.sportsforsports.R;
+import technology.infobite.com.sportsforsports.constant.Constant;
+import technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUserList;
 
-public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.ViewHolder> {
+public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.ViewHolder> implements Filterable {
 
-    private List<NotificationModel> gridDetailModels;
+    private List<AllUserList> allUserLists;
+    private List<AllUserList> filteredAllUserLists;
     private Context context;
+    private SearchAdapterListener searchAdapterListener;
 
-    public SearchListAdapter(List<NotificationModel> gridDetailModels, Context context) {
-        this.gridDetailModels = gridDetailModels;
+    public SearchListAdapter(List<AllUserList> allUserLists, Context context, SearchAdapterListener searchAdapterListener) {
+        this.allUserLists = allUserLists;
+        this.filteredAllUserLists = allUserLists;
         this.context = context;
+        this.searchAdapterListener = searchAdapterListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
         LayoutInflater li = LayoutInflater.from(context);
         View viewt = li.inflate(R.layout.row_search_list, null);
         return new ViewHolder(viewt);
@@ -38,47 +48,94 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        NotificationModel gridDetailmodels = gridDetailModels.get(i);
+        AllUserList gridDetailmodels = filteredAllUserLists.get(i);
 
-        viewHolder.image.setImageDrawable(context.getResources().getDrawable(gridDetailmodels.getImage()));
-        viewHolder.text1.setText(gridDetailmodels.getText1());
-        viewHolder.text2.setText(gridDetailmodels.getText2());
+        Glide.with(context)
+                .load(Constant.PROFILE_IMAGE_BASE_URL + gridDetailmodels.getAvtarImg())
+                .into(viewHolder.imgUser);
+
+        viewHolder.tvUserName.setText(gridDetailmodels.getUserName());
+        viewHolder.tvBio.setText(gridDetailmodels.getBio());
 
         if (i == 0 || i == 1) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(12, 56, 12, 12);
+            params.setMargins(24, 56, 24, 24);
             viewHolder.llItem.setLayoutParams(params);
         } else {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(12, 12, 12, 12);
+            params.setMargins(24, 12, 24, 12);
             viewHolder.llItem.setLayoutParams(params);
         }
     }
 
     @Override
     public int getItemCount() {
-        return gridDetailModels.size();
+        return filteredAllUserLists.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredAllUserLists = allUserLists;
+                } else {
+                    List<AllUserList> filteredList = new ArrayList<>();
+                    for (AllUserList row : allUserLists) {
+                        if (row.getUserName().toLowerCase().contains(charString.toLowerCase()) ||
+                                row.getMainSport().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+                    filteredAllUserLists = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredAllUserLists;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredAllUserLists = (ArrayList<AllUserList>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView image;
-        TextView text1, text2;
-        CardView llItem;
+        private ImageView imgUser;
+        private TextView tvUserName, tvBio;
+        private CardView llItem;
+        private Button btnView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            btnView = itemView.findViewById(R.id.btnView);
             llItem = itemView.findViewById(R.id.llItem);
-            image = itemView.findViewById(R.id.grid_image);
-            text1 = itemView.findViewById(R.id.grid_text1);
-            text2 = itemView.findViewById(R.id.grid_text2);
+            imgUser = itemView.findViewById(R.id.imgUser);
+            tvUserName = itemView.findViewById(R.id.tvUserName);
+            tvBio = itemView.findViewById(R.id.tvBio);
 
+            btnView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    searchAdapterListener.onSearchSelected(allUserLists.get(getAdapterPosition()));
+                }
+            });
         }
+    }
+
+    public interface SearchAdapterListener {
+        void onSearchSelected(AllUserList contact);
     }
 }
 

@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#e43643</color>
     <color name="colorAccent">#D81B60</color>
     <color name="orange">#ff6a04</color>
+    <color name="green">#009900</color>
+    <color name="blue">#000099</color>
     <color name="pink">#e43643</color>
     <color name="white">#ffffff</color>
     <color name="dark_white">#f8f8f8</color>
@@ -19,6 +21,7 @@
     <color name="color_f">#8BC34A</color>
     <color name="color_g">#673AB7</color>
     <color name="color_h">#CDDC39</color>
+    <color name="color_i">#3F51B5</color>
     <color name="transparent_color_c">#6DE91E63</color>
 
     <color name="gray_a">#585757</color>

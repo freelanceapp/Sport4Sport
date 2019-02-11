@@ -66,6 +66,9 @@ public class VideoGalleryFragment extends BaseFragment implements View.OnClickLi
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                         REQUEST_PERMISSIONS);
             }
+            /*ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSIONS);*/
         } else {
             Log.e("Else", "Else");
             fn_video();

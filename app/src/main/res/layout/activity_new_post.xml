@@ -188,7 +188,8 @@
             android:layout_height="34dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/ic_text_post" />
+            android:src="@drawable/ic_text_post"
+            android:tint="@color/colorPrimary" />
 
         <ImageView
             android:id="@+id/img_Camera"

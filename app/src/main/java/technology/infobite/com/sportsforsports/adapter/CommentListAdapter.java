@@ -16,6 +16,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.Comment;
+import technology.infobite.com.sportsforsports.utils.AppPreference;
 
 public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.ViewHolder> {
 
@@ -41,8 +42,15 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
         Comment notificationmodel = notificationModels.get(i);
 
-        Glide.with(context).load(Constant.PROFILE_IMAGE_BASE_URL + notificationmodel.getUserImage())
-                .into(viewHolder.imgUserProfile);
+        String strUserImage = AppPreference.getStringPreference(context, Constant.USER_IMAGE);
+
+        if (notificationmodel.getUserImage() == null || notificationmodel.getUserImage().isEmpty()) {
+            Glide.with(context).load(Constant.PROFILE_IMAGE_BASE_URL + strUserImage)
+                    .into(viewHolder.imgUserProfile);
+        } else {
+            Glide.with(context).load(Constant.PROFILE_IMAGE_BASE_URL + notificationmodel.getUserImage())
+                    .into(viewHolder.imgUserProfile);
+        }
 
         viewHolder.tvUserName.setText(notificationmodel.getUserName());
         viewHolder.tvCommentTime.setText(notificationmodel.getDate());
