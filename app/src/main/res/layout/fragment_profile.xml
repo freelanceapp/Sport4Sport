@@ -72,7 +72,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -107,7 +108,6 @@
                         android:id="@+id/txtFansCount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/_555"
                         android:textAlignment="center"
                         android:textColor="@color/orange"
                         android:textSize="18dp"
@@ -203,40 +203,20 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/orange"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:layout_height="1dp"
+                android:background="@color/gray_f" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1.5"
-                    android:text="View Main Sport"
-                    android:textColor="@color/white"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="2.5"
-                    android:gravity="center"
-                    android:text="Swipe Right"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/white"
-                    android:textStyle="normal"
-                    tools:ignore="RtlCompat" />
-            </LinearLayout>
+            <include
+                android:id="@+id/sample1"
+                layout="@layout/layout_main_sport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="4dp"
                 android:background="@color/gray_f" />
 
             <LinearLayout
@@ -275,7 +255,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="4dp"
                 android:background="@color/gray_f" />
 
             <android.support.v7.widget.RecyclerView

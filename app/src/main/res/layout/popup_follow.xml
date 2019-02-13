@@ -4,6 +4,7 @@
     android:id="@+id/llPopup"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:layout_margin="16dp"
     android:background="@color/white"
     android:orientation="vertical"
@@ -38,6 +39,7 @@
             android:paddingRight="24dp"
             android:paddingBottom="8dp"
             android:text="Follow"
+            android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </LinearLayout>

@@ -13,12 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -49,17 +47,15 @@ import technology.infobite.com.sportsforsports.utils.Alerts;
 import technology.infobite.com.sportsforsports.utils.AppPreference;
 import technology.infobite.com.sportsforsports.utils.BaseActivity;
 
-public class PostDetailActivity extends BaseActivity implements View.OnClickListener {
+public class MyPostDetailActivity extends BaseActivity implements View.OnClickListener {
 
     private UserFeed newPostModel;
 
     private LinearLayout llPostComment;
-    private RelativeLayout rlViewUserProfile;
     private ImageView imgPostImage;
     private CircleImageView imgUserProfile;
     private TextView tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvPostDescription, tvHeadline;
 
-    private Button postsend;
     private VideoView videoViewPost;
     private ProgressBar progressBar;
     private RecyclerView recyclerViewCommentList;
@@ -99,7 +95,6 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         llPostComment = findViewById(R.id.llPostComment);
         findViewById(R.id.llLikePost).setOnClickListener(this);
         findViewById(R.id.imgMoreMenu).setOnClickListener(this);
-        rlViewUserProfile = findViewById(R.id.rlViewUserProfile);
         imgUserProfile = findViewById(R.id.imgUserProfile);
         tvUserName = findViewById(R.id.tvUserName);
         tvHeadline = findViewById(R.id.tvHeadline);
@@ -109,7 +104,6 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         tvCommentCount = findViewById(R.id.tvCommentCount);
         tvPostTime = findViewById(R.id.tvPostTime);
         tvPostDescription = findViewById(R.id.tvPostDescription);
-        postsend = findViewById(R.id.post_comment_send);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

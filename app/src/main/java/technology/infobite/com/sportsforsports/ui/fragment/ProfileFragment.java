@@ -50,6 +50,7 @@ import technology.infobite.com.sportsforsports.modal.daily_news_feed.UserFeed;
 import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
+import technology.infobite.com.sportsforsports.swipe_classes.SwipeLayout;
 import technology.infobite.com.sportsforsports.ui.activity.UpdateProfileActivity;
 import technology.infobite.com.sportsforsports.utils.Alerts;
 import technology.infobite.com.sportsforsports.utils.AppPreference;
@@ -75,6 +76,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private UserFeedAdapter headlineAdapter, photoAdapter, videoAdapter;
 
     private ImageView imgComment, imgCamera, imgVideoCamera;
+    private SwipeLayout sample1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,24 +107,31 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         imgVideoCamera.setOnClickListener(this);
 
         setMyPhotoVideoData();
+        initSwipeLayout();
+    }
+
+    private void initSwipeLayout() {
+        sample1 = (SwipeLayout) rootView.findViewById(R.id.sample1);
+        sample1.setShowMode(SwipeLayout.ShowMode.PullOut);
+        sample1.addDrag(SwipeLayout.DragEdge.Left, sample1.findViewById(R.id.bottom_wrapper));
     }
 
     private void setMyPhotoVideoData() {
         /*Headline list data*/
-        headlineAdapter = new UserFeedAdapter(mContext, myTextHeadlineList, this, retrofitApiClient);
+        headlineAdapter = new UserFeedAdapter(mContext, myTextHeadlineList, this, retrofitApiClient, "MyProfile");
         recyclerViewHeadlines.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerViewHeadlines.setItemAnimator(new DefaultItemAnimator());
         recyclerViewHeadlines.setAdapter(headlineAdapter);
 
         /*Image list data*/
-        photoAdapter = new UserFeedAdapter(mContext, myPhotoList, this, retrofitApiClient);
+        photoAdapter = new UserFeedAdapter(mContext, myPhotoList, this, retrofitApiClient, "MyProfile");
         GridLayoutManager photoLayoutManager = new GridLayoutManager(mContext, 4);
         recyclerViewImage.setLayoutManager(photoLayoutManager);
         recyclerViewImage.setItemAnimator(new DefaultItemAnimator());
         recyclerViewImage.setAdapter(photoAdapter);
 
         /*Video list data*/
-        videoAdapter = new UserFeedAdapter(mContext, myVideoList, this, retrofitApiClient);
+        videoAdapter = new UserFeedAdapter(mContext, myVideoList, this, retrofitApiClient, "MyProfile");
         GridLayoutManager videoLayoutManager = new GridLayoutManager(mContext, 4);
         recyclerViewVideos.setLayoutManager(videoLayoutManager);
         recyclerViewVideos.setItemAnimator(new DefaultItemAnimator());
@@ -195,6 +204,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     private void setViewData() {
         ((TextView) rootView.findViewById(R.id.txtMyName)).setText(userDataModal.getUser().getUserName());
+        ((TextView) rootView.findViewById(R.id.tvMainSport)).setText(userDataModal.getUser().getMainSport());
         ((TextView) rootView.findViewById(R.id.txtBio)).setText(userDataModal.getUser().getBio());
         ((TextView) rootView.findViewById(R.id.txtFansCount)).setText(userDataModal.getFan().get(0).getFan());
         ((TextView) rootView.findViewById(R.id.txtDob)).setText(userDataModal.getUser().getDob());
@@ -348,4 +358,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 break;
         }
     }
+
+    /*************************************************************************/
+    /*
+     *
+     * */
 }

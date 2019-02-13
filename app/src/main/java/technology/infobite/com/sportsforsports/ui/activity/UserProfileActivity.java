@@ -86,20 +86,20 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
     private void setMyPhotoVideoData() {
         /*Headline list data*/
-        headlineAdapter = new UserFeedAdapter(mContext, myTextHeadlineList, this, retrofitApiClient);
+        headlineAdapter = new UserFeedAdapter(mContext, myTextHeadlineList, this, retrofitApiClient, "UserProfile");
         recyclerViewHeadlines.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerViewHeadlines.setItemAnimator(new DefaultItemAnimator());
         recyclerViewHeadlines.setAdapter(headlineAdapter);
 
         /*Image list data*/
-        photoAdapter = new UserFeedAdapter(mContext, myPhotoList, this, retrofitApiClient);
+        photoAdapter = new UserFeedAdapter(mContext, myPhotoList, this, retrofitApiClient, "UserProfile");
         GridLayoutManager photoLayoutManager = new GridLayoutManager(mContext, 4);
         recyclerViewImage.setLayoutManager(photoLayoutManager);
         recyclerViewImage.setItemAnimator(new DefaultItemAnimator());
         recyclerViewImage.setAdapter(photoAdapter);
 
         /*Video list data*/
-        videoAdapter = new UserFeedAdapter(mContext, myVideoList, this, retrofitApiClient);
+        videoAdapter = new UserFeedAdapter(mContext, myVideoList, this, retrofitApiClient, "UserProfile");
         GridLayoutManager videoLayoutManager = new GridLayoutManager(mContext, 4);
         recyclerViewVideos.setLayoutManager(videoLayoutManager);
         recyclerViewVideos.setItemAnimator(new DefaultItemAnimator());
@@ -177,6 +177,16 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 .load(Constant.PROFILE_IMAGE_BASE_URL + userDataModal.getUser().getAvtarImg())
                 .apply(new RequestOptions().optionalCenterCrop())
                 .into(((CircleImageView) findViewById(R.id.ic_profile_person)));
+
+        if (myTextHeadlineList.size() == 0) {
+            ((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.VISIBLE);
+        } else if (myPhotoList.size() == 0) {
+            ((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.VISIBLE);
+        } else if (myVideoList.size() == 0) {
+            ((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.VISIBLE);
+        } else {
+            ((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.GONE);
+        }
     }
 
     @Override

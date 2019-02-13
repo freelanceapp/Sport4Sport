@@ -41,10 +41,10 @@ import technology.infobite.com.sportsforsports.utils.AppPreference;
 
 public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final int VIEW_TYPE_TEXT = 0;
-    public static final int VIEW_TYPE_IMAGE = 1;
-    public static final int VIEW_TYPE_VIDEO = 2;
-    public static final int VIEW_TYPE_EMPTY = 3;
+    private static final int VIEW_TYPE_TEXT = 0;
+    private static final int VIEW_TYPE_IMAGE = 1;
+    private static final int VIEW_TYPE_VIDEO = 2;
+    private static final int VIEW_TYPE_EMPTY = 3;
 
     private List<UserFeed> mInfoList;
     private Context mContext;
@@ -122,7 +122,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 viewHolder.imgMoreMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openPopup();
+                        checkFollowApi(feed.getPostUserId(), feed.getPostUserName());
                     }
                 });
 
@@ -211,7 +211,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 imageViewHolder.imgMoreMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openPopup();
+                        checkFollowApi(imageFeed.getPostUserId(), imageFeed.getPostUserName());
                     }
                 });
 
@@ -301,7 +301,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 videoViewHolder.imgMoreMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openPopup();
+                        checkFollowApi(videoFeed.getPostUserId(), videoFeed.getPostUserName());
                     }
                 });
 
@@ -351,8 +351,36 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    private void openPopup() {
-        Dialog dialogCustomerInfo = new Dialog(mContext);
+    private void checkFollowApi(final String strUserId, final String strPostUsername) {
+        String strMyId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
+        RetrofitService.getLikeResponse(retrofitApiClient.checkFollow(strUserId, strMyId), new WebResponse() {
+            @Override
+            public void onResponseSuccess(Response<?> result) {
+                ResponseBody responseBody = (ResponseBody) result.body();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseBody.string());
+                    if (!jsonObject.getBoolean("error")) {
+                        String strStatus = jsonObject.getString("status");
+                        openPopup(strPostUsername, strStatus, strUserId);
+                    } else {
+                        Alerts.show(mContext, jsonObject.getString("message"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onResponseFailed(String error) {
+                Alerts.show(mContext, error);
+            }
+        });
+    }
+
+    private void openPopup(String strName, String strStatus, final String strFanId) {
+        final Dialog dialogCustomerInfo = new Dialog(mContext);
         dialogCustomerInfo.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogCustomerInfo.setContentView(R.layout.popup_follow);
 
@@ -361,16 +389,41 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         if (dialogCustomerInfo.getWindow() != null)
             dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
+        ((TextView) dialogCustomerInfo.findViewById(R.id.tvUsername)).setText(strName);
+        ((TextView) dialogCustomerInfo.findViewById(R.id.tvFollow)).setText(strStatus);
         ((TextView) dialogCustomerInfo.findViewById(R.id.tvFollow)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                followUser(strFanId, dialogCustomerInfo);
             }
         });
 
-        Window window = dialogCustomerInfo.getWindow();
-        window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+       /* Window window = dialogCustomerInfo.getWindow();
+        window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);*/
         dialogCustomerInfo.show();
+    }
+
+    private void followUser(String strUserId, final Dialog dialogCustomerInfo) {
+        String strMyId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
+        RetrofitService.getLikeResponse(retrofitApiClient.followUser(strUserId, strMyId, "1"), new WebResponse() {
+            @Override
+            public void onResponseSuccess(Response<?> result) {
+                ResponseBody responseBody = (ResponseBody) result.body();
+                try {
+                    dialogCustomerInfo.dismiss();
+                    JSONObject jsonObject = new JSONObject(responseBody.string());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onResponseFailed(String error) {
+                Alerts.show(mContext, error);
+            }
+        });
     }
 
     private void likeApi(final UserFeed feed, final ImageView imgLike, final TextView textView) {

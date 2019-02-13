@@ -33,6 +33,7 @@ import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitApiClient;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
+import technology.infobite.com.sportsforsports.ui.activity.MyPostDetailActivity;
 import technology.infobite.com.sportsforsports.ui.activity.PostDetailActivity;
 import technology.infobite.com.sportsforsports.utils.Alerts;
 import technology.infobite.com.sportsforsports.utils.AppPreference;
@@ -43,13 +44,15 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context mContext;
     private View.OnClickListener onClickListener;
     private RetrofitApiClient retrofitApiClient;
+    private String strActivityType = "";
 
     public UserFeedAdapter(Context mContext, List<UserFeed> infoList, View.OnClickListener onClickListener,
-                           RetrofitApiClient retrofitApiClient) {
+                           RetrofitApiClient retrofitApiClient, String strActivityType) {
         this.mContext = mContext;
         this.mInfoList = infoList;
         this.onClickListener = onClickListener;
         this.retrofitApiClient = retrofitApiClient;
+        this.strActivityType = strActivityType;
     }
 
     @NonNull
@@ -203,7 +206,12 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         String data = gson.toJson(imageFeed);
         AppPreference.setStringPreference(mContext, Constant.POST_DETAIL, data);
 
-        Intent intent = new Intent(mContext, PostDetailActivity.class);
+        Intent intent = null;
+        if (strActivityType.equalsIgnoreCase("MyProfile")) {
+            intent = new Intent(mContext, MyPostDetailActivity.class);
+        } else {
+            intent = new Intent(mContext, PostDetailActivity.class);
+        }
         intent.putExtra("get_from", "user");
         intent.putExtra("post_id", imageFeed.getFeedId());
         mContext.startActivity(intent);

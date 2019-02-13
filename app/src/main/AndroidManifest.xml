@@ -83,6 +83,7 @@
         </activity>
         <activity android:name=".ui.activity.SearchListActivity" />
         <activity android:name=".utils.BaseActivity" />
+        <activity android:name=".ui.activity.MyPostDetailActivity" />
 
         <service android:name=".firebase_utils.MyFirebaseMessagingService">
             <intent-filter>
