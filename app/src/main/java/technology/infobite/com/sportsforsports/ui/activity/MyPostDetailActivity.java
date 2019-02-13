@@ -234,7 +234,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
                 imm.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
                 break;
             case R.id.imgMoreMenu:
-                checkFollowApi(newPostModel.getPostUserId(), newPostModel.getPostUserName());
+                openPopup();
                 break;
         }
     }
@@ -257,7 +257,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
                     }*/ else {
                         AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, true);
                     }
-                    timelineApi();
+                    timelineApi("comment");
                     if (commentResponseModal == null)
                         return;
                     commentList.addAll(commentResponseModal.getComment());
@@ -276,7 +276,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    private void timelineApi() {
+    private void timelineApi(final String strType) {
         String strId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
         if (cd.isNetworkAvailable()) {
             RetrofitService.refreshTimeLine(retrofitApiClient.showPostTimeLine(strId), new WebResponse() {
@@ -289,6 +289,9 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
                         Gson gson = new GsonBuilder().setLenient().create();
                         String data = gson.toJson(dailyNewsFeedMainModal);
                         AppPreference.setStringPreference(mContext, Constant.TIMELINE_DATA, data);
+                    }
+                    if (strType.equalsIgnoreCase("delete")) {
+                        finish();
                     }
                 }
 
@@ -345,50 +348,27 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
     /*
      * Follow unfollow function
      * */
-    private void checkFollowApi(final String strUserId, final String strPostUsername) {
-        String strMyId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
-        RetrofitService.getLikeResponse(retrofitApiClient.checkFollow(strUserId, strMyId), new WebResponse() {
-            @Override
-            public void onResponseSuccess(Response<?> result) {
-                ResponseBody responseBody = (ResponseBody) result.body();
-                try {
-                    JSONObject jsonObject = new JSONObject(responseBody.string());
-                    if (!jsonObject.getBoolean("error")) {
-                        String strStatus = jsonObject.getString("status");
-                        openPopup(strPostUsername, strStatus, strUserId);
-                    } else {
-                        Alerts.show(mContext, jsonObject.getString("message"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onResponseFailed(String error) {
-                Alerts.show(mContext, error);
-            }
-        });
-    }
-
-    private void openPopup(String strName, String strStatus, final String strFanId) {
+    private void openPopup() {
         final Dialog dialogCustomerInfo = new Dialog(mContext);
         dialogCustomerInfo.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogCustomerInfo.setContentView(R.layout.popup_follow);
+        dialogCustomerInfo.setContentView(R.layout.dialog_delete);
 
         dialogCustomerInfo.setCanceledOnTouchOutside(true);
         dialogCustomerInfo.setCancelable(true);
         if (dialogCustomerInfo.getWindow() != null)
             dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        ((TextView) dialogCustomerInfo.findViewById(R.id.tvUsername)).setText(strName);
-        ((TextView) dialogCustomerInfo.findViewById(R.id.tvFollow)).setText(strStatus);
-        ((TextView) dialogCustomerInfo.findViewById(R.id.tvFollow)).setOnClickListener(new View.OnClickListener() {
+        ((TextView) dialogCustomerInfo.findViewById(R.id.tvOk)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                followUser(strFanId, dialogCustomerInfo);
+                deletePostApi(dialogCustomerInfo);
+            }
+        });
+
+        ((TextView) dialogCustomerInfo.findViewById(R.id.tvCancel)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogCustomerInfo.dismiss();
             }
         });
 
@@ -397,16 +377,16 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         dialogCustomerInfo.show();
     }
 
-    private void followUser(String strUserId, final Dialog dialogCustomerInfo) {
-        String strMyId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
-        RetrofitService.getLikeResponse(retrofitApiClient.followUser(strUserId, strMyId, "1"), new WebResponse() {
+    private void deletePostApi(final Dialog dialogCustomerInfo) {
+        RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.deletePost(postId), new WebResponse() {
             @Override
             public void onResponseSuccess(Response<?> result) {
                 ResponseBody responseBody = (ResponseBody) result.body();
                 try {
                     dialogCustomerInfo.dismiss();
                     JSONObject jsonObject = new JSONObject(responseBody.string());
-                    timelineApi();
+                    Alerts.show(mContext, jsonObject + "");
+                    timelineApi("delete");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

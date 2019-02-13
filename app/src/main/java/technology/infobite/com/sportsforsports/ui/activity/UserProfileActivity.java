@@ -105,7 +105,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         recyclerViewVideos.setItemAnimator(new DefaultItemAnimator());
         recyclerViewVideos.setAdapter(videoAdapter);
 
-
         init();
     }
 

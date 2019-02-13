@@ -79,11 +79,11 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imageFeed = mInfoList.get(position);
         }
 
-        String strUserName = AppPreference.getStringPreference(mContext, Constant.USER_NAME);
-        String strUserImage = AppPreference.getStringPreference(mContext, Constant.USER_IMAGE);
+        /*String strUserName = AppPreference.getStringPreference(mContext, Constant.USER_NAME);
+        String strUserImage = AppPreference.getStringPreference(mContext, Constant.USER_IMAGE);*/
 
         final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
-        imageViewHolder.tvUserName.setText(strUserName);
+        imageViewHolder.tvUserName.setText(imageFeed.getPostUserName());
         imageViewHolder.tvPostDescription.setText(imageFeed.getAthleteStatus());
 
         imageViewHolder.imgLike.setTag(position);
@@ -172,12 +172,12 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         imageViewHolder.rlImageVideo.setTag(position);
-        imageViewHolder.rlImageVideo.setOnClickListener(this);
+        imageViewHolder.rlImageVideo.setOnClickListener(onClickListener);
         imageViewHolder.llHeadline.setTag(position);
         imageViewHolder.llHeadline.setOnClickListener(this);
 
         Glide.with(imageViewHolder.itemView.getContext())
-                .load(Constant.PROFILE_IMAGE_BASE_URL + strUserImage)
+                .load(Constant.PROFILE_IMAGE_BASE_URL + imageFeed.getPostUserImage())
                 .apply(new RequestOptions().optionalCenterCrop())
                 .into(imageViewHolder.imgUserProfile);
     }
@@ -198,13 +198,13 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         String strName = AppPreference.getStringPreference(mContext, Constant.USER_NAME);
         String strProfilePhoto = AppPreference.getStringPreference(mContext, Constant.USER_IMAGE);
-        imageFeed.setPostUserName(strName);
-        imageFeed.setPostUserImage(strProfilePhoto);
-        imageFeed.setIsLike("unlike");
+        //imageFeed.setPostUserName(strName);
+        //imageFeed.setPostUserImage(strProfilePhoto);
+        //imageFeed.setIsLike("unlike");
 
-        Gson gson = new GsonBuilder().setLenient().create();
+       /* Gson gson = new GsonBuilder().setLenient().create();
         String data = gson.toJson(imageFeed);
-        AppPreference.setStringPreference(mContext, Constant.POST_DETAIL, data);
+        AppPreference.setStringPreference(mContext, Constant.POST_DETAIL, data);*/
 
         Intent intent = null;
         if (strActivityType.equalsIgnoreCase("MyProfile")) {

@@ -28,6 +28,7 @@ import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFe
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.UserFeed;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
+import technology.infobite.com.sportsforsports.ui.activity.MyPostDetailActivity;
 import technology.infobite.com.sportsforsports.ui.activity.PostDetailActivity;
 import technology.infobite.com.sportsforsports.ui.activity.UserProfileActivity;
 import technology.infobite.com.sportsforsports.utils.Alerts;
@@ -53,6 +54,7 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
     private ExoPlayerRecyclerView recyclerViewFeed;
     private int playPosition = -1;
     private String strId;
+    private String strUserId = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
 
     private void init() {
         mContext = getActivity();
+        strUserId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         recyclerViewFeed = rootView.findViewById(R.id.recyclerViewFeed);
@@ -117,8 +120,14 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
                 int position = Integer.parseInt(v.getTag().toString());
                 Gson gson = new GsonBuilder().setLenient().create();
                 String data = gson.toJson(feedList.get(position));
+                String postUserId = feedList.get(position).getPostUserId();
                 AppPreference.setStringPreference(mContext, Constant.POST_DETAIL, data);
-                Intent intent = new Intent(mContext, PostDetailActivity.class);
+                Intent intent = null;
+                if (postUserId.equals(strUserId)) {
+                    intent = new Intent(mContext, MyPostDetailActivity.class);
+                } else {
+                    intent = new Intent(mContext, PostDetailActivity.class);
+                }
                 intent.putExtra("get_from", "timeline");
                 intent.putExtra("post_id", feedList.get(position).getFeedId());
                 startActivity(intent);
@@ -126,16 +135,15 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
             case R.id.llViewUserProfile:
                 int pos = Integer.parseInt(v.getTag().toString());
                 String strPostUserId = feedList.get(pos).getPostUserId();
-                String strUserId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
                 if (strPostUserId.equals(strUserId)) {
                     Fragment ProfileFragment = fragmentManager.findFragmentByTag(Constant.ProfileFragment);
                     if (ProfileFragment == null) {
                         changeFragment(new ProfileFragment(), Constant.ProfileFragment);
                     }
                 } else {
-                    Intent postUserId = new Intent(mContext, UserProfileActivity.class);
-                    postUserId.putExtra("fan_id", strPostUserId);
-                    startActivity(postUserId);
+                    Intent intentPostUserId = new Intent(mContext, UserProfileActivity.class);
+                    intentPostUserId.putExtra("fan_id", strPostUserId);
+                    startActivity(intentPostUserId);
                 }
                 break;
         }
@@ -181,6 +189,7 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
+        //recyclerViewFeed.onRelease();
         if (AppPreference.getBooleanPreference(mContext, Constant.IS_DATA_UPDATE)) {
             feedList.clear();
             String strTimelineData = AppPreference.getStringPreference(mContext, Constant.TIMELINE_DATA);

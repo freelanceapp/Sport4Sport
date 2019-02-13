@@ -111,7 +111,8 @@ public class SearchListActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onSearchSelected(AllUserList contact) {
-        Intent postUserId = new Intent(mContext, UserProfileActivity.class);
+        //Intent postUserId = new Intent(mContext, UserProfileActivity.class);
+        Intent postUserId = new Intent(mContext, DragablePanelUserProfileActivity.class);
         postUserId.putExtra("fan_id", contact.getUserId());
         startActivity(postUserId);
     }

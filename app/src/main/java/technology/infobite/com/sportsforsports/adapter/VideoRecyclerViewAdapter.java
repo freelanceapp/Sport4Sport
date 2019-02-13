@@ -351,6 +351,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
+    /*
+    * Check follow api
+    * */
     private void checkFollowApi(final String strUserId, final String strPostUsername) {
         String strMyId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
         RetrofitService.getLikeResponse(retrofitApiClient.checkFollow(strUserId, strMyId), new WebResponse() {
@@ -379,6 +382,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         });
     }
 
+    /*
+    * Follow/Unfollow dialog
+    * */
     private void openPopup(String strName, String strStatus, final String strFanId) {
         final Dialog dialogCustomerInfo = new Dialog(mContext);
         dialogCustomerInfo.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -403,6 +409,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         dialogCustomerInfo.show();
     }
 
+    /*
+     * Follow/Unfollow api
+     * */
     private void followUser(String strUserId, final Dialog dialogCustomerInfo) {
         String strMyId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
         RetrofitService.getLikeResponse(retrofitApiClient.followUser(strUserId, strMyId, "1"), new WebResponse() {
@@ -426,6 +435,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         });
     }
 
+    /*
+     * Like/Unlike api
+     * */
     private void likeApi(final UserFeed feed, final ImageView imgLike, final TextView textView) {
         final String strId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
 

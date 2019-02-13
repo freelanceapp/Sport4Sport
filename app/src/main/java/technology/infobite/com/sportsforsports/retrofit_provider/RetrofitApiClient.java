@@ -94,4 +94,8 @@ public interface RetrofitApiClient {
     @FormUrlEncoded
     @POST(Constant.SINGLE_POST)
     Call<DailyNewsFeedMainModal> postDetail(@Field("user_id") String useId, @Field("post_id") String post_id);
+
+    @FormUrlEncoded
+    @POST(Constant.DELETE_POST)
+    Call<ResponseBody> deletePost(@Field("post_id") String post_id);
 }
