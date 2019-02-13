@@ -1,5 +1,6 @@
 package technology.infobite.com.sportsforsports.ui.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -64,8 +65,9 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private CommentListAdapter commentListAdapter;
     private List<Comment> commentList = new ArrayList<>();
 
+    private String strId = "";
     private String strFrom = "";
-    private int postId = 0;
+    private String postId = "";
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -77,14 +79,15 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     private void init() {
+        strId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
-        strFrom = getIntent().getStringExtra("from");
-        postId = getIntent().getIntExtra("post_id", 0);
+        strFrom = getIntent().getStringExtra("get_from");
+        postId = getIntent().getStringExtra("post_id");
 
-        Gson gson = new Gson();
+        /*Gson gson = new Gson();
         String strPostDetail = AppPreference.getStringPreference(mContext, Constant.POST_DETAIL);
-        newPostModel = gson.fromJson(strPostDetail, UserFeed.class);
+        newPostModel = gson.fromJson(strPostDetail, UserFeed.class);*/
 
         recyclerViewCommentList = findViewById(R.id.recyclerViewCommentList);
         recyclerViewCommentList.setHasFixedSize(true);
@@ -106,16 +109,38 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         tvPostDescription = findViewById(R.id.tvPostDescription);
         postsend = findViewById(R.id.post_comment_send);
 
-        final String strId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshTimelineApi(strId);
-                setDataInModal();
+                postDetailApi();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-        setDataInModal();
+        postDetailApi();
+    }
+
+    /* Post detail api */
+    private void postDetailApi() {
+        if (cd.isNetworkAvailable()) {
+            RetrofitService.showPostTimeLine(new Dialog(mContext), retrofitApiClient.postDetail(strId, postId), new WebResponse() {
+                @Override
+                public void onResponseSuccess(Response<?> result) {
+                    DailyNewsFeedMainModal dailyNewsFeedMainModal = (DailyNewsFeedMainModal) result.body();
+                    if (dailyNewsFeedMainModal != null)
+                        if (dailyNewsFeedMainModal.getFeed() != null)
+                            newPostModel = dailyNewsFeedMainModal.getFeed().get(0);
+                    setDataInModal();
+                }
+
+                @Override
+                public void onResponseFailed(String error) {
+                    Alerts.show(mContext, error);
+                }
+            });
+        } else {
+            cd.show(mContext);
+        }
+
     }
 
     private void setDataInModal() {
@@ -228,7 +253,9 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                     commentList.clear();
                     if (strFrom.equals("user")) {
                         AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, false);
-                    } else {
+                    }/* else if (strFrom.equals("notification")) {
+                        AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, true);
+                    }*/ else {
                         AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, true);
                     }
                     timelineApi();
@@ -279,67 +306,39 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
      * Like/Unlike function
      * */
     private void likeApi(final UserFeed feed, final ImageView imgLike, final TextView textView) {
-        final String strId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
 
-        RetrofitService.getLikeResponse(retrofitApiClient.postLike(feed.getFeedId(), strId, "1"), new WebResponse() {
-            @Override
-            public void onResponseSuccess(Response<?> result) {
-                ResponseBody responseBody = (ResponseBody) result.body();
-                try {
-                    JSONObject jsonObject = new JSONObject(responseBody.string());
-                    if (!jsonObject.getBoolean("error")) {
-                        if (feed.getIsLike().equals("unlike")) {
-                            imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_fill));
-                        } else {
-                            imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_icon));
-                        }
-                        textView.setText(jsonObject.getString("total_fan") + " like");
-                        refreshTimelineApi(strId);
-                    } else {
-                        Alerts.show(mContext, jsonObject.getString("message"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onResponseFailed(String error) {
-                Alerts.show(mContext, error);
-            }
-        });
-    }
-
-    private void refreshTimelineApi(String strId) {
-        RetrofitService.refreshTimeLine(retrofitApiClient.showPostTimeLine(strId), new WebResponse() {
-            @Override
-            public void onResponseSuccess(Response<?> result) {
-                DailyNewsFeedMainModal dailyNewsFeedMainModal = (DailyNewsFeedMainModal) result.body();
-                if (dailyNewsFeedMainModal.getError()) {
-                    Alerts.show(mContext, "No data");
-                } else {
-                    Gson gson = new GsonBuilder().setLenient().create();
-                    String data = gson.toJson(dailyNewsFeedMainModal);
-                    /*AppPreference.setStringPreference(mContext, Constant.TIMELINE_DATA, data);
-                    AppPreference.setBooleanPreference(mContext, "likedPost", true);*/
-
-                    if (dailyNewsFeedMainModal.getFeed().size() > 0) {
-                        for (int i = 0; i < dailyNewsFeedMainModal.getFeed().size(); i++) {
-                            if (dailyNewsFeedMainModal.getFeed().get(i).getFeedId().equals(postId)) {
-                                newPostModel = dailyNewsFeedMainModal.getFeed().get(i);
+        if (cd.isNetworkAvailable()) {
+            RetrofitService.getLikeResponse(retrofitApiClient.postLike(feed.getFeedId(), strId, "1"), new WebResponse() {
+                @Override
+                public void onResponseSuccess(Response<?> result) {
+                    ResponseBody responseBody = (ResponseBody) result.body();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseBody.string());
+                        if (!jsonObject.getBoolean("error")) {
+                            if (feed.getIsLike().equals("unlike")) {
+                                imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_fill));
+                            } else {
+                                imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_icon));
                             }
+                            postDetailApi();
+                            textView.setText(jsonObject.getString("total_fan") + " like");
+                        } else {
+                            Alerts.show(mContext, jsonObject.getString("message"));
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    setDataInModal();
                 }
-            }
 
-            @Override
-            public void onResponseFailed(String error) {
-                Alerts.show(mContext, error);
-            }
-        });
+                @Override
+                public void onResponseFailed(String error) {
+                    Alerts.show(mContext, error);
+                }
+            });
+        } else {
+            cd.show(mContext);
+        }
     }
 }

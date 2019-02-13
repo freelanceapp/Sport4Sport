@@ -119,7 +119,7 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
                 String data = gson.toJson(feedList.get(position));
                 AppPreference.setStringPreference(mContext, Constant.POST_DETAIL, data);
                 Intent intent = new Intent(mContext, PostDetailActivity.class);
-                intent.putExtra("from", "timeline");
+                intent.putExtra("get_from", "timeline");
                 intent.putExtra("post_id", feedList.get(position).getFeedId());
                 startActivity(intent);
                 break;
@@ -134,7 +134,7 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
                     }
                 } else {
                     Intent postUserId = new Intent(mContext, UserProfileActivity.class);
-                    postUserId.putExtra("strPostUserId", strPostUserId);
+                    postUserId.putExtra("fan_id", strPostUserId);
                     startActivity(postUserId);
                 }
                 break;
@@ -163,7 +163,9 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
                         String data = gson.toJson(dailyNewsFeedMainModal);
                         AppPreference.setStringPreference(mContext, Constant.TIMELINE_DATA, data);
 
-                        feedList.addAll(dailyNewsFeedMainModal.getFeed());
+                        if (dailyNewsFeedMainModal.getFeed().size() > 0) {
+                            feedList.addAll(dailyNewsFeedMainModal.getFeed());
+                        }
                         init();
                     }
                 }
@@ -185,7 +187,8 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
             Gson gson = new Gson();
             dailyNewsFeedMainModal = gson.fromJson(strTimelineData, DailyNewsFeedMainModal.class);
             feedList.addAll(dailyNewsFeedMainModal.getFeed());
-            mAdapter.notifyDataSetChanged();
+            if (mAdapter != null)
+                mAdapter.notifyDataSetChanged();
             AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, false);
         }
     }

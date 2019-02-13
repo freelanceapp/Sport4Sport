@@ -149,7 +149,17 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             AppPreference.setStringPreference(mContext, Constant.USER_NAME, userDataModal.getUser().getUserName());
                             AppPreference.setStringPreference(mContext, Constant.USER_IMAGE, userDataModal.getUser().getAvtarImg());
                             rootView.findViewById(R.id.llProfile).setVisibility(View.VISIBLE);
-                            originalTimeline.addAll(userDataModal.getFeed());
+
+                            if (userDataModal.getFeed() != null) {
+                                if (userDataModal.getFeed().size() > 0) {
+                                    //((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.GONE);
+                                    originalTimeline.addAll(userDataModal.getFeed());
+                                } else {
+                                    //((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                //((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.VISIBLE);
+                            }
 
                             if (originalTimeline.size() > 0) {
                                 for (int i = 0; i < originalTimeline.size(); i++) {
@@ -186,7 +196,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private void setViewData() {
         ((TextView) rootView.findViewById(R.id.txtMyName)).setText(userDataModal.getUser().getUserName());
         ((TextView) rootView.findViewById(R.id.txtBio)).setText(userDataModal.getUser().getBio());
-        //((TextView) rootView.findViewById(R.id.txtFansCount)).setText(userDataModal.getUser().getBio());
+        ((TextView) rootView.findViewById(R.id.txtFansCount)).setText(userDataModal.getFan().get(0).getFan());
         ((TextView) rootView.findViewById(R.id.txtDob)).setText(userDataModal.getUser().getDob());
         ((TextView) rootView.findViewById(R.id.txtCoachName)).setText(userDataModal.getUser().getCoach());
         ((TextView) rootView.findViewById(R.id.txtSportClub)).setText(userDataModal.getUser().getClub());

@@ -18,11 +18,13 @@ import java.util.List;
 import retrofit2.Response;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.adapter.SearchListAdapter;
+import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUserList;
 import technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUserMainModal;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
 import technology.infobite.com.sportsforsports.utils.Alerts;
+import technology.infobite.com.sportsforsports.utils.AppPreference;
 import technology.infobite.com.sportsforsports.utils.BaseActivity;
 
 public class SearchListActivity extends BaseActivity implements View.OnClickListener, SearchListAdapter.SearchAdapterListener {
@@ -30,8 +32,8 @@ public class SearchListActivity extends BaseActivity implements View.OnClickList
     private List<AllUserList> allUserLists = new ArrayList<>();
     private RecyclerView gridDetailrclv;
     private SearchListAdapter searchListAdapter;
-    private SearchView searchView;
     private EditText edtSearch;
+    private String strUserId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class SearchListActivity extends BaseActivity implements View.OnClickList
     }
 
     private void init() {
-        searchView = findViewById(R.id.searchView);
+        strUserId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
         edtSearch = findViewById(R.id.edtSearch);
         findViewById(R.id.imgBack).setOnClickListener(this);
 
@@ -77,7 +79,7 @@ public class SearchListActivity extends BaseActivity implements View.OnClickList
 
     private void allUserListApi() {
         if (cd.isNetworkAvailable()) {
-            RetrofitService.getAllUserData(new Dialog(mContext), retrofitApiClient.getAllUserList(), new WebResponse() {
+            RetrofitService.getAllUserData(new Dialog(mContext), retrofitApiClient.getAllUserList(strUserId), new WebResponse() {
                 @Override
                 public void onResponseSuccess(Response<?> result) {
                     AllUserMainModal allUserMainModal = (AllUserMainModal) result.body();
@@ -110,7 +112,7 @@ public class SearchListActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onSearchSelected(AllUserList contact) {
         Intent postUserId = new Intent(mContext, UserProfileActivity.class);
-        postUserId.putExtra("strPostUserId", contact.getUserId());
+        postUserId.putExtra("fan_id", contact.getUserId());
         startActivity(postUserId);
     }
 }

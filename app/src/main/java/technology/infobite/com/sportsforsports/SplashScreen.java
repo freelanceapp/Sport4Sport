@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.ui.activity.HomeActivity;
@@ -30,6 +32,9 @@ public class SplashScreen extends BaseActivity {
 
     private void fn_checkpermission() {
         /*RUN TIME PERMISSIONS*/
+        FirebaseApp.initializeApp(this);
+        FirebaseInstanceId.getInstance().getToken();
+
         if ((ContextCompat.checkSelfPermission(mContext,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) &&
                 (ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
@@ -47,7 +52,7 @@ public class SplashScreen extends BaseActivity {
         }
     }
 
-    private void handlerTimer(){
+    private void handlerTimer() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

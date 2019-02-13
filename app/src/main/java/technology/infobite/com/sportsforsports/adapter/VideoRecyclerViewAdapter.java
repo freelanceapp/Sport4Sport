@@ -1,5 +1,6 @@
 package technology.infobite.com.sportsforsports.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -42,6 +44,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public static final int VIEW_TYPE_TEXT = 0;
     public static final int VIEW_TYPE_IMAGE = 1;
     public static final int VIEW_TYPE_VIDEO = 2;
+    public static final int VIEW_TYPE_EMPTY = 3;
 
     private List<UserFeed> mInfoList;
     private Context mContext;
@@ -69,13 +72,16 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             case VIEW_TYPE_IMAGE:
                 return new ImageViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.row_timeline_image, parent, false));
+            case VIEW_TYPE_EMPTY:
+                return new EmptyViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.row_empty_data, parent, false));
             default:
                 return null;
         }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         /*holder.onBind(position);*/
         switch (holder.getItemViewType()) {
             case 0:
@@ -110,6 +116,13 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     @Override
                     public void onClick(View v) {
                         likeApi(feed, viewHolder.imgLike, viewHolder.tvPostLikeCount);
+                    }
+                });
+
+                viewHolder.imgMoreMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openPopup();
                     }
                 });
 
@@ -192,6 +205,13 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     @Override
                     public void onClick(View v) {
                         likeApi(imageFeed, imageViewHolder.imgLike, imageViewHolder.tvPostLikeCount);
+                    }
+                });
+
+                imageViewHolder.imgMoreMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openPopup();
                     }
                 });
 
@@ -278,6 +298,13 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     }
                 });
 
+                videoViewHolder.imgMoreMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openPopup();
+                    }
+                });
+
                 if (videoFeed.getIsLike().equals("unlike")) {
                     videoViewHolder.imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_icon));
                 } else {
@@ -319,7 +346,31 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         .apply(new RequestOptions().optionalCenterCrop())
                         .into(videoViewHolder.imgUserProfile);
                 break;
+            case VIEW_TYPE_EMPTY:
+                break;
         }
+    }
+
+    private void openPopup() {
+        Dialog dialogCustomerInfo = new Dialog(mContext);
+        dialogCustomerInfo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogCustomerInfo.setContentView(R.layout.popup_follow);
+
+        dialogCustomerInfo.setCanceledOnTouchOutside(true);
+        dialogCustomerInfo.setCancelable(true);
+        if (dialogCustomerInfo.getWindow() != null)
+            dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        ((TextView) dialogCustomerInfo.findViewById(R.id.tvFollow)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        Window window = dialogCustomerInfo.getWindow();
+        window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialogCustomerInfo.show();
     }
 
     private void likeApi(final UserFeed feed, final ImageView imgLike, final TextView textView) {
@@ -383,7 +434,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemViewType(int position) {
-        if (!mInfoList.get(position).getAthleteVideo().isEmpty()) {
+        if (mInfoList.size() == 0) {
+            return VIEW_TYPE_EMPTY;
+        } else if (!mInfoList.get(position).getAthleteVideo().isEmpty()) {
             return VIEW_TYPE_VIDEO;
         } else if (!mInfoList.get(position).getAlhleteImages().isEmpty()) {
             return VIEW_TYPE_IMAGE;
@@ -412,12 +465,11 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         private RelativeLayout rlPost, llViewUserProfile;
         private LinearLayout llLikePost, llPostComment;
-        private ImageView imgLike;
+        public ImageView mCover, imgLike, imgMoreMenu;
         private CircleImageView imgUserProfile;
         private TextView tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvTotalComment, tvPostDescription;
         private CardView cardViewVideo;
 
-        public ImageView mCover;
         public ProgressBar mProgressBar;
         public final View parent;
         public final View viewData;
@@ -435,6 +487,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             imgUserProfile = itemView.findViewById(R.id.imgUserProfile);
             tvUserName = itemView.findViewById(R.id.tvUserName);
+            imgMoreMenu = itemView.findViewById(R.id.imgMoreMenu);
             imgLike = itemView.findViewById(R.id.imgLike);
             llLikePost = itemView.findViewById(R.id.llLikePost);
             llPostComment = itemView.findViewById(R.id.llPostComment);
@@ -450,8 +503,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         private RelativeLayout rlPost, llViewUserProfile;
         private LinearLayout llLikePost, llPostComment;
-        private ImageView imgPostImage, imgLike;
+        private ImageView imgPostImage, imgLike, imgMoreMenu;
         private CircleImageView imgUserProfile;
+        private CardView cardViewImage;
         private TextView tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvTotalComment, tvPostDescription;
         public final View viewData;
 
@@ -459,10 +513,12 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             super(itemView);
             viewData = itemView;
             rlPost = itemView.findViewById(R.id.rlPost);
+            cardViewImage = itemView.findViewById(R.id.cardViewImage);
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             imgUserProfile = itemView.findViewById(R.id.imgUserProfile);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             imgPostImage = itemView.findViewById(R.id.imgPostImage);
+            imgMoreMenu = itemView.findViewById(R.id.imgMoreMenu);
             imgLike = itemView.findViewById(R.id.imgLike);
             llLikePost = itemView.findViewById(R.id.llLikePost);
             llPostComment = itemView.findViewById(R.id.llPostComment);
@@ -478,8 +534,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         private RelativeLayout rlPost, llViewUserProfile;
         private LinearLayout llLikePost, llPostComment;
-        private ImageView imgLike;
+        private ImageView imgLike, imgMoreMenu;
         private CircleImageView imgUserProfile;
+        private CardView cardViewHeadline;
         private TextView tvHeadline, tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvTotalComment, tvPostDescription;
         public final View viewData;
 
@@ -488,10 +545,12 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             viewData = itemView;
             rlPost = itemView.findViewById(R.id.rlPost);
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
+            cardViewHeadline = itemView.findViewById(R.id.cardViewHeadline);
             imgUserProfile = itemView.findViewById(R.id.imgUserProfile);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             tvHeadline = itemView.findViewById(R.id.tvHeadline);
             imgLike = itemView.findViewById(R.id.imgLike);
+            imgMoreMenu = itemView.findViewById(R.id.imgMoreMenu);
             llLikePost = itemView.findViewById(R.id.llLikePost);
             llPostComment = itemView.findViewById(R.id.llPostComment);
             tvPostLikeCount = itemView.findViewById(R.id.tvPostLikeCount);
@@ -499,6 +558,16 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             tvPostTime = itemView.findViewById(R.id.tvPostTime);
             tvTotalComment = itemView.findViewById(R.id.tvTotalComment);
             tvPostDescription = itemView.findViewById(R.id.tvPostDescription);
+        }
+    }
+
+    public class EmptyViewHolder extends RecyclerView.ViewHolder {
+
+        public final View viewData;
+
+        public EmptyViewHolder(View itemView) {
+            super(itemView);
+            viewData = itemView;
         }
     }
 }

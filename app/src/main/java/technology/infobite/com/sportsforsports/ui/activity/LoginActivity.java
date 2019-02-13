@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void loginApi() {
         String strEmail = ((EditText) findViewById(R.id.edtEmail)).getText().toString();
         String strPassword = ((EditText) findViewById(R.id.edtPassword)).getText().toString();
+        String strToken = AppPreference.getStringPreference(mContext, Constant.TOKEN);
 
         if (strEmail.isEmpty()) {
             Alerts.show(mContext, "Please enter email!!!");
@@ -79,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Alerts.show(mContext, "Please enter password!!!");
         } else {
             if (cd.isNetworkAvailable()) {
-                RetrofitService.getLoginData(new Dialog(mContext), retrofitApiClient.signIn(strEmail, strPassword), new WebResponse() {
+                RetrofitService.getLoginData(new Dialog(mContext), retrofitApiClient.signIn(strEmail, strPassword, strToken), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         UserDataModal responseBody = (UserDataModal) result.body();

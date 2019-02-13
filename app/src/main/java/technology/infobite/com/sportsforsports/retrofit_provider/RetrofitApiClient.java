@@ -6,13 +6,13 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUserMainModal;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
+import technology.infobite.com.sportsforsports.modal.notification_list_modal.NotificationMainModal;
 import technology.infobite.com.sportsforsports.modal.post_comment_modal.PostCommentResponseModal;
 import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 
@@ -20,12 +20,13 @@ public interface RetrofitApiClient {
 
     @FormUrlEncoded
     @POST(Constant.LOGIN_API)
-    Call<UserDataModal> signIn(@Field("email") String email, @Field("password") String password);
+    Call<UserDataModal> signIn(@Field("email") String email, @Field("password") String password,
+                               @Field("token") String token);
 
     @FormUrlEncoded
     @POST(Constant.REGISTRATION_API)
     Call<UserDataModal> signUp(@Field("name") String name, @Field("email") String email,
-                               @Field("password") String password);
+                               @Field("password") String password, @Field("token") String token);
 
     @FormUrlEncoded
     @POST(Constant.UPDATE_PROFILE_API)
@@ -69,8 +70,9 @@ public interface RetrofitApiClient {
     Call<ResponseBody> postLike(@Field("post_id") String postId, @Field("user_id") String useId,
                                 @Field("status") String status);
 
-    @GET(Constant.USER_LIST)
-    Call<AllUserMainModal> getAllUserList();
+    @FormUrlEncoded
+    @POST(Constant.USER_LIST)
+    Call<AllUserMainModal> getAllUserList(@Field("user_id") String useId);
 
     @FormUrlEncoded
     @POST(Constant.FOLLOW_API)
@@ -81,5 +83,15 @@ public interface RetrofitApiClient {
     @POST(Constant.CHECK_FOLLOW)
     Call<ResponseBody> checkFollow(@Field("fan_user_id") String fan_user_id, @Field("user_id") String useId);
 
+    @FormUrlEncoded
+    @POST(Constant.NOTIFICATION_LIST)
+    Call<NotificationMainModal> notificationList(@Field("user_id") String useId);
 
+    @FormUrlEncoded
+    @POST(Constant.UPDATE_TOKEN)
+    Call<ResponseBody> updateToken(@Field("user_id") String useId);
+
+    @FormUrlEncoded
+    @POST(Constant.SINGLE_POST)
+    Call<DailyNewsFeedMainModal> postDetail(@Field("user_id") String useId, @Field("post_id") String post_id);
 }

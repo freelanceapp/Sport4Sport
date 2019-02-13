@@ -64,7 +64,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
     private void initView() {
         strMyId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
-        strUserId = getIntent().getStringExtra("strPostUserId");
+        strUserId = getIntent().getStringExtra("fan_id");
 
         recyclerViewHeadlines = findViewById(R.id.recyclerViewHeadlines);
         recyclerViewImage = findViewById(R.id.recyclerViewImage);

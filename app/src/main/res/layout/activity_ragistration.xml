@@ -43,8 +43,8 @@
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_user"
                     android:drawablePadding="15dp"
-                    android:inputType="text"
                     android:hint="Name"
+                    android:inputType="text"
                     android:textColor="@color/white"
                     android:textStyle="normal" />
 
@@ -56,8 +56,8 @@
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_user"
                     android:drawablePadding="15dp"
-                    android:inputType="textEmailAddress"
                     android:hint="@string/email"
+                    android:inputType="textEmailAddress"
                     android:textColor="@color/white"
                     android:textStyle="normal" />
 
@@ -70,7 +70,7 @@
                     android:drawableLeft="@drawable/ic_lock"
                     android:drawablePadding="15dp"
                     android:hint="Password"
-                    android:inputType="textPassword"
+                    android:inputType="text"
                     android:paddingRight="10dp"
                     android:textColor="@color/white"
                     android:textStyle="normal" />

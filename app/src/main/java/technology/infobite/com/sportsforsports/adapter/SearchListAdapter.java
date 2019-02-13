@@ -46,7 +46,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
 
         AllUserList gridDetailmodels = filteredAllUserLists.get(i);
 
@@ -56,6 +56,12 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
         viewHolder.tvUserName.setText(gridDetailmodels.getUserName());
         viewHolder.tvBio.setText(gridDetailmodels.getBio());
+        viewHolder.btnView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchAdapterListener.onSearchSelected(filteredAllUserLists.get(i));
+            }
+        });
 
         if (i == 0 || i == 1) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -124,13 +130,6 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
             imgUser = itemView.findViewById(R.id.imgUser);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             tvBio = itemView.findViewById(R.id.tvBio);
-
-            btnView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    searchAdapterListener.onSearchSelected(allUserLists.get(getAdapterPosition()));
-                }
-            });
         }
     }
 

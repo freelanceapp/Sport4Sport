@@ -48,6 +48,7 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
         String strname = ((EditText) findViewById(R.id.edtName)).getText().toString();
         String strEmail = ((EditText) findViewById(R.id.edtEmail)).getText().toString();
         String strPassword = ((EditText) findViewById(R.id.edtPassword)).getText().toString();
+        String strToken = AppPreference.getStringPreference(mContext, Constant.TOKEN);
 
         if (strname.isEmpty()) {
             Alerts.show(mContext, "Please enter name!!!");
@@ -58,7 +59,7 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
         } else {
             if (cd.isNetworkAvailable()) {
                 RetrofitService.getLoginData(new Dialog(mContext), retrofitApiClient.signUp(strname, strEmail,
-                        strPassword), new WebResponse() {
+                        strPassword, strToken), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         UserDataModal responseBody = (UserDataModal) result.body();

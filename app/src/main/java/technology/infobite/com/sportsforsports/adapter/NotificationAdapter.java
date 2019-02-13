@@ -9,19 +9,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
-import technology.infobite.com.sportsforsports.NotificationModel;
 import technology.infobite.com.sportsforsports.R;
+import technology.infobite.com.sportsforsports.constant.Constant;
+import technology.infobite.com.sportsforsports.modal.notification_list_modal.NotificationList;
 
-public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
-    private List<NotificationModel> notificationModels;
-    Context context;
+    private List<NotificationList> notificationLists;
+    private Context context;
+    private View.OnClickListener onClickListener;
 
-    public NotificationAdapter(List<NotificationModel> notificationModels, Context context) {
-        this.notificationModels = notificationModels;
+    public NotificationAdapter(List<NotificationList> notificationLists, Context context, View.OnClickListener onClickListener) {
+        this.notificationLists = notificationLists;
         this.context = context;
+        this.onClickListener = onClickListener;
     }
 
     @NonNull
@@ -29,36 +34,46 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         LayoutInflater li = LayoutInflater.from(context);
-        View viewt = li.inflate(R.layout.row_notification,null);
+        View viewt = li.inflate(R.layout.row_notification, null);
         return new ViewHolder(viewt);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        NotificationModel notificationmodel= notificationModels.get(i);
+        String strNotification = notificationLists.get(i).getNotifactionType();
+        String strFanName = notificationLists.get(i).getFanUserName();
+        if (strNotification.equalsIgnoreCase("Like")) {
+            viewHolder.tvNotificationType.setText(strFanName + " " + "likes your post");
+        } else if (strNotification.equalsIgnoreCase("Comment")) {
+            viewHolder.tvNotificationType.setText(strFanName + " " + "commented on your post");
+        } else if (strNotification.equalsIgnoreCase("Follow")) {
+            viewHolder.tvNotificationType.setText(strFanName + " " + "started following you");
+        }
 
-        viewHolder.image.setImageDrawable(context.getResources().getDrawable(notificationmodel.getImage()));
-        viewHolder.text1.setText(notificationmodel.getText1());
-        viewHolder.text2.setText(notificationmodel.getText2());
+        viewHolder.tvTime.setText("8 h");
+
+        Glide.with(context)
+                .load(Constant.PROFILE_IMAGE_BASE_URL + notificationLists.get(i).getFanAvtarImg())
+                .into(viewHolder.image);
     }
 
     @Override
     public int getItemCount() {
-        return notificationModels.size();
+        return notificationLists.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView image;
-        TextView text1,text2;
+        TextView tvNotificationType, tvTime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             image = itemView.findViewById(R.id.ic_profile_person);
-            text1 = itemView.findViewById(R.id.no_posts);
-            text2 = itemView.findViewById(R.id.no_time);
+            tvNotificationType = itemView.findViewById(R.id.tvNotificationType);
+            tvTime = itemView.findViewById(R.id.tvTime);
 
         }
     }

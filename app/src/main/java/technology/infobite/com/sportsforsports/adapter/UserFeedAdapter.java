@@ -204,7 +204,7 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         AppPreference.setStringPreference(mContext, Constant.POST_DETAIL, data);
 
         Intent intent = new Intent(mContext, PostDetailActivity.class);
-        intent.putExtra("from", "user");
+        intent.putExtra("get_from", "user");
         intent.putExtra("post_id", imageFeed.getFeedId());
         mContext.startActivity(intent);
     }

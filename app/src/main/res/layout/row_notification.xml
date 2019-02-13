@@ -19,17 +19,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/no_posts"
+            android:id="@+id/tvNotificationType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="kfjwelrf erfjewk weklfjlkjwe  fkej"
             android:textStyle="normal" />
 
         <TextView
-            android:id="@+id/no_time"
+            android:id="@+id/tvTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="lferjskfj"
             android:textStyle="normal" />
     </LinearLayout>
 </LinearLayout>
