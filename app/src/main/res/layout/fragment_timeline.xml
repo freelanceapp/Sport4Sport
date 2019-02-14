@@ -16,11 +16,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <technology.infobite.com.sportsforsports.utils.exoplayer.ExoPlayerRecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewFeed"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
             android:dividerHeight="8dp" />
+
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

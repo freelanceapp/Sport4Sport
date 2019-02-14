@@ -2,18 +2,19 @@ package technology.infobite.com.sportsforsports.ui.fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -35,7 +36,6 @@ import technology.infobite.com.sportsforsports.utils.Alerts;
 import technology.infobite.com.sportsforsports.utils.AppPreference;
 import technology.infobite.com.sportsforsports.utils.BaseFragment;
 import technology.infobite.com.sportsforsports.utils.ConnectionDetector;
-import technology.infobite.com.sportsforsports.utils.exoplayer.ExoPlayerRecyclerView;
 
 import static android.widget.LinearLayout.VERTICAL;
 import static technology.infobite.com.sportsforsports.ui.activity.HomeActivity.fragmentManager;
@@ -51,10 +51,15 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
     private View rootView;
     private List<UserFeed> feedList = new ArrayList<>();
     private DailyNewsFeedMainModal dailyNewsFeedMainModal;
-    private ExoPlayerRecyclerView recyclerViewFeed;
+    private RecyclerView recyclerViewFeed;
     private int playPosition = -1;
     private String strId;
     private String strUserId = "";
+
+    /***********************************************/
+    private SimpleExoPlayer player;
+    private PlayerView videoSurfaceView;
+    private Dialog dialogCustomerInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,7 +80,7 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         recyclerViewFeed = rootView.findViewById(R.id.recyclerViewFeed);
-        recyclerViewFeed.setVideoInfoList(feedList);
+        //recyclerViewFeed.setVideoInfoList(feedList);
         mAdapter = new VideoRecyclerViewAdapter(mContext, feedList, this, retrofitApiClient);
         recyclerViewFeed.setLayoutManager(new LinearLayoutManager(mContext, VERTICAL, false));
 
@@ -83,7 +88,7 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
         recyclerViewFeed.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
-        if (firstTime) {
+        /*if (firstTime) {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
@@ -100,7 +105,7 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
                     recyclerViewFeed.playVideo();
                 }
             });
-        }
+        }*/
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -148,6 +153,26 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
                 break;
         }
     }
+
+    /************************************/
+    /*
+     * Video player dialog
+     * */
+    private void videoPlayDialog(String strVideoUrl) {
+        dialogCustomerInfo = new Dialog(mContext);
+        dialogCustomerInfo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogCustomerInfo.setContentView(R.layout.dialog_video_play);
+
+        dialogCustomerInfo.setCanceledOnTouchOutside(true);
+        dialogCustomerInfo.setCancelable(true);
+        if (dialogCustomerInfo.getWindow() != null)
+            dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+       /* Window window = dialogCustomerInfo.getWindow();
+        window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);*/
+        dialogCustomerInfo.show();
+    }
+
 
     private void changeFragment(Fragment fragment, String strTag) {
         fragmentManager

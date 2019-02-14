@@ -46,6 +46,7 @@ public class DragablePanelUserProfileActivity extends BaseActivity implements Vi
     private DraggablePanel draggablePanel;
     private DraggabbleTopFragment draggabbleTopFragment;
     private DraggabbleBottomFragment draggabbleBottomFragment;
+    private boolean isPanelOpen = false;
     /************************************************************/
 
     private UserDataModal userDataModal;
@@ -235,7 +236,11 @@ public class DragablePanelUserProfileActivity extends BaseActivity implements Vi
                 sendPostData(v, myTextHeadlineList);
                 break;
             case R.id.rlImageVideo:
-                openPanelWithData(v, myPhotoList);
+                if (strListType.equalsIgnoreCase("photo")) {
+                    openPanelWithData(v, myPhotoList);
+                } else if (strListType.equalsIgnoreCase("video")) {
+                    openPanelWithData(v, myVideoList);
+                }
                 break;
             case R.id.llFollow:
                 followUser();
@@ -365,6 +370,16 @@ public class DragablePanelUserProfileActivity extends BaseActivity implements Vi
         draggablePanel.maximize();
         draggabbleTopFragment.showImage(imageFeed);
         draggabbleBottomFragment.showImage(imageFeed.getFeedId(), "timeline");
+    }
+
+    @Override
+    public void onBackPressed() {
+       /* if (draggablePanel.isMaximized()) {
+            draggablePanel.minimize();
+        } else {
+            finish();
+        }*/
+        finish();
     }
 }
 
