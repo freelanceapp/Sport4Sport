@@ -31,6 +31,7 @@
 
                 <ImageView
                     android:id="@+id/imgClose"
+                    android:visibility="gone"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
                     android:layout_alignParentRight="true"
@@ -50,7 +51,7 @@
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
-        android:src="@drawable/profile_image" />
+        android:src="@drawable/app_logo" />
 
     <ScrollView
         android:layout_width="match_parent"

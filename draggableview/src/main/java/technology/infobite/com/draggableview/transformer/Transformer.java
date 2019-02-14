@@ -21,7 +21,7 @@ import com.nineoldandroids.view.ViewHelper;
 
 /**
  * Abstract class created to be implemented by different classes are going to change the size of a
- * view. The most basic one is going to scale the view and the most complex used with VideoView is
+ * view. The most basic one is going to scale the view and the most complex used with VideoViews is
  * going to change the size of the view.
  * <p/>
  * The view used in this class has to be contained by a RelativeLayout.

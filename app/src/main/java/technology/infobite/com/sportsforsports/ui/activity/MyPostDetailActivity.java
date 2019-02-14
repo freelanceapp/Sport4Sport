@@ -14,13 +14,38 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultAllocator;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -46,6 +71,11 @@ import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
 import technology.infobite.com.sportsforsports.utils.Alerts;
 import technology.infobite.com.sportsforsports.utils.AppPreference;
 import technology.infobite.com.sportsforsports.utils.BaseActivity;
+import technology.infobite.com.sportsforsports.utils.exoplayer.VideoPlayerConfig;
+
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 
 public class MyPostDetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -56,8 +86,6 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
     private CircleImageView imgUserProfile;
     private TextView tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvPostDescription, tvHeadline;
 
-    private VideoView videoViewPost;
-    private ProgressBar progressBar;
     private RecyclerView recyclerViewCommentList;
     private CommentListAdapter commentListAdapter;
     private List<Comment> commentList = new ArrayList<>();
@@ -66,6 +94,11 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
     private String strFrom = "";
     private String postId = "";
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private SimpleExoPlayer player;
+    private PlayerView videoSurfaceView;
+    private ProgressBar mProgressBar;
+    private RelativeLayout rlVideoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +124,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         recyclerViewCommentList.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerViewCommentList.setItemAnimator(new DefaultItemAnimator());
 
-        progressBar = findViewById(R.id.progressBar);
+        mProgressBar = findViewById(R.id.mProgressBar);
         llPostComment = findViewById(R.id.llPostComment);
         findViewById(R.id.llLikePost).setOnClickListener(this);
         findViewById(R.id.imgMoreMenu).setOnClickListener(this);
@@ -99,7 +132,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         tvUserName = findViewById(R.id.tvUserName);
         tvHeadline = findViewById(R.id.tvHeadline);
         imgPostImage = findViewById(R.id.imgPostImage);
-        videoViewPost = findViewById(R.id.videoViewPost);
+        rlVideoView = findViewById(R.id.rlVideoView);
         tvPostLikeCount = findViewById(R.id.tvPostLikeCount);
         tvCommentCount = findViewById(R.id.tvCommentCount);
         tvPostTime = findViewById(R.id.tvPostTime);
@@ -109,10 +142,32 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onRefresh() {
                 postDetailApi();
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
         postDetailApi();
+        initPlayer();
+    }
+
+    /*
+     * Player initialise
+     * */
+    private void initPlayer() {
+        videoSurfaceView = new PlayerView(mContext);
+        videoSurfaceView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_ZOOM);
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelector trackSelector =
+                new DefaultTrackSelector(videoTrackSelectionFactory);
+        LoadControl loadControl = new DefaultLoadControl(
+                new DefaultAllocator(true, 16),
+                VideoPlayerConfig.MIN_BUFFER_DURATION,
+                VideoPlayerConfig.MAX_BUFFER_DURATION,
+                VideoPlayerConfig.MIN_PLAYBACK_START_BUFFER,
+                VideoPlayerConfig.MIN_PLAYBACK_RESUME_BUFFER, -1, true);
+        player = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
+        videoSurfaceView.setUseController(false);
+        videoSurfaceView.setPlayer(player);
     }
 
     /* Post detail api */
@@ -126,11 +181,13 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
                         if (dailyNewsFeedMainModal.getFeed() != null)
                             newPostModel = dailyNewsFeedMainModal.getFeed().get(0);
                     setDataInModal();
+                    swipeRefreshLayout.setRefreshing(false);
                 }
 
                 @Override
                 public void onResponseFailed(String error) {
                     Alerts.show(mContext, error);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             });
         } else {
@@ -168,31 +225,22 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         if (!newPostModel.getAthleteArticeHeadline().isEmpty()) {
             tvHeadline.setVisibility(View.VISIBLE);
             imgPostImage.setVisibility(View.GONE);
-            videoViewPost.setVisibility(View.GONE);
+            rlVideoView.setVisibility(View.GONE);
             tvHeadline.setText(newPostModel.getAthleteArticeHeadline());
         } else if (!newPostModel.getAlhleteImages().isEmpty()) {
             imgPostImage.setVisibility(View.VISIBLE);
             tvHeadline.setVisibility(View.GONE);
-            videoViewPost.setVisibility(View.GONE);
+            rlVideoView.setVisibility(View.GONE);
             Glide.with(mContext)
                     .load(R.drawable.app_logo)
                     .load(Constant.IMAGE_BASE_URL + newPostModel.getAlhleteImages())
                     .into(imgPostImage);
         } else if (!newPostModel.getAthleteVideo().isEmpty()) {
-            videoViewPost.setVisibility(View.VISIBLE);
+            rlVideoView.setVisibility(View.VISIBLE);
             tvHeadline.setVisibility(View.GONE);
             imgPostImage.setVisibility(View.GONE);
             String strVideoUrl = newPostModel.getAthleteVideo();
-            Uri uri = Uri.parse(Constant.VIDEO_BASE_URL + strVideoUrl);
-            videoViewPost.setVideoURI(uri);
-            videoViewPost.start();
-            progressBar.setVisibility(View.VISIBLE);
-            videoViewPost.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    progressBar.setVisibility(View.GONE);
-                }
-            });
+            initVideoView(strVideoUrl);
         }
 
         if (newPostModel.getLikes() == null || newPostModel.getLikes().isEmpty()) {
@@ -210,6 +258,107 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         } else {
             tvPostTime.setText(newPostModel.getEntryDate());
         }
+    }
+
+    /*************************/
+    /*Play video*/
+    private void initVideoView(String strVideoUrl) {
+        /****************************************/
+
+        FrameLayout frameLayout = findViewById(R.id.video_layout);
+        frameLayout.addView(videoSurfaceView);
+        videoSurfaceView.requestFocus();
+        videoSurfaceView.setPlayer(player);
+
+        DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, Util.getUserAgent
+                (mContext, "android_wave_list"), defaultBandwidthMeter);
+        String uriString = Constant.VIDEO_BASE_URL + strVideoUrl;
+        MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(Uri.parse(uriString));
+        player.prepare(videoSource);
+        player.setPlayWhenReady(true);
+
+        player.addListener(new Player.EventListener() {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
+            }
+
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+            }
+
+            @Override
+            public void onLoadingChanged(boolean isLoading) {
+
+            }
+
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                switch (playbackState) {
+
+                    case Player.STATE_BUFFERING:
+                        videoSurfaceView.setAlpha(0.5f);
+                        if (mProgressBar != null) {
+                            mProgressBar.setVisibility(VISIBLE);
+                        }
+                        break;
+                    case Player.STATE_ENDED:
+                        player.seekTo(0);
+                        break;
+                    case Player.STATE_IDLE:
+                        break;
+                    case Player.STATE_READY:
+                        if (mProgressBar != null) {
+                            mProgressBar.setVisibility(GONE);
+                        }
+                        videoSurfaceView.setVisibility(VISIBLE);
+                        videoSurfaceView.setAlpha(1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onRepeatModeChanged(int repeatMode) {
+
+            }
+
+            @Override
+            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+            }
+
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+
+            }
+
+            @Override
+            public void onPositionDiscontinuity(int reason) {
+
+            }
+
+            @Override
+            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+            }
+
+            @Override
+            public void onSeekProcessed() {
+
+            }
+        });
+    }
+
+    public void removePlayer() {
+        player.release();
+        player = null;
+        videoSurfaceView.setVisibility(INVISIBLE);
+        videoSurfaceView.removeAllViews();
     }
 
     private void setCommentList() {
@@ -399,5 +548,18 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
                 Alerts.show(mContext, error);
             }
         });
+    }
+
+    /*
+    *
+    * */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (player != null) {
+            removePlayer();
+        } else {
+            finish();
+        }
     }
 }

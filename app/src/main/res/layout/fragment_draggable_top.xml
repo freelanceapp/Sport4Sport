@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/llTopFrag"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="gone">
 
     <RelativeLayout
         android:id="@+id/rlViewUserProfile"
@@ -61,9 +64,10 @@
         <TextView
             android:id="@+id/tvHeadline"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_margin="16dp"
+            android:gravity="center_vertical"
             android:textColor="@color/black"
             android:textSize="16dp"
             android:visibility="gone" />
@@ -78,24 +82,36 @@
             android:src="@drawable/nature1"
             android:visibility="gone" />
 
-        <VideoView
-            android:id="@+id/videoViewPost"
+        <RelativeLayout
+            android:id="@+id/rlVideoView"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/colorPrimary"
-            android:indeterminateTintMode="src_atop"
-            android:visibility="gone" />
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/mProgressBar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="right"
+                android:layout_margin="4dp"
+                android:elevation="16dp"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorPrimary"
+                android:indeterminateTintMode="src_atop" />
+
+            <FrameLayout
+                android:id="@+id/video_layout"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:adjustViewBounds="true"
+                android:background="@android:color/black"
+                android:gravity="center"
+                android:scaleType="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 </LinearLayout>

@@ -51,6 +51,7 @@ import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
 import technology.infobite.com.sportsforsports.swipe_classes.SwipeLayout;
+import technology.infobite.com.sportsforsports.ui.activity.MyPostDetailActivity;
 import technology.infobite.com.sportsforsports.ui.activity.UpdateProfileActivity;
 import technology.infobite.com.sportsforsports.utils.Alerts;
 import technology.infobite.com.sportsforsports.utils.AppPreference;
@@ -77,6 +78,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     private ImageView imgComment, imgCamera, imgVideoCamera;
     private SwipeLayout sample1;
+    private String strListType = "text";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -226,6 +228,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.imgComment:
+                strListType = "text";
                 imgComment.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
                 imgCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
                 imgVideoCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
@@ -235,6 +238,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 recyclerViewImage.setVisibility(View.GONE);
                 break;
             case R.id.imgCamera:
+                strListType = "photo";
                 imgComment.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
                 imgCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
                 imgVideoCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
@@ -244,6 +248,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 recyclerViewVideos.setVisibility(View.GONE);
                 break;
             case R.id.imgVideoCamera:
+                strListType = "video";
                 imgComment.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
                 imgCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
                 imgVideoCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
@@ -268,8 +273,43 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     e.printStackTrace();
                 }
                 break;
+            case R.id.llHeadline:
+            case R.id.rlImageVideo:
+                if (strListType.equalsIgnoreCase("text")) {
+                    sendPostData(v, myTextHeadlineList);
+                } else if (strListType.equalsIgnoreCase("photo")) {
+                    sendPostData(v, myPhotoList);
+                } else if (strListType.equalsIgnoreCase("video")) {
+                    sendPostData(v, myVideoList);
+                }
+                break;
         }
     }
+
+    private void sendPostData(View view, List<UserFeed> userFeedList) {
+        int pos = Integer.parseInt(view.getTag().toString());
+        UserFeed imageFeed = userFeedList.get(pos);
+
+        Intent intent = new Intent(mContext, MyPostDetailActivity.class);
+        intent.putExtra("get_from", "user");
+        intent.putExtra("post_id", imageFeed.getFeedId());
+        mContext.startActivity(intent);
+    }
+
+    /*
+     * Set data in Dragabele panel
+     * */
+  /*  private void openPanelWithData(View view, List<UserFeed> dataList, String strType) {
+        int pos = Integer.parseInt(view.getTag().toString());
+        UserFeed imageFeed = dataList.get(pos);
+
+        isPanelOpen = true;
+
+        draggablePanel.setVisibility(View.VISIBLE);
+        draggablePanel.maximize();
+        draggabbleTopFragment.showImage(imageFeed, strType);
+        draggabbleBottomFragment.showImage(imageFeed.getFeedId(), "timeline");
+    }*/
 
     /***********************************************************************/
     /*
@@ -284,7 +324,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             try {
                 inputStream = mContext.getContentResolver().openInputStream(uriImage);
                 final Bitmap imageMap = BitmapFactory.decodeStream(inputStream);
-                ((ImageView) rootView.findViewById(R.id.ic_profile_person)).setImageBitmap(imageMap);
+                ((CircleImageView) rootView.findViewById(R.id.ic_profile_person)).setImageBitmap(imageMap);
 
                 imagePath = getPath(uriImage);
                 imageFile = new File(imagePath);

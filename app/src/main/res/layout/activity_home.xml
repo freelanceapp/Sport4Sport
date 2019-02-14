@@ -64,7 +64,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/pink"
+        app:backgroundTint="@color/pink"
+        android:outlineSpotShadowColor="@color/pink"
         android:src="@drawable/ic_add" />
 
 </RelativeLayout>

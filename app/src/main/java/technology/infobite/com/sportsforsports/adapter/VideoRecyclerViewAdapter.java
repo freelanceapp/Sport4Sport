@@ -2,7 +2,9 @@ package technology.infobite.com.sportsforsports.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +18,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -284,6 +290,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
                 videoViewHolder.llPostComment.setTag(position);
                 videoViewHolder.llPostComment.setOnClickListener(onClickListener);
+
                 videoViewHolder.tvTotalComment.setTag(position);
                 videoViewHolder.tvTotalComment.setOnClickListener(onClickListener);
                 videoViewHolder.rlPost.setTag(position);
@@ -345,6 +352,25 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         .load(Constant.PROFILE_IMAGE_BASE_URL + videoFeed.getPostUserImage())
                         .apply(new RequestOptions().optionalCenterCrop())
                         .into(videoViewHolder.imgUserProfile);
+
+                videoViewHolder.progressBar.setVisibility(View.VISIBLE);
+                Glide.with(videoViewHolder.itemView.getContext())
+                        .load(Constant.VIDEO_BASE_URL + videoFeed.getAthleteVideo())
+                        .apply(new RequestOptions().optionalCenterCrop())
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                videoViewHolder.progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                videoViewHolder.progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .into(videoViewHolder.mCover);
                 break;
             case VIEW_TYPE_EMPTY:
                 break;
@@ -394,6 +420,10 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         dialogCustomerInfo.setCancelable(true);
         if (dialogCustomerInfo.getWindow() != null)
             dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        if (strStatus.equalsIgnoreCase("not follow")) {
+            strStatus = "Unfollow";
+        }
 
         ((TextView) dialogCustomerInfo.findViewById(R.id.tvUsername)).setText(strName);
         ((TextView) dialogCustomerInfo.findViewById(R.id.tvFollow)).setText(strStatus);
@@ -535,7 +565,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         private TextView tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvTotalComment, tvPostDescription;
         private CardView cardViewVideo;
 
-        public ProgressBar mProgressBar;
+        public ProgressBar progressBar;
         public final View parent;
         public final View viewData;
 
@@ -546,7 +576,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             parent.setTag(this);
             cardViewVideo = itemView.findViewById(R.id.cardViewVideo);
             mCover = itemView.findViewById(R.id.cover);
-            mProgressBar = itemView.findViewById(R.id.progressBar);
+            progressBar = itemView.findViewById(R.id.progressBar);
 
             rlPost = itemView.findViewById(R.id.rlPost);
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);

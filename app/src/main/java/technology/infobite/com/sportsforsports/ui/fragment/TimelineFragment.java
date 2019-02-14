@@ -2,6 +2,7 @@ package technology.infobite.com.sportsforsports.ui.fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,9 +13,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultAllocator;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -36,7 +61,11 @@ import technology.infobite.com.sportsforsports.utils.Alerts;
 import technology.infobite.com.sportsforsports.utils.AppPreference;
 import technology.infobite.com.sportsforsports.utils.BaseFragment;
 import technology.infobite.com.sportsforsports.utils.ConnectionDetector;
+import technology.infobite.com.sportsforsports.utils.exoplayer.VideoPlayerConfig;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static android.widget.LinearLayout.VERTICAL;
 import static technology.infobite.com.sportsforsports.ui.activity.HomeActivity.fragmentManager;
 
@@ -119,6 +148,7 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.video_layout:
             case R.id.tvTotalComment:
             case R.id.rlPost:
             case R.id.llPostComment:
@@ -151,6 +181,11 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
                     startActivity(intentPostUserId);
                 }
                 break;
+            /*case R.id.video_layout:
+                int videoPos = Integer.parseInt(v.getTag().toString());
+                String strVideoUrl = feedList.get(videoPos).getAthleteVideo();
+                videoPlayDialog(strVideoUrl);
+                break;*/
         }
     }
 
@@ -163,16 +198,139 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
         dialogCustomerInfo.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogCustomerInfo.setContentView(R.layout.dialog_video_play);
 
-        dialogCustomerInfo.setCanceledOnTouchOutside(true);
-        dialogCustomerInfo.setCancelable(true);
-        if (dialogCustomerInfo.getWindow() != null)
-            dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialogCustomerInfo.setCanceledOnTouchOutside(false);
+        dialogCustomerInfo.setCancelable(false);
+       /* if (dialogCustomerInfo.getWindow() != null)
+            dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);*/
+
+        ProgressBar progressBar = dialogCustomerInfo.findViewById(R.id.progressBar);
+        initVideoView(progressBar, strVideoUrl);
 
        /* Window window = dialogCustomerInfo.getWindow();
         window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);*/
         dialogCustomerInfo.show();
     }
 
+    private void initVideoView(final ProgressBar mProgressBar, String strVideoUrl) {
+        videoSurfaceView = new PlayerView(mContext);
+        videoSurfaceView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_ZOOM);
+        mProgressBar.setVisibility(VISIBLE);
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelector trackSelector =
+                new DefaultTrackSelector(videoTrackSelectionFactory);
+        LoadControl loadControl = new DefaultLoadControl(
+                new DefaultAllocator(true, 16),
+                VideoPlayerConfig.MIN_BUFFER_DURATION,
+                VideoPlayerConfig.MAX_BUFFER_DURATION,
+                VideoPlayerConfig.MIN_PLAYBACK_START_BUFFER,
+                VideoPlayerConfig.MIN_PLAYBACK_RESUME_BUFFER, -1, true);
+        player = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
+        videoSurfaceView.setUseController(false);
+        videoSurfaceView.setPlayer(player);
+        /****************************************/
+
+        FrameLayout frameLayout = dialogCustomerInfo.findViewById(R.id.video_layout);
+        frameLayout.addView(videoSurfaceView);
+        videoSurfaceView.requestFocus();
+        videoSurfaceView.setPlayer(player);
+
+        DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext, Util.getUserAgent
+                (mContext, "android_wave_list"), defaultBandwidthMeter);
+        String uriString = Constant.VIDEO_BASE_URL + strVideoUrl;
+        MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(Uri.parse(uriString));
+        player.prepare(videoSource);
+        player.setPlayWhenReady(true);
+
+        dialogCustomerInfo.findViewById(R.id.imgClose).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                player.release();
+                player = null;
+                videoSurfaceView.setVisibility(INVISIBLE);
+                videoSurfaceView.removeAllViews();
+                dialogCustomerInfo.dismiss();
+            }
+        });
+
+        player.addListener(new Player.EventListener() {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
+            }
+
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+            }
+
+            @Override
+            public void onLoadingChanged(boolean isLoading) {
+
+            }
+
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                switch (playbackState) {
+
+                    case Player.STATE_BUFFERING:
+                        videoSurfaceView.setAlpha(0.5f);
+                        if (mProgressBar != null) {
+                            mProgressBar.setVisibility(VISIBLE);
+                        }
+                        break;
+                    case Player.STATE_ENDED:
+                        player.seekTo(0);
+                        break;
+                    case Player.STATE_IDLE:
+                        break;
+                    case Player.STATE_READY:
+                        if (mProgressBar != null) {
+                            mProgressBar.setVisibility(GONE);
+                        }
+                        videoSurfaceView.setVisibility(VISIBLE);
+                        videoSurfaceView.setAlpha(1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onRepeatModeChanged(int repeatMode) {
+
+            }
+
+            @Override
+            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+            }
+
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+
+            }
+
+            @Override
+            public void onPositionDiscontinuity(int reason) {
+
+            }
+
+            @Override
+            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+            }
+
+            @Override
+            public void onSeekProcessed() {
+
+            }
+        });
+
+    }
 
     private void changeFragment(Fragment fragment, String strTag) {
         fragmentManager

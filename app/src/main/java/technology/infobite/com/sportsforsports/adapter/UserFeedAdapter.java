@@ -2,18 +2,25 @@ package technology.infobite.com.sportsforsports.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -94,12 +101,12 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         imageViewHolder.tvTotalComment.setTag(position);
         imageViewHolder.tvTotalComment.setOnClickListener(onClickListener);
 
-        imageViewHolder.llLikePost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //likeApi(imageFeed, imageViewHolder.imgLike, imageViewHolder.tvPostLikeCount);
-            }
-        });
+        if (strActivityType.equalsIgnoreCase("MyProfile") || strActivityType.equalsIgnoreCase("UserProfile")) {
+            /*llLikeComment,llLikeCommentCount,llViewAllComments*/
+            imageViewHolder.llLikeComment.setVisibility(View.GONE);
+            imageViewHolder.llLikeCommentCount.setVisibility(View.GONE);
+            imageViewHolder.llViewAllComments.setVisibility(View.GONE);
+        }
 
        /* if (imageFeed.getIsLike().equals("unlike")) {
             imageViewHolder.imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_icon));
@@ -137,15 +144,18 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         if (!imageFeed.getAthleteArticeHeadline().isEmpty()) {
+            imageViewHolder.imgPlayVideo.setVisibility(View.GONE);
             imageViewHolder.rlImageVideo.setVisibility(View.GONE);
             imageViewHolder.llHeadline.setVisibility(View.VISIBLE);
             imageViewHolder.tvHeadline.setVisibility(View.VISIBLE);
+            imageViewHolder.progressBar.setVisibility(View.GONE);
             imageViewHolder.imgPostImage.setVisibility(View.GONE);
             imageViewHolder.tvHeadline.setText(imageFeed.getAthleteArticeHeadline());
         } else if (!imageFeed.getAlhleteImages().isEmpty()) {
             imageViewHolder.rlImageVideo.setVisibility(View.VISIBLE);
             imageViewHolder.llHeadline.setVisibility(View.GONE);
             imageViewHolder.imgPlayVideo.setVisibility(View.GONE);
+            imageViewHolder.progressBar.setVisibility(View.GONE);
 
             imageViewHolder.tvHeadline.setVisibility(View.GONE);
             imageViewHolder.imgPostImage.setVisibility(View.VISIBLE);
@@ -155,26 +165,43 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .into(imageViewHolder.imgPhotoVideo);
 
         } else if (!imageFeed.getAthleteVideo().isEmpty()) {
-            imageViewHolder.imgPlayVideo.setVisibility(View.GONE);
             imageViewHolder.rlImageVideo.setVisibility(View.VISIBLE);
             imageViewHolder.llHeadline.setVisibility(View.GONE);
+            imageViewHolder.imgPlayVideo.setVisibility(View.VISIBLE);
 
             imageViewHolder.tvHeadline.setVisibility(View.GONE);
             imageViewHolder.imgPostImage.setVisibility(View.VISIBLE);
+            imageViewHolder.progressBar.setVisibility(View.VISIBLE);
 
-           /* if (position>4){
-                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                retriever.setDataSource(Constant.VIDEO_BASE_URL + imageFeed.getAthleteVideo(), new HashMap<String, String>());
-                Bitmap  bitmap = retriever.getFrameAtTime(2000000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-                //bitmap = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
-                imageViewHolder.imgPhotoVideo.setImageBitmap(bitmap);
-            }*/
+            Glide.with(imageViewHolder.itemView.getContext())
+                    .load(Constant.IMAGE_BASE_URL + imageFeed.getAlhleteImages())
+                    .apply(new RequestOptions().optionalCenterCrop())
+                    .into(imageViewHolder.imgPhotoVideo);
+
+            Glide.with(imageViewHolder.itemView.getContext())
+                    .load(Constant.VIDEO_BASE_URL + imageFeed.getAthleteVideo())
+                    .apply(new RequestOptions().optionalCenterCrop())
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            imageViewHolder.progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            imageViewHolder.progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .into(imageViewHolder.imgPhotoVideo);
+
         }
 
         imageViewHolder.rlImageVideo.setTag(position);
         imageViewHolder.rlImageVideo.setOnClickListener(onClickListener);
         imageViewHolder.llHeadline.setTag(position);
-        imageViewHolder.llHeadline.setOnClickListener(this);
+        imageViewHolder.llHeadline.setOnClickListener(onClickListener);
 
         Glide.with(imageViewHolder.itemView.getContext())
                 .load(Constant.PROFILE_IMAGE_BASE_URL + imageFeed.getPostUserImage())
@@ -195,16 +222,6 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private void sendPostData(View view) {
         int pos = Integer.parseInt(view.getTag().toString());
         UserFeed imageFeed = mInfoList.get(pos);
-
-        String strName = AppPreference.getStringPreference(mContext, Constant.USER_NAME);
-        String strProfilePhoto = AppPreference.getStringPreference(mContext, Constant.USER_IMAGE);
-        //imageFeed.setPostUserName(strName);
-        //imageFeed.setPostUserImage(strProfilePhoto);
-        //imageFeed.setIsLike("unlike");
-
-       /* Gson gson = new GsonBuilder().setLenient().create();
-        String data = gson.toJson(imageFeed);
-        AppPreference.setStringPreference(mContext, Constant.POST_DETAIL, data);*/
 
         Intent intent = null;
         if (strActivityType.equalsIgnoreCase("MyProfile")) {
@@ -284,18 +301,24 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public class ImageViewHolder extends RecyclerView.ViewHolder {
 
         private RelativeLayout rlPost;
-        private LinearLayout llLikePost, llPostComment, llHeadline;
+        private LinearLayout llLikePost, llPostComment, llHeadline, llLikeComment, llLikeCommentCount, llViewAllComments;
         private RelativeLayout rlImageVideo;
         private ImageView imgPostImage, imgLike, imgPlayVideo, imgPhotoVideo;
         private CircleImageView imgUserProfile;
         private TextView tvHeadline, tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvTotalComment, tvPostDescription;
         public final View viewData;
+        private ProgressBar progressBar;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
             viewData = itemView;
-            imgPhotoVideo = itemView.findViewById(R.id.imgPhotoVideo);
+            llLikeComment = itemView.findViewById(R.id.llLikeComment);
+            llLikeCommentCount = itemView.findViewById(R.id.llLikeCommentCount);
+            llViewAllComments = itemView.findViewById(R.id.llViewAllComments);
+
+            progressBar = itemView.findViewById(R.id.progressBar);
             imgPlayVideo = itemView.findViewById(R.id.imgPlayVideo);
+            imgPhotoVideo = itemView.findViewById(R.id.imgPhotoVideo);
             llHeadline = itemView.findViewById(R.id.llHeadline);
             rlImageVideo = itemView.findViewById(R.id.rlImageVideo);
             rlPost = itemView.findViewById(R.id.rlPost);

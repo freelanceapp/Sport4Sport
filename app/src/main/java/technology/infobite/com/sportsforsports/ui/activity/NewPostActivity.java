@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 
@@ -30,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -37,6 +37,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.constant.Constant;
+import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
 import technology.infobite.com.sportsforsports.upload_with_progress.ProgressRequestBody;
@@ -47,22 +48,28 @@ import technology.infobite.com.sportsforsports.utils.BaseActivity;
 public class NewPostActivity extends BaseActivity implements View.OnClickListener, ProgressRequestBody.UploadCallbacks {
 
     private static final int PICK_FROM_GALLERY = 1;
-    private File imageFile = null, videoFile = null;
+    private File imageFile = null, videoFile = null, thumbnailFile = null;
     private static int VIDEO_FROM_GALLERY = 1;
     private String imagePath = "", strVideoPath = "";
     private String strPostType = "text";
+    private CircleImageView myprofile_img;
+    private UserDataModal userDataModal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
+        myprofile_img = findViewById(R.id.myprofile_img);
         ((TextView) findViewById(R.id.tv_post_feed)).setOnClickListener(this);
         findViewById(R.id.img_Comment).setOnClickListener(this);
         findViewById(R.id.img_Camera).setOnClickListener(this);
         findViewById(R.id.img_Video_Camera).setOnClickListener(this);
         findViewById(R.id.tv_select_image).setOnClickListener(this);
         findViewById(R.id.tv_select_video).setOnClickListener(this);
+        findViewById(R.id.imgBack).setOnClickListener(this);
+
+        init();
     }
 
     private void checkValidation() {
@@ -102,18 +109,22 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
 
             MultipartBody.Part fileToUpload = null;
             MultipartBody.Part videoFileUpload = null;
+            MultipartBody.Part videoThumbnailUpload = null;
 
             if (strPostType.equals("image")) {
                 RequestBody imageBodyFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
                 fileToUpload = MultipartBody.Part.createFormData("alhlete_images", imageFile.getName(),
                         imageBodyFile);
             } else if (strPostType.equals("video")) {
+                RequestBody thumbFile = RequestBody.create(MediaType.parse("image/*"), thumbnailFile);
+                videoThumbnailUpload = MultipartBody.Part.createFormData("thumbnail", thumbnailFile.getName(), thumbFile);
+
                 ProgressRequestBody fileBody = new ProgressRequestBody(videoFile, "video/mp4", this);
                 videoFileUpload = MultipartBody.Part.createFormData("athlete_video", videoFile.getName(), fileBody);
             }
 
             RetrofitService.getNewPostData(new Dialog(mContext), retrofitApiClient.newPostFeed(_id, _Status,
-                    videoFileUpload, _Url, _Headline, fileToUpload), new WebResponse() {
+                    videoFileUpload, _Url, _Headline, fileToUpload, videoThumbnailUpload), new WebResponse() {
                 @Override
                 public void onResponseSuccess(Response<?> result) {
                     ResponseBody responseBody = (ResponseBody) result.body();
@@ -148,6 +159,9 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.imgBack:
+                finish();
+                break;
             case R.id.tv_post_feed:
                 checkValidation();
                 break;
@@ -262,19 +276,17 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
             Uri video = data.getData();
             strVideoPath = getPath(video);
             videoFile = new File(strVideoPath);
-            ((VideoView) findViewById(R.id.vid_upload)).setVideoURI(video);
-            ((VideoView) findViewById(R.id.vid_upload)).start();
+
         } else if (requestCode == 786) {
             if (resultCode == RESULT_OK) {
                 String result = data.getStringExtra("crop_video");
                 String thumb = data.getStringExtra("video_thumb");
+                thumbnailFile = new File(thumb);
                 Uri video = Uri.parse(result);
                 Glide.with(mContext).load("file://" + thumb)
                         .into(((ImageView) findViewById(R.id.imgVideoThumb)));
 
                 videoFile = new File(result);
-                ((VideoView) findViewById(R.id.vid_upload)).setVideoURI(video);
-                ((VideoView) findViewById(R.id.vid_upload)).start();
             }
         }
     }
@@ -303,4 +315,30 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
     public void onFinish() {
         ((TextView) findViewById(R.id.tvProgress)).setText("Finished");
     }
+
+    /**************/
+    /*
+     * Profile api
+     * */
+    private void init() {
+        String strUserId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
+        if (cd.isNetworkAvailable()) {
+            RetrofitService.getLoginData(new Dialog(mContext), retrofitApiClient.userProfile(strUserId), new WebResponse() {
+                @Override
+                public void onResponseSuccess(Response<?> result) {
+                    userDataModal = (UserDataModal) result.body();
+                    Glide.with(mContext).load(Constant.PROFILE_IMAGE_BASE_URL + userDataModal.getUser().getAvtarImg())
+                            .into(myprofile_img);
+                }
+
+                @Override
+                public void onResponseFailed(String error) {
+                    Alerts.show(mContext, error);
+                }
+            });
+        } else {
+            cd.show(mContext);
+        }
+    }
+
 }

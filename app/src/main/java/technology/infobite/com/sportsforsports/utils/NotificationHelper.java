@@ -14,8 +14,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import technology.infobite.com.sportsforsports.R;
-import technology.infobite.com.sportsforsports.ui.activity.PostDetailActivity;
 import technology.infobite.com.sportsforsports.ui.activity.UserProfileActivity;
+import technology.infobite.com.sportsforsports.ui.activity.PostDetailActivity;
 
 public class NotificationHelper {
 
@@ -92,12 +92,12 @@ public class NotificationHelper {
 
         /*if (type.equalsIgnoreCase("ARTICLE")) {
 
-            intent = new Intent(mContext, UserProfileActivity.class);
+            intent = new Intent(mContext, ProfileActivity.class);
             intent.putExtra("from", "notification");
             intent.putExtra("id", id);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         } else {
-            intent = new Intent(mContext, UserProfileActivity.class);
+            intent = new Intent(mContext, ProfileActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }*/
 

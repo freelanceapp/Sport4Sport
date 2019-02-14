@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -111,8 +110,8 @@ public class SearchListActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onSearchSelected(AllUserList contact) {
-        //Intent postUserId = new Intent(mContext, UserProfileActivity.class);
-        Intent postUserId = new Intent(mContext, DragablePanelUserProfileActivity.class);
+        //Intent postUserId = new Intent(mContext, ProfileActivity.class);
+        Intent postUserId = new Intent(mContext, UserProfileActivity.class);
         postUserId.putExtra("fan_id", contact.getUserId());
         startActivity(postUserId);
     }

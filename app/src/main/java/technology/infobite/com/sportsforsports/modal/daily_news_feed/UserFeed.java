@@ -31,6 +31,9 @@ public class UserFeed implements Serializable, Parcelable {
     @SerializedName("athlete_video")
     @Expose
     private String athleteVideo;
+    @SerializedName("video_thumbnail")
+    @Expose
+    private String videoThumbnail;
     @SerializedName("athlete_artice_url")
     @Expose
     private String athleteArticeUrl;
@@ -75,6 +78,7 @@ public class UserFeed implements Serializable, Parcelable {
         this.postUserName = ((String) in.readValue((String.class.getClassLoader())));
         this.postUserImage = ((String) in.readValue((String.class.getClassLoader())));
         this.athleteStatus = ((String) in.readValue((String.class.getClassLoader())));
+        this.videoThumbnail = ((String) in.readValue((String.class.getClassLoader())));
         this.athleteVideo = ((String) in.readValue((String.class.getClassLoader())));
         this.athleteArticeUrl = ((String) in.readValue((String.class.getClassLoader())));
         this.athleteArticeHeadline = ((String) in.readValue((String.class.getClassLoader())));
@@ -118,6 +122,14 @@ public class UserFeed implements Serializable, Parcelable {
 
     public void setAthleteStatus(String athleteStatus) {
         this.athleteStatus = athleteStatus;
+    }
+
+    public String getVideoThumbnail() {
+        return videoThumbnail;
+    }
+
+    public void setVideoThumbnail(String videoThumbnail) {
+        this.videoThumbnail = videoThumbnail;
     }
 
     public String getAthleteVideo() {
@@ -198,6 +210,7 @@ public class UserFeed implements Serializable, Parcelable {
         dest.writeValue(postUserId);
         dest.writeValue(postUserName);
         dest.writeValue(postUserImage);
+        dest.writeValue(videoThumbnail);
         dest.writeValue(athleteVideo);
         dest.writeValue(athleteArticeUrl);
         dest.writeValue(athleteArticeHeadline);

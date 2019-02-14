@@ -18,6 +18,7 @@ public class Constant {
     public static final String UPDATE_TOKEN = "token.php";
     public static final String SINGLE_POST = "single_post.php";
     public static final String DELETE_POST = "delete_post.php";
+    public static final String UPDATE_PROFILE_IMAGE= "update_profile_image.php";
 
     /* Fragment tag */
     public static final String TimelineFragment = "TimelineFragment";

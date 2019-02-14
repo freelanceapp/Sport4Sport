@@ -101,24 +101,37 @@
                             android:src="@drawable/nature1"
                             android:visibility="gone" />
 
-                        <VideoView
-                            android:id="@+id/videoViewPost"
+                        <RelativeLayout
+                            android:id="@+id/rlVideoView"
                             android:layout_width="match_parent"
-                            android:layout_height="350dp"
-                            android:layout_centerHorizontal="true"
-                            android:visibility="gone" />
-
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:layout_gravity="center"
-                            android:indeterminate="true"
-                            android:indeterminateTint="@color/colorPrimary"
-                            android:indeterminateTintMode="src_atop"
-                            android:visibility="gone" />
+                            android:visibility="gone">
+
+                            <ProgressBar
+                                android:id="@+id/mProgressBar"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="right"
+                                android:layout_margin="4dp"
+                                android:elevation="16dp"
+                                android:indeterminate="true"
+                                android:indeterminateTint="@color/colorPrimary"
+                                android:indeterminateTintMode="src_atop" />
+
+                            <FrameLayout
+                                android:id="@+id/video_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="350dp"
+                                android:adjustViewBounds="true"
+                                android:background="@android:color/black"
+                                android:gravity="center"
+                                android:scaleType="center"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent" />
+
+                        </RelativeLayout>
+
 
                     </RelativeLayout>
 

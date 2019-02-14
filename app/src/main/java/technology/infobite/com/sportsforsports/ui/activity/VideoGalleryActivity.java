@@ -77,7 +77,8 @@ public class VideoGalleryActivity extends BaseActivity implements View.OnClickLi
         String absolutePathOfImage = null;
         uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
 
-        String[] projection = {MediaStore.MediaColumns.DATA, MediaStore.Video.Media.BUCKET_DISPLAY_NAME, MediaStore.Video.Media._ID, MediaStore.Video.Thumbnails.DATA};
+        String[] projection = {MediaStore.MediaColumns.DATA, MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Video.Media._ID, MediaStore.Video.Thumbnails.DATA};
 
         final String orderBy = MediaStore.Images.Media.DATE_TAKEN;
         cursor = getApplicationContext().getContentResolver().query(uri, projection, null, null, orderBy + " DESC");

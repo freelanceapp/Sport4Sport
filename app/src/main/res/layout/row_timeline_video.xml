@@ -69,38 +69,32 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/video_layout"
+            <ImageView
+                android:id="@+id/cover"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:adjustViewBounds="true"
-                android:background="@android:color/black"
-                android:gravity="center"
-                android:scaleType="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:background="@android:color/white"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nature1" />
 
-                <ImageView
-                    android:id="@+id/cover"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/white"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/cover"
-                    android:visibility="gone" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/play_button" />
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="right"
-                    android:layout_margin="4dp"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/colorPrimary"
-                    android:indeterminateTintMode="src_atop"
-                    android:visibility="gone" />
-            </FrameLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorPrimary"
+                android:indeterminateTintMode="src_atop"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <LinearLayout

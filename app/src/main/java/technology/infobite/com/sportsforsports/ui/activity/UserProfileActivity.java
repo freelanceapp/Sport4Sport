@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+import technology.infobite.com.draggableview.DraggablePanel;
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.adapter.UserFeedAdapter;
 import technology.infobite.com.sportsforsports.constant.Constant;
@@ -31,12 +33,21 @@ import technology.infobite.com.sportsforsports.modal.daily_news_feed.UserFeed;
 import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
+import technology.infobite.com.sportsforsports.swipe_classes.SwipeLayout;
+import technology.infobite.com.sportsforsports.ui.fragment.DraggabbleBottomFragment;
+import technology.infobite.com.sportsforsports.ui.fragment.DraggabbleTopFragment;
 import technology.infobite.com.sportsforsports.utils.Alerts;
 import technology.infobite.com.sportsforsports.utils.AppPreference;
 import technology.infobite.com.sportsforsports.utils.BaseActivity;
 import technology.infobite.com.sportsforsports.utils.ConnectionDetector;
 
 public class UserProfileActivity extends BaseActivity implements View.OnClickListener {
+
+    public static DraggablePanel draggablePanel;
+    private DraggabbleTopFragment draggabbleTopFragment;
+    private DraggabbleBottomFragment draggabbleBottomFragment;
+    private boolean isPanelOpen = false;
+    /************************************************************/
 
     private UserDataModal userDataModal;
     private String strUserId = "", strMyId = "";
@@ -51,15 +62,52 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
     private ImageView imgComment, imgCamera, imgVideoCamera;
 
+    private String strListType = "text";
+    private SwipeLayout sample1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_dragable_panel_user_profile);
+
         mContext = this;
         cd = new ConnectionDetector(mContext);
         retrofitApiClient = RetrofitService.getRetrofit();
 
+        initDragable();
         initView();
+        initSwipeLayout();
+    }
+
+    private void initDragable() {
+        draggabbleTopFragment = new DraggabbleTopFragment();
+        draggabbleBottomFragment = new DraggabbleBottomFragment();
+
+        draggablePanel = (DraggablePanel) findViewById(R.id.draggable_panel);
+        draggablePanel.setVisibility(View.GONE);
+        draggablePanel.setFragmentManager(getSupportFragmentManager());
+        draggablePanel.setTopFragment(draggabbleTopFragment);
+        draggablePanel.setBottomFragment(draggabbleBottomFragment);
+
+        TypedValue typedValue = new TypedValue();
+        getResources().getValue(R.dimen.x_scale_factor, typedValue, true);
+        float xScaleFactor = typedValue.getFloat();
+        typedValue = new TypedValue();
+        getResources().getValue(R.dimen.y_scale_factor, typedValue, true);
+        float yScaleFactor = typedValue.getFloat();
+        draggablePanel.setXScaleFactor(xScaleFactor);
+        draggablePanel.setYScaleFactor(yScaleFactor);
+        draggablePanel.setTopViewHeight(550);
+        draggablePanel.setTopFragmentMarginRight(getResources().getDimensionPixelSize(R.dimen.top_fragment_margin));
+        draggablePanel.setTopFragmentMarginBottom(getResources().getDimensionPixelSize(R.dimen.top_fragment_margin));
+        draggablePanel.initializeView();
+        draggablePanel.setVisibility(View.GONE);
+    }
+
+    private void initSwipeLayout() {
+        sample1 = (SwipeLayout) findViewById(R.id.sample1);
+        sample1.setShowMode(SwipeLayout.ShowMode.PullOut);
+        sample1.addDrag(SwipeLayout.DragEdge.Left, sample1.findViewById(R.id.bottom_wrapper));
     }
 
     private void initView() {
@@ -87,7 +135,9 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     private void setMyPhotoVideoData() {
         /*Headline list data*/
         headlineAdapter = new UserFeedAdapter(mContext, myTextHeadlineList, this, retrofitApiClient, "UserProfile");
-        recyclerViewHeadlines.setLayoutManager(new LinearLayoutManager(mContext));
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        linearLayoutManager.setReverseLayout(false);
+        recyclerViewHeadlines.setLayoutManager(linearLayoutManager);
         recyclerViewHeadlines.setItemAnimator(new DefaultItemAnimator());
         recyclerViewHeadlines.setAdapter(headlineAdapter);
 
@@ -104,6 +154,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         recyclerViewVideos.setLayoutManager(videoLayoutManager);
         recyclerViewVideos.setItemAnimator(new DefaultItemAnimator());
         recyclerViewVideos.setAdapter(videoAdapter);
+
 
         init();
     }
@@ -166,6 +217,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
     private void setViewData() {
         ((TextView) findViewById(R.id.txtMyName)).setText(userDataModal.getUser().getUserName());
+        ((TextView) findViewById(R.id.tvMainSport)).setText(userDataModal.getUser().getMainSport());
         ((TextView) findViewById(R.id.txtBio)).setText(userDataModal.getUser().getBio());
         ((TextView) findViewById(R.id.txtFansCount)).setText(userDataModal.getFan().get(0).getFan());
         ((TextView) findViewById(R.id.txtDob)).setText(userDataModal.getUser().getDob());
@@ -191,10 +243,21 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.llHeadline:
+                openPanelWithData(v, myTextHeadlineList, "text");
+                break;
+            case R.id.rlImageVideo:
+                if (strListType.equalsIgnoreCase("photo")) {
+                    openPanelWithData(v, myPhotoList, "photo");
+                } else if (strListType.equalsIgnoreCase("video")) {
+                    openPanelWithData(v, myVideoList, "video");
+                }
+                break;
             case R.id.llFollow:
                 followUser();
                 break;
             case R.id.imgComment:
+                strListType = "text";
                 imgComment.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
                 imgCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
                 imgVideoCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
@@ -204,6 +267,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 recyclerViewImage.setVisibility(View.GONE);
                 break;
             case R.id.imgCamera:
+                strListType = "photo";
                 imgComment.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
                 imgCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
                 imgVideoCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
@@ -213,6 +277,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 recyclerViewVideos.setVisibility(View.GONE);
                 break;
             case R.id.imgVideoCamera:
+                strListType = "video";
                 imgComment.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
                 imgCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.transparent));
                 imgVideoCamera.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
@@ -295,4 +360,29 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    /*
+     * Set data in Dragabele panel
+     * */
+    private void openPanelWithData(View view, List<UserFeed> dataList, String strType) {
+        int pos = Integer.parseInt(view.getTag().toString());
+        UserFeed imageFeed = dataList.get(pos);
+
+        isPanelOpen = true;
+
+        draggablePanel.setVisibility(View.VISIBLE);
+        draggablePanel.maximize();
+        draggabbleTopFragment.showImage(imageFeed, strType);
+        draggabbleBottomFragment.showImage(imageFeed.getFeedId(), "timeline");
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isPanelOpen) {
+            draggablePanel.minimize();
+            isPanelOpen = false;
+        } else {
+            draggabbleTopFragment.removePlayer();
+            finish();
+        }
+    }
 }

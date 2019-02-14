@@ -13,7 +13,6 @@ import technology.infobite.com.sportsforsports.R;
 public class VideoTrimerActivity extends Activity implements OnTrimVideoListener {
 
     private String str_video;
-    // VideoView vv_video;
     private K4LVideoTrimmer videoTrimmer;
     private ProgressDialog mProgressDialog;
 

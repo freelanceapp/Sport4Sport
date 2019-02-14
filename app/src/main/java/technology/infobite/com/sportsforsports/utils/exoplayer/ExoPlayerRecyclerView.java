@@ -180,7 +180,7 @@ public class ExoPlayerRecyclerView extends RecyclerView {
             return;
         }
         mCoverImage = holder.mCover;
-        mProgressBar = holder.mProgressBar;
+        mProgressBar = holder.progressBar;
         FrameLayout frameLayout = holder.itemView.findViewById(R.id.video_layout);
         frameLayout.addView(videoSurfaceView);
         addedVideo = true;
@@ -225,7 +225,6 @@ public class ExoPlayerRecyclerView extends RecyclerView {
     }
 
     private void initialize(Context context) {
-
         appContext = context.getApplicationContext();
         Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point point = new Point();
