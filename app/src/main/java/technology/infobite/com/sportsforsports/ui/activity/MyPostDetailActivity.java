@@ -168,6 +168,9 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         player = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
         videoSurfaceView.setUseController(false);
         videoSurfaceView.setPlayer(player);
+
+        FrameLayout frameLayout = findViewById(R.id.video_layout);
+        frameLayout.addView(videoSurfaceView);
     }
 
     /* Post detail api */
@@ -264,9 +267,6 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
     /*Play video*/
     private void initVideoView(String strVideoUrl) {
         /****************************************/
-
-        FrameLayout frameLayout = findViewById(R.id.video_layout);
-        frameLayout.addView(videoSurfaceView);
         videoSurfaceView.requestFocus();
         videoSurfaceView.setPlayer(player);
 

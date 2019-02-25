@@ -72,7 +72,6 @@ import static technology.infobite.com.sportsforsports.ui.activity.HomeActivity.f
 public class TimelineFragment extends BaseFragment implements View.OnClickListener {
 
     private VideoRecyclerViewAdapter mAdapter;
-    private boolean firstTime = true;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     /***********************************************/
@@ -81,7 +80,6 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
     private List<UserFeed> feedList = new ArrayList<>();
     private DailyNewsFeedMainModal dailyNewsFeedMainModal;
     private RecyclerView recyclerViewFeed;
-    private int playPosition = -1;
     private String strId;
     private String strUserId = "";
 
@@ -109,32 +107,12 @@ public class TimelineFragment extends BaseFragment implements View.OnClickListen
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         recyclerViewFeed = rootView.findViewById(R.id.recyclerViewFeed);
-        //recyclerViewFeed.setVideoInfoList(feedList);
         mAdapter = new VideoRecyclerViewAdapter(mContext, feedList, this, retrofitApiClient);
         recyclerViewFeed.setLayoutManager(new LinearLayoutManager(mContext, VERTICAL, false));
 
         recyclerViewFeed.setItemAnimator(new DefaultItemAnimator());
         recyclerViewFeed.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
-
-        /*if (firstTime) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    recyclerViewFeed.playVideo();
-                }
-            });
-            firstTime = false;
-        }
-        recyclerViewFeed.scrollToPosition(0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            recyclerViewFeed.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    recyclerViewFeed.playVideo();
-                }
-            });
-        }*/
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

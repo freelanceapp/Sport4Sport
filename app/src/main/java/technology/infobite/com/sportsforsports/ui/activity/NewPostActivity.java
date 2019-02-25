@@ -222,19 +222,6 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
             case R.id.tv_select_video:
                 Intent intent = new Intent(mContext, VideoActivity.class);
                 startActivityForResult(intent, 786);
-                /*try {
-                    if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(NewPostActivity.this,
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
-                                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, VIDEO_FROM_GALLERY);
-                    } else {
-                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(galleryIntent, VIDEO_FROM_GALLERY);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
                 break;
         }
     }
