@@ -6,8 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class NotificationList implements Parcelable
-{
+public class NotificationList implements Parcelable {
 
     @SerializedName("user_id")
     @Expose
@@ -15,6 +14,9 @@ public class NotificationList implements Parcelable
     @SerializedName("user_name")
     @Expose
     private String userName;
+    @SerializedName("date")
+    @Expose
+    private String date;
     @SerializedName("avtar_img")
     @Expose
     private String avtarImg;
@@ -47,8 +49,7 @@ public class NotificationList implements Parcelable
             return (new NotificationList[size]);
         }
 
-    }
-            ;
+    };
 
     protected NotificationList(Parcel in) {
         this.userId = ((String) in.readValue((String.class.getClassLoader())));
@@ -58,6 +59,7 @@ public class NotificationList implements Parcelable
         this.fanUserName = ((String) in.readValue((String.class.getClassLoader())));
         this.fanAvtarImg = ((String) in.readValue((String.class.getClassLoader())));
         this.notifactionType = ((String) in.readValue((String.class.getClassLoader())));
+        this.date = ((String) in.readValue((String.class.getClassLoader())));
         this.postId = ((String) in.readValue((String.class.getClassLoader())));
     }
 
@@ -120,6 +122,14 @@ public class NotificationList implements Parcelable
         this.notifactionType = notifactionType;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getPostId() {
         return postId;
     }
@@ -135,6 +145,7 @@ public class NotificationList implements Parcelable
         dest.writeValue(fanUserId);
         dest.writeValue(fanUserName);
         dest.writeValue(fanAvtarImg);
+        dest.writeValue(date);
         dest.writeValue(notifactionType);
         dest.writeValue(postId);
     }

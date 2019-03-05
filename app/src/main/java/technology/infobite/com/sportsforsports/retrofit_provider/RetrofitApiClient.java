@@ -85,7 +85,7 @@ public interface RetrofitApiClient {
 
     @FormUrlEncoded
     @POST(Constant.UPDATE_TOKEN)
-    Call<ResponseBody> updateToken(@Field("user_id") String useId);
+    Call<ResponseBody> updateToken(@Field("user_id") String useId, @Field("token") String token);
 
     @FormUrlEncoded
     @POST(Constant.SINGLE_POST)

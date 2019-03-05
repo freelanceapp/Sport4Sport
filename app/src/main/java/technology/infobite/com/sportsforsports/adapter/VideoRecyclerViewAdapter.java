@@ -563,7 +563,6 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         public ImageView mCover, imgLike, imgMoreMenu;
         private CircleImageView imgUserProfile;
         private TextView tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvTotalComment, tvPostDescription;
-        private CardView cardViewVideo;
 
         public ProgressBar progressBar;
         public final View parent;
@@ -574,7 +573,6 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             parent = itemView;
             viewData = itemView;
             parent.setTag(this);
-            cardViewVideo = itemView.findViewById(R.id.cardViewVideo);
             mCover = itemView.findViewById(R.id.cover);
             progressBar = itemView.findViewById(R.id.progressBar);
 
@@ -600,7 +598,6 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         private LinearLayout llLikePost, llPostComment;
         private ImageView imgPostImage, imgLike, imgMoreMenu;
         private CircleImageView imgUserProfile;
-        private CardView cardViewImage;
         private TextView tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvTotalComment, tvPostDescription;
         public final View viewData;
 
@@ -608,7 +605,6 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             super(itemView);
             viewData = itemView;
             rlPost = itemView.findViewById(R.id.rlPost);
-            cardViewImage = itemView.findViewById(R.id.cardViewImage);
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             imgUserProfile = itemView.findViewById(R.id.imgUserProfile);
             tvUserName = itemView.findViewById(R.id.tvUserName);
@@ -631,7 +627,6 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         private LinearLayout llLikePost, llPostComment;
         private ImageView imgLike, imgMoreMenu;
         private CircleImageView imgUserProfile;
-        private CardView cardViewHeadline;
         private TextView tvHeadline, tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvTotalComment, tvPostDescription;
         public final View viewData;
 
@@ -640,7 +635,6 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             viewData = itemView;
             rlPost = itemView.findViewById(R.id.rlPost);
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
-            cardViewHeadline = itemView.findViewById(R.id.cardViewHeadline);
             imgUserProfile = itemView.findViewById(R.id.imgUserProfile);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             tvHeadline = itemView.findViewById(R.id.tvHeadline);

@@ -43,6 +43,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         String strNotification = notificationLists.get(i).getNotifactionType();
         String strFanName = notificationLists.get(i).getFanUserName();
+        String strTime = notificationLists.get(i).getDate();
         if (strNotification.equalsIgnoreCase("Like")) {
             viewHolder.tvNotificationType.setText(strFanName + " " + "likes your post");
         } else if (strNotification.equalsIgnoreCase("Comment")) {
@@ -51,7 +52,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             viewHolder.tvNotificationType.setText(strFanName + " " + "started following you");
         }
 
-        viewHolder.tvTime.setText("8 h");
+        viewHolder.tvTime.setText(strTime);
 
         Glide.with(context)
                 .load(Constant.PROFILE_IMAGE_BASE_URL + notificationLists.get(i).getFanAvtarImg())

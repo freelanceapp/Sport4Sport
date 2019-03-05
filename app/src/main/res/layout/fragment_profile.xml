@@ -97,12 +97,12 @@
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:layout_width="22dp"
                             android:layout_height="22dp"
+                            android:layout_alignEnd="@+id/ic_profile_person"
                             android:layout_alignRight="@+id/ic_profile_person"
                             android:layout_alignBottom="@+id/ic_profile_person"
                             android:background="@drawable/circle_background"
                             android:padding="2dp"
-                            android:src="@drawable/ic_add"
-                            android:layout_alignEnd="@+id/ic_profile_person" />
+                            android:src="@drawable/ic_add" />
                     </RelativeLayout>
 
                     <TextView
@@ -147,60 +147,66 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:layout_width="50dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Born : "
                                 android:textStyle="normal" />
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:id="@+id/txtDob"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Coach : "
                                 android:textStyle="normal" />
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:id="@+id/txtCoachName"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Club : "
                                 android:textStyle="normal" />
+
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/txtDob"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textStyle="normal" />
-
-                            <TextView
-                                android:id="@+id/txtCoachName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:text="Club : "
                                 android:textStyle="normal" />
 
                             <TextView
                                 android:id="@+id/txtSportClub"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textStyle="normal" />
+
                         </LinearLayout>
                     </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
 
