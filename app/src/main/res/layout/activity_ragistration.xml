@@ -31,9 +31,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
+                android:layout_marginLeft="30dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="60dp"
+                android:layout_marginRight="30dp"
                 android:orientation="vertical">
 
                 <EditText
@@ -70,7 +70,7 @@
                     android:drawableLeft="@drawable/ic_lock"
                     android:drawablePadding="15dp"
                     android:hint="Password"
-                    android:inputType="text"
+                    android:inputType="textPassword"
                     android:paddingRight="10dp"
                     android:textColor="@color/white"
                     android:textStyle="normal" />

@@ -18,7 +18,7 @@ public class Constant {
     public static final String UPDATE_TOKEN = "token.php";
     public static final String SINGLE_POST = "single_post.php";
     public static final String DELETE_POST = "delete_post.php";
-    public static final String UPDATE_PROFILE_IMAGE= "update_profile_image.php";
+    public static final String UPDATE_PROFILE_IMAGE = "update_profile_image.php";
 
     /* Fragment tag */
     public static final String TimelineFragment = "TimelineFragment";
@@ -43,4 +43,7 @@ public class Constant {
     public static final String VIDEO_URL = "https://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4";
     public static final String VIDEO_BASE_URL = "http://codeencrypt.in/sport/images/alhlete_video/";
     public static final String PROFILE_IMAGE_BASE_URL = "http://codeencrypt.in/sport/images/profile_img/";
+    public static final String DEFAULT_IMAGE_URL = "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png";
 }
+
+/**/

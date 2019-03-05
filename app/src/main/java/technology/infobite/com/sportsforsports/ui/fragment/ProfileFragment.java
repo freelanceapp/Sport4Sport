@@ -17,6 +17,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,6 +95,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void initView() {
+        Glide.with(mContext)
+                .load(Constant.DEFAULT_IMAGE_URL)
+                .apply(new RequestOptions().optionalCenterCrop())
+                .into(((CircleImageView) rootView.findViewById(R.id.ic_profile_person)));
+
         recyclerViewHeadlines = rootView.findViewById(R.id.recyclerViewHeadlines);
         recyclerViewImage = rootView.findViewById(R.id.recyclerViewImage);
         recyclerViewVideos = rootView.findViewById(R.id.recyclerViewVideos);
@@ -213,10 +219,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         ((TextView) rootView.findViewById(R.id.txtCoachName)).setText(userDataModal.getUser().getCoach());
         ((TextView) rootView.findViewById(R.id.txtSportClub)).setText(userDataModal.getUser().getClub());
 
-        Glide.with(mContext)
-                .load(Constant.PROFILE_IMAGE_BASE_URL + userDataModal.getUser().getAvtarImg())
-                .apply(new RequestOptions().optionalCenterCrop())
-                .into(((CircleImageView) rootView.findViewById(R.id.ic_profile_person)));
+        String strAvtar = userDataModal.getUser().getAvtarImg();
+        if (strAvtar != null) {
+            Glide.with(mContext)
+                    .load(Constant.PROFILE_IMAGE_BASE_URL + strAvtar)
+                    .apply(new RequestOptions().optionalCenterCrop())
+                    .into(((CircleImageView) rootView.findViewById(R.id.ic_profile_person)));
+        }
     }
 
     @Override
@@ -296,21 +305,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mContext.startActivity(intent);
     }
 
-    /*
-     * Set data in Dragabele panel
-     * */
-  /*  private void openPanelWithData(View view, List<UserFeed> dataList, String strType) {
-        int pos = Integer.parseInt(view.getTag().toString());
-        UserFeed imageFeed = dataList.get(pos);
-
-        isPanelOpen = true;
-
-        draggablePanel.setVisibility(View.VISIBLE);
-        draggablePanel.maximize();
-        draggabbleTopFragment.showImage(imageFeed, strType);
-        draggabbleBottomFragment.showImage(imageFeed.getFeedId(), "timeline");
-    }*/
-
     /***********************************************************************/
     /*
      * Update profile api
@@ -348,26 +342,20 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     private void updateProfilePhotoApi() {
         RequestBody _id = RequestBody.create(MediaType.parse("text/plain"), userDataModal.getUser().getUserId());
-        RequestBody _name = RequestBody.create(MediaType.parse("text/plain"), userDataModal.getUser().getUserName());
-        RequestBody _athelete = RequestBody.create(MediaType.parse("text/plain"), userDataModal.getUser().getIsAthlete());
-        RequestBody _country = RequestBody.create(MediaType.parse("text/plain"), userDataModal.getUser().getCountry());
-        RequestBody _sport = RequestBody.create(MediaType.parse("text/plain"), userDataModal.getUser().getMainSport());
-        RequestBody _club = RequestBody.create(MediaType.parse("text/plain"), userDataModal.getUser().getClub());
-        RequestBody _bio = RequestBody.create(MediaType.parse("text/plain"), userDataModal.getUser().getBio());
-        RequestBody _dob = RequestBody.create(MediaType.parse("text/plain"), userDataModal.getUser().getDob());
-        RequestBody _coach = RequestBody.create(MediaType.parse("text/plain"), userDataModal.getUser().getCoach());
 
         RequestBody imageBodyFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("avtar_img", imageFile.getName(), imageBodyFile);
 
-        RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfileImage(_id, _name, _athelete,
-                _country, _sport, _club, _bio, _dob, _coach, fileToUpload), new WebResponse() {
+        RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfileImage(_id, fileToUpload), new WebResponse() {
             @Override
             public void onResponseSuccess(Response<?> result) {
                 ResponseBody responseBody = (ResponseBody) result.body();
                 if (responseBody != null) {
                     try {
                         JSONObject jsonObject = new JSONObject(responseBody.string());
+                        Log.e("Profile_data:- ", jsonObject + "");
+                        Alerts.show(mContext, "Profile pic updated");
+                        //init();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {

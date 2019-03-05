@@ -37,12 +37,8 @@ public interface RetrofitApiClient {
                                      @Field("coach") String coach);
 
     @Multipart
-    @POST(Constant.UPDATE_PROFILE_API)
-    Call<ResponseBody> updateProfileImage(@Part("user_id") RequestBody user_id, @Part("name") RequestBody name,
-                                          @Part("is_athlete") RequestBody is_athlete, @Part("country") RequestBody country,
-                                          @Part("main_sport") RequestBody main_sport, @Part("club") RequestBody club,
-                                          @Part("bio") RequestBody bio, @Part("dob") RequestBody dob,
-                                          @Part("coach") RequestBody coach, @Part MultipartBody.Part aimage);
+    @POST(Constant.UPDATE_PROFILE_IMAGE)
+    Call<ResponseBody> updateProfileImage(@Part("user_id") RequestBody user_id, @Part MultipartBody.Part aimage);
 
     @FormUrlEncoded
     @POST(Constant.USER_PROFILE_API)

@@ -23,10 +23,10 @@ import technology.infobite.com.sportsforsports.utils.ConnectionDetector;
 
 public class RagistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public RetrofitApiClient retrofitApiClient;
-    public ConnectionDetector cd;
-    public Context mContext;
-    Button buttonregester;
+    private RetrofitApiClient retrofitApiClient;
+    private ConnectionDetector cd;
+    private Context mContext;
+    private Button buttonregester;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,10 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
             Alerts.show(mContext, "Please enter email!!!");
         } else if (strPassword.isEmpty()) {
             Alerts.show(mContext, "Please enter password!!!");
+        } else if (strPassword.length() < 6) {
+            Alerts.show(mContext, "Password length more than 5");
+        } else if (strPassword.matches("[a-zA-Z0-9.? ]*")) {
+            Alerts.show(mContext, "Password must contains capital, small, number and special characters !!!");
         } else {
             if (cd.isNetworkAvailable()) {
                 RetrofitService.getLoginData(new Dialog(mContext), retrofitApiClient.signUp(strname, strEmail,

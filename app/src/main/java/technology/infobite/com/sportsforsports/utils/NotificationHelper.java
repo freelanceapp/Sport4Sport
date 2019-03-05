@@ -14,8 +14,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import technology.infobite.com.sportsforsports.R;
-import technology.infobite.com.sportsforsports.ui.activity.UserProfileActivity;
 import technology.infobite.com.sportsforsports.ui.activity.PostDetailActivity;
+import technology.infobite.com.sportsforsports.ui.activity.UserProfileActivity;
 
 public class NotificationHelper {
 
