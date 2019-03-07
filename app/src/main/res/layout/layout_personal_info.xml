@@ -70,7 +70,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -97,16 +97,32 @@
                     android:textStyle="normal" />
             </LinearLayout>
 
-            <CheckBox
-                android:id="@+id/checkBoxAthlete"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:buttonTint="@color/white"
-                android:text="@string/i_m_an_athlete_with_disability"
-                android:textColor="@color/white"
-                android:textSize="12dp"
-                android:textStyle="normal" />
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="City"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/edtCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -143,6 +159,17 @@
                     android:layout_toRightOf="@+id/txtCountryName"
                     android:backgroundTint="@color/white" />
             </RelativeLayout>
+
+            <CheckBox
+                android:id="@+id/checkBoxAthlete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:buttonTint="@color/white"
+                android:text="@string/i_m_an_athlete_with_disability"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:textStyle="normal" />
 
             <Button
                 android:id="@+id/btnContinue"

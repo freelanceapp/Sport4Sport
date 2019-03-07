@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,15 +24,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import technology.infobite.com.sportsforsports.R;
+import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
 import technology.infobite.com.sportsforsports.utils.Alerts;
+import technology.infobite.com.sportsforsports.utils.AppProgressDialog;
 import technology.infobite.com.sportsforsports.utils.BaseActivity;
+import technology.infobite.com.sportsforsports.utils.GpsTracker;
 
 public class CreateProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -43,18 +52,57 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
     private String strUserName = "";
     private String strUserId = "";
 
-    private Spinner spinnerCountryList;
-    private String[] countryList = {"Select country", "India", "USA", "South Africa", "Russia"};
-    private String strCountryName = "";
+    private Spinner spinnerCountryList, spinnerHeight, spinnerWeight, spinnerYear;
+    private String strCountryName = "", strHeightUnit = "", strWeightUnit = "", strYear = "";
+
+    double latitude; // latitude
+    double longitude; // longitude
+    private Dialog dialog;
 
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_profile);
+        mContext = this;
+        dialog = new Dialog(mContext);
 
         init();
         getIntentData();
+        getLatLong();
+    }
+
+    private void getLatLong() {
+        GpsTracker gpsTracker = new GpsTracker(mContext);
+        latitude = gpsTracker.getLatitude();
+        longitude = gpsTracker.getLongitude();
+        getAddressList();
+    }
+
+    private void getAddressList() {
+        AppProgressDialog.show(dialog);
+        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses.size() > 0) {
+                AppProgressDialog.hide(dialog);
+                //address_et.setText(addresses.get(0).getAddressLine(0));
+                ((EditText) findViewById(R.id.edtCity)).setText(addresses.get(0).getLocality());
+                //((EditText) findViewById(R.id.edtState)).setText(addresses.get(0).getAdminArea());
+                //country_et.setText(addresses.get(0).getCountryName());
+                //zipcode_et.setText(addresses.get(0).getPostalCode());
+            } else {
+                AppProgressDialog.show(dialog);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getLatLong();
+                    }
+                }, 3000);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getIntentData() {
@@ -67,7 +115,7 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
 
     private void init() {
         spinnerCountryList = findViewById(R.id.spinnerCountryList);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, countryList);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.countries);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         spinnerCountryList.setAdapter(adapter);
         spinnerCountryList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -106,6 +154,67 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         findViewById(R.id.btnNoThanks).setOnClickListener(this);
         findViewById(R.id.btnContinue).setOnClickListener(this);
         findViewById(R.id.btnContinueB).setOnClickListener(this);
+
+        setSpinnerData();
+    }
+
+    private void setSpinnerData() {
+        spinnerHeight = findViewById(R.id.spinnerHeight);
+        spinnerWeight = findViewById(R.id.spinnerWeight);
+        spinnerYear = findViewById(R.id.spinnerYear);
+
+        ArrayAdapter adapterHeight = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.heightUnit);
+        adapterHeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinnerHeight.setAdapter(adapterHeight);
+        spinnerHeight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strHeightUnit = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ArrayAdapter adapterWeight = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.weightUnit);
+        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinnerWeight.setAdapter(adapterWeight);
+        spinnerWeight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strWeightUnit = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        List<String> yearList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            int year = 1930;
+            year = year + i;
+            String strYear = String.valueOf(year);
+            yearList.add(strYear);
+        }
+
+        ArrayAdapter adapterYear = new ArrayAdapter(this, android.R.layout.simple_spinner_item, yearList);
+        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinnerYear.setAdapter(adapterYear);
+        spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strYear = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void dateDialogue() {
@@ -153,11 +262,15 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
     private void clickNoThanks() {
         String strName = ((EditText) findViewById(R.id.edtName)).getText().toString();
         String strDateOfBirth = edtBirthday.getText().toString();
+        String strCity = ((EditText) findViewById(R.id.edtCity)).getText().toString();
+        //String strState = ((EditText) findViewById(R.id.edtState)).getText().toString();
 
         if (strName.isEmpty()) {
             Alerts.show(mContext, "Please enter name first !!!");
         } else if (strDateOfBirth.isEmpty()) {
             Alerts.show(mContext, "Please select date of birth !!!");
+        } else if (strCity.isEmpty()) {
+            Alerts.show(mContext, "Please enter city");
         } else {
             clickContinueB();
         }
@@ -166,11 +279,14 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
     private void clickContinue() {
         String strName = ((EditText) findViewById(R.id.edtName)).getText().toString();
         String strDateOfBirth = edtBirthday.getText().toString();
+        String strCity = ((EditText) findViewById(R.id.edtCity)).getText().toString();
 
         if (strName.isEmpty()) {
             Alerts.show(mContext, "Please enter name first !!!");
         } else if (strDateOfBirth.isEmpty()) {
             Alerts.show(mContext, "Please select date of birth !!!");
+        } else if (strCity.isEmpty()) {
+            Alerts.show(mContext, "Please enter city");
         } else {
             // Animation in = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
             ((LinearLayout) findViewById(R.id.llCreateProfile)).setBackground(
@@ -196,12 +312,30 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         String strClub = ((EditText) findViewById(R.id.edtClub)).getText().toString();
         String strBio = ((EditText) findViewById(R.id.edtBio)).getText().toString();
 
+        String strNickname = ((EditText) findViewById(R.id.edtNickname)).getText().toString();
+        String strHeight = ((EditText) findViewById(R.id.edtHeight)).getText().toString();
+        String strWeight = ((EditText) findViewById(R.id.edtWeight)).getText().toString();
+        String strPosition = ((EditText) findViewById(R.id.edtPosition)).getText().toString();
+        String strRituals = ((EditText) findViewById(R.id.edtRituals)).getText().toString();
+        String strCollege = ((EditText) findViewById(R.id.edtCollege)).getText().toString();
+        String strOtherSport = ((EditText) findViewById(R.id.edtOtherSport)).getText().toString();
+        String strCity = ((EditText) findViewById(R.id.edtCity)).getText().toString();
+
+        strHeight = strHeight + " " + strHeightUnit;
+        strWeight = strWeight + " " + strWeightUnit;
+        strCollege = strCollege + " , " + strYear;
+
         if (strCountryName.equals("Select country")) {
             Alerts.show(mContext, "Please select country");
+        } else if (strNickname.isEmpty()) {
+            Alerts.show(mContext, "Please enter nickname");
+        } else if (strHeight.isEmpty()) {
+            Alerts.show(mContext, "Please enter height");
         } else {
             if (cd.isNetworkAvailable()) {
                 RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfile(strUserId, strName, strIsAthlete,
-                        strCountryName, strMainSport, strClub, strBio, strDateOfBirth, strCoach), new WebResponse() {
+                        strCountryName, strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
+                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         ResponseBody responseBody = (ResponseBody) result.body();
