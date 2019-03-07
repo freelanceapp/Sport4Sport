@@ -61,7 +61,6 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
     double longitude; // longitude
     private Dialog dialog;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +69,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         dialog = new Dialog(mContext);
 
         init();
+        getLatLong();
         getIntentData();
     }
 
@@ -123,6 +123,15 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         ((EditText) findViewById(R.id.edtCoach)).setText(userDataModal.getUser().getCoach());
         ((EditText) findViewById(R.id.edtClub)).setText(userDataModal.getUser().getClub());
         ((EditText) findViewById(R.id.edtBio)).setText(userDataModal.getUser().getBio());
+
+        ((EditText) findViewById(R.id.edtCity)).setText(userDataModal.getUser().getCity());
+        ((EditText) findViewById(R.id.edtNickname)).setText(userDataModal.getUser().getNickname());
+        ((EditText) findViewById(R.id.edtHeight)).setText(userDataModal.getUser().getHeight());
+        ((EditText) findViewById(R.id.edtWeight)).setText(userDataModal.getUser().getWeight());
+        ((EditText) findViewById(R.id.edtPosition)).setText(userDataModal.getUser().getPosition());
+        ((EditText) findViewById(R.id.edtRituals)).setText(userDataModal.getUser().getPreGameRituals());
+        ((EditText) findViewById(R.id.edtOtherSport)).setText(userDataModal.getUser().getCollege());
+        ((EditText) findViewById(R.id.edtCollege)).setText(userDataModal.getUser().getOtherSport());
     }
 
     private void init() {

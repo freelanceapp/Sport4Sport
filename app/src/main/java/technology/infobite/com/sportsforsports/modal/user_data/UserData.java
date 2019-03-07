@@ -74,6 +74,30 @@ public class UserData implements Parcelable {
     @SerializedName("social_type")
     @Expose
     private String socialType;
+    @SerializedName("nickname")
+    @Expose
+    private String nickname;
+    @SerializedName("height")
+    @Expose
+    private String height;
+    @SerializedName("weight")
+    @Expose
+    private String weight;
+    @SerializedName("position")
+    @Expose
+    private String position;
+    @SerializedName("pre_game_rituals")
+    @Expose
+    private String preGameRituals;
+    @SerializedName("college")
+    @Expose
+    private String college;
+    @SerializedName("other_sport")
+    @Expose
+    private String otherSport;
+    @SerializedName("city")
+    @Expose
+    private String city;
     public final static Parcelable.Creator<UserData> CREATOR = new Creator<UserData>() {
 
 
@@ -113,6 +137,14 @@ public class UserData implements Parcelable {
         this.fans = ((String) in.readValue((String.class.getClassLoader())));
         this.socialId = ((String) in.readValue((String.class.getClassLoader())));
         this.socialType = ((String) in.readValue((String.class.getClassLoader())));
+        this.nickname = ((String) in.readValue((String.class.getClassLoader())));
+        this.height = ((String) in.readValue((String.class.getClassLoader())));
+        this.weight = ((String) in.readValue((String.class.getClassLoader())));
+        this.position = ((String) in.readValue((String.class.getClassLoader())));
+        this.preGameRituals = ((String) in.readValue((String.class.getClassLoader())));
+        this.college = ((String) in.readValue((String.class.getClassLoader())));
+        this.otherSport = ((String) in.readValue((String.class.getClassLoader())));
+        this.city = ((String) in.readValue((String.class.getClassLoader())));
     }
 
     public UserData() {
@@ -294,6 +326,70 @@ public class UserData implements Parcelable {
         this.socialType = socialType;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getPreGameRituals() {
+        return preGameRituals;
+    }
+
+    public void setPreGameRituals(String preGameRituals) {
+        this.preGameRituals = preGameRituals;
+    }
+
+    public String getCollege() {
+        return college;
+    }
+
+    public void setCollege(String college) {
+        this.college = college;
+    }
+
+    public String getOtherSport() {
+        return otherSport;
+    }
+
+    public void setOtherSport(String otherSport) {
+        this.otherSport = otherSport;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(userId);
         dest.writeValue(userName);
@@ -317,6 +413,14 @@ public class UserData implements Parcelable {
         dest.writeValue(fans);
         dest.writeValue(socialId);
         dest.writeValue(socialType);
+        dest.writeValue(nickname);
+        dest.writeValue(height);
+        dest.writeValue(weight);
+        dest.writeValue(position);
+        dest.writeValue(preGameRituals);
+        dest.writeValue(otherSport);
+        dest.writeValue(college);
+        dest.writeValue(city);
     }
 
     public int describeContents() {
