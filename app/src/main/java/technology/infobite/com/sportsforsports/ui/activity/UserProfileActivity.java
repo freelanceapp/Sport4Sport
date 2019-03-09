@@ -1,6 +1,7 @@
 package technology.infobite.com.sportsforsports.ui.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -122,6 +123,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         imgCamera = findViewById(R.id.imgCamera);
         imgVideoCamera = findViewById(R.id.imgVideoCamera);
 
+        findViewById(R.id.llFollowLeague).setOnClickListener(this);
         findViewById(R.id.imgBack).setOnClickListener(this);
         findViewById(R.id.llFollow).setOnClickListener(this);
         imgComment.setOnClickListener(this);
@@ -288,6 +290,9 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.imgBack:
                 finish();
+                break;
+            case R.id.llFollowLeague:
+                startActivity(new Intent(mContext, LeagueFollowingActivity.class));
                 break;
         }
     }

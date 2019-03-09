@@ -18,7 +18,7 @@
 
     <application
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/app_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -91,6 +91,8 @@
         <activity android:name=".utils.BaseActivity" />
         <activity android:name=".ui.activity.MyPostDetailActivity" />
         <activity android:name=".ui.activity.VideoGalleryActivity" />
+        <activity android:name=".ui.activity.LeagueActivity" />
+        <activity android:name=".ui.activity.LeagueFollowingActivity" />
 
         <service android:name=".firebase_utils.MyFirebaseMessagingService">
             <intent-filter>

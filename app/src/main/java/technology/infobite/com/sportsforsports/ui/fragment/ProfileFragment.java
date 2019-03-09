@@ -52,6 +52,7 @@ import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.retrofit_provider.WebResponse;
 import technology.infobite.com.sportsforsports.swipe_classes.SwipeLayout;
+import technology.infobite.com.sportsforsports.ui.activity.LeagueFollowingActivity;
 import technology.infobite.com.sportsforsports.ui.activity.MyPostDetailActivity;
 import technology.infobite.com.sportsforsports.ui.activity.UpdateProfileActivity;
 import technology.infobite.com.sportsforsports.utils.Alerts;
@@ -105,6 +106,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         recyclerViewVideos = rootView.findViewById(R.id.recyclerViewVideos);
         rootView.findViewById(R.id.imgEditProfile).setOnClickListener(this);
         rootView.findViewById(R.id.rlUpdateProfile).setOnClickListener(this);
+        rootView.findViewById(R.id.llFollowLeague).setOnClickListener(this);
 
         imgComment = rootView.findViewById(R.id.imgComment);
         imgCamera = rootView.findViewById(R.id.imgCamera);
@@ -291,6 +293,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 } else if (strListType.equalsIgnoreCase("video")) {
                     sendPostData(v, myVideoList);
                 }
+                break;
+            case R.id.llFollowLeague:
+                startActivity(new Intent(mContext, LeagueFollowingActivity.class));
                 break;
         }
     }

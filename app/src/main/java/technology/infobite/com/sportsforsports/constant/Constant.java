@@ -1,7 +1,7 @@
 package technology.infobite.com.sportsforsports.constant;
 
 public class Constant {
-
+    /*http://codeencrypt.in/sport/admin/api/league_list.php*/
     public static final String BASE_URL = "http://codeencrypt.in/sport/admin/api/";
     public static final String LOGIN_API = "user-login.php";
     public static final String REGISTRATION_API = "user_signup.php";
@@ -19,6 +19,9 @@ public class Constant {
     public static final String SINGLE_POST = "single_post.php";
     public static final String DELETE_POST = "delete_post.php";
     public static final String UPDATE_PROFILE_IMAGE = "update_profile_image.php";
+    public static final String LEAGUE_LIST = "select_league.php";
+    public static final String LEAGUE_FOLLOWING_LIST = "league_list.php";
+    public static final String LEAGUE_FOLLOW = "league_follow.php";
 
     /* Fragment tag */
     public static final String TimelineFragment = "TimelineFragment";
@@ -60,6 +63,7 @@ public class Constant {
     public static final String VIDEO_URL = "https://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4";
     public static final String VIDEO_BASE_URL = "http://codeencrypt.in/sport/images/alhlete_video/";
     public static final String PROFILE_IMAGE_BASE_URL = "http://codeencrypt.in/sport/images/profile_img/";
+    public static final String LEAGUE_IMAGE_BASE_URL = BASE_URL + "league/";
     public static final String DEFAULT_IMAGE_URL = "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png";
 }
 

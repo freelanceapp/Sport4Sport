@@ -21,16 +21,16 @@ import java.util.List;
 
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.constant.Constant;
-import technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUserList;
+import technology.infobite.com.sportsforsports.modal.league.LeagueList;
 
-public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.ViewHolder> implements Filterable {
+public class LeagueListAdapter extends RecyclerView.Adapter<LeagueListAdapter.ViewHolder> implements Filterable {
 
-    private List<AllUserList> allUserLists;
-    private List<AllUserList> filteredAllUserLists;
+    private List<LeagueList> filteredAllUserLists;
+    private List<LeagueList> allUserLists;
     private Context context;
     private SearchAdapterListener searchAdapterListener;
 
-    public SearchListAdapter(List<AllUserList> allUserLists, Context context, SearchAdapterListener searchAdapterListener) {
+    public LeagueListAdapter(List<LeagueList> allUserLists, Context context, SearchAdapterListener searchAdapterListener) {
         this.allUserLists = allUserLists;
         this.filteredAllUserLists = allUserLists;
         this.context = context;
@@ -41,22 +41,29 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater li = LayoutInflater.from(context);
-        View viewt = li.inflate(R.layout.row_search_list, null);
+        View viewt = li.inflate(R.layout.row_league_list, null);
         return new ViewHolder(viewt);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
 
-        AllUserList gridDetailmodels = filteredAllUserLists.get(i);
+        LeagueList gridDetailmodels = filteredAllUserLists.get(i);
 
         Glide.with(context)
-                .load(Constant.PROFILE_IMAGE_BASE_URL + gridDetailmodels.getAvtarImg())
+                .load(Constant.LEAGUE_IMAGE_BASE_URL + gridDetailmodels.getImage())
                 .into(viewHolder.imgUser);
 
-        viewHolder.tvUserName.setText(gridDetailmodels.getUserName());
-        viewHolder.tvBio.setText(gridDetailmodels.getBio());
-        viewHolder.btnView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvUserName.setText(gridDetailmodels.getLeagueName());
+        viewHolder.tvCategory.setText(gridDetailmodels.getCategory());
+        viewHolder.btnFollow.setText(gridDetailmodels.getStatus());
+
+        if (gridDetailmodels.getStatus().equalsIgnoreCase("Unfollow")) {
+            viewHolder.btnFollow.setBackground(context.getResources().getDrawable(R.drawable.gridbutton_background));
+        } else {
+            viewHolder.btnFollow.setBackground(context.getResources().getDrawable(R.drawable.btn_back_b));
+        }
+        viewHolder.btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchAdapterListener.onSearchSelected(filteredAllUserLists.get(i));
@@ -80,11 +87,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
     @Override
     public int getItemCount() {
-        if (filteredAllUserLists != null) {
-            return filteredAllUserLists.size();
-        } else {
-            return 0;
-        }
+        return filteredAllUserLists.size();
     }
 
     @Override
@@ -96,9 +99,9 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
                 if (charString.isEmpty()) {
                     filteredAllUserLists = allUserLists;
                 } else {
-                    List<AllUserList> filteredList = new ArrayList<>();
-                    for (AllUserList row : allUserLists) {
-                        if (row.getUserName().toLowerCase().contains(charString.toLowerCase())) {
+                    List<LeagueList> filteredList = new ArrayList<>();
+                    for (LeagueList row : allUserLists) {
+                        if (row.getLeagueName().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
                     }
@@ -112,7 +115,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                filteredAllUserLists = (ArrayList<AllUserList>) filterResults.values;
+                filteredAllUserLists = (ArrayList<LeagueList>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
@@ -121,23 +124,23 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imgUser;
-        private TextView tvUserName, tvBio;
+        private TextView tvUserName, tvCategory;
         private CardView llItem;
-        private Button btnView;
+        private Button btnFollow;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            btnView = itemView.findViewById(R.id.btnView);
+            btnFollow = itemView.findViewById(R.id.btnFollow);
             llItem = itemView.findViewById(R.id.llItem);
             imgUser = itemView.findViewById(R.id.imgUser);
             tvUserName = itemView.findViewById(R.id.tvUserName);
-            tvBio = itemView.findViewById(R.id.tvBio);
+            tvCategory = itemView.findViewById(R.id.tvCategory);
         }
     }
 
     public interface SearchAdapterListener {
-        void onSearchSelected(AllUserList contact);
+        void onSearchSelected(LeagueList contact);
     }
 }
 

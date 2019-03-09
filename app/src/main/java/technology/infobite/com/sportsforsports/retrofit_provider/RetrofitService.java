@@ -2,6 +2,9 @@ package technology.infobite.com.sportsforsports.retrofit_provider;
 
 import android.app.Dialog;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -12,6 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUserMainModal;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
+import technology.infobite.com.sportsforsports.modal.league.LeagueMainModal;
 import technology.infobite.com.sportsforsports.modal.notification_list_modal.NotificationMainModal;
 import technology.infobite.com.sportsforsports.modal.post_comment_modal.PostCommentResponseModal;
 import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
@@ -23,10 +27,16 @@ public class RetrofitService {
 
     public static RetrofitApiClient client;
 
+    final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            .readTimeout(20, TimeUnit.MINUTES)
+            .connectTimeout(20, TimeUnit.MINUTES)
+            .build();
+
     public RetrofitService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
                 .build();
         client = retrofit.create(RetrofitApiClient.class);
     }
@@ -225,6 +235,27 @@ public class RetrofitService {
 
             @Override
             public void onFailure(Call<NotificationMainModal> call, Throwable throwable) {
+                if (dialog != null)
+                    AppProgressDialog.hide(dialog);
+                webResponse.onResponseFailed(throwable.getMessage());
+            }
+        });
+    }
+
+    public static void getLeagueList(final Dialog dialog, final Call<LeagueMainModal> method, final WebResponse webResponse) {
+        if (dialog != null)
+            AppProgressDialog.show(dialog);
+
+        method.enqueue(new Callback<LeagueMainModal>() {
+            @Override
+            public void onResponse(Call<LeagueMainModal> call, Response<LeagueMainModal> response) {
+                if (dialog != null)
+                    AppProgressDialog.hide(dialog);
+                WebServiceResponse.handleResponse(response, webResponse);
+            }
+
+            @Override
+            public void onFailure(Call<LeagueMainModal> call, Throwable throwable) {
                 if (dialog != null)
                     AppProgressDialog.hide(dialog);
                 webResponse.onResponseFailed(throwable.getMessage());

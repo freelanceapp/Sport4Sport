@@ -12,6 +12,7 @@ import retrofit2.http.Part;
 import technology.infobite.com.sportsforsports.constant.Constant;
 import technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUserMainModal;
 import technology.infobite.com.sportsforsports.modal.daily_news_feed.DailyNewsFeedMainModal;
+import technology.infobite.com.sportsforsports.modal.league.LeagueMainModal;
 import technology.infobite.com.sportsforsports.modal.notification_list_modal.NotificationMainModal;
 import technology.infobite.com.sportsforsports.modal.post_comment_modal.PostCommentResponseModal;
 import technology.infobite.com.sportsforsports.modal.user_data.UserDataModal;
@@ -98,4 +99,17 @@ public interface RetrofitApiClient {
     @FormUrlEncoded
     @POST(Constant.DELETE_POST)
     Call<ResponseBody> deletePost(@Field("post_id") String post_id);
+
+    @FormUrlEncoded
+    @POST(Constant.LEAGUE_LIST)
+    Call<LeagueMainModal> leagueList(@Field("user_id") String user_id);
+
+    @FormUrlEncoded
+    @POST(Constant.LEAGUE_FOLLOWING_LIST)
+    Call<LeagueMainModal> leagueFollowingList(@Field("user_id") String user_id);
+
+    @FormUrlEncoded
+    @POST(Constant.LEAGUE_FOLLOW)
+    Call<ResponseBody> leagueFollow(@Field("user_id") String user_id, @Field("league_id") String league_id,
+                                    @Field("status") String status);
 }

@@ -43,10 +43,23 @@
                 android:id="@+id/imgSearch"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:adjustViewBounds="true"
                 android:padding="4dp"
                 android:src="@drawable/ic_icons_search"
+                android:tint="@color/white" />
+
+            <ImageView
+                android:id="@+id/imgLeague"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="16dp"
+                android:layout_toStartOf="@+id/imgSearch"
+                android:layout_toLeftOf="@+id/imgSearch"
+                android:adjustViewBounds="true"
+                android:padding="4dp"
+                android:src="@drawable/ic_league"
                 android:tint="@color/white" />
         </RelativeLayout>
     </LinearLayout>
@@ -61,11 +74,32 @@
         android:id="@+id/fabNewPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/cardViewBotom"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        app:backgroundTint="@color/pink"
         android:outlineSpotShadowColor="@color/pink"
-        android:src="@drawable/ic_add" />
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/pink" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardViewBotom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:cardBackgroundColor="@color/colorPrimary">
+
+        <RelativeLayout
+            android:id="@+id/rlNewPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_camera_b" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>
