@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -255,9 +254,23 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     imageViewHolder.tvPostTime.setVisibility(View.VISIBLE);
                     imageViewHolder.tvPostTime.setText(imageFeed.getEntryDate());
                 }
+                imageViewHolder.imageProgress.setVisibility(View.VISIBLE);
                 Glide.with(imageViewHolder.itemView.getContext())
                         .load(Constant.IMAGE_BASE_URL + imageFeed.getAlhleteImages())
                         .apply(new RequestOptions().optionalCenterCrop())
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                imageViewHolder.imageProgress.setVisibility(View.GONE);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                imageViewHolder.imageProgress.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
                         .into(imageViewHolder.imgPostImage);
 
                 Glide.with(imageViewHolder.itemView.getContext())
@@ -598,12 +611,14 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         private LinearLayout llLikePost, llPostComment;
         private ImageView imgPostImage, imgLike, imgMoreMenu;
         private CircleImageView imgUserProfile;
+        private ProgressBar imageProgress;
         private TextView tvUserName, tvPostLikeCount, tvCommentCount, tvPostTime, tvTotalComment, tvPostDescription;
         public final View viewData;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
             viewData = itemView;
+            imageProgress = itemView.findViewById(R.id.imageProgress);
             rlPost = itemView.findViewById(R.id.rlPost);
             llViewUserProfile = itemView.findViewById(R.id.llViewUserProfile);
             imgUserProfile = itemView.findViewById(R.id.imgUserProfile);

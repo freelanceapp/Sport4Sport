@@ -113,6 +113,7 @@ public class LeagueActivity extends BaseActivity implements View.OnClickListener
         finish();
         switch (v.getId()) {
             case R.id.imgBack:
+                finish();
                 break;
         }
     }

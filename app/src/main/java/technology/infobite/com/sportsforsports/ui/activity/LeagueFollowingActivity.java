@@ -118,7 +118,7 @@ public class LeagueFollowingActivity extends BaseActivity implements View.OnClic
                     try {
                         JSONObject jsonObject = new JSONObject(responseBody.string());
                         if (!jsonObject.getBoolean("error")) {
-                            Alerts.show(mContext, "League follow");
+                            Alerts.show(mContext, "League unfollow");
                         } else {
                             Alerts.show(mContext, jsonObject + "");
                         }

@@ -1,13 +1,13 @@
 package technology.infobite.com.sportsforsports.modal.all_user_list_modal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AllUserMainModal implements Parcelable {
 
@@ -19,7 +19,7 @@ public class AllUserMainModal implements Parcelable {
     private String message;
     @SerializedName("user")
     @Expose
-    private List<AllUserList> user = new ArrayList<AllUserList>();
+    private List<AllUserList> allUserList = new ArrayList<AllUserList>();
     public final static Parcelable.Creator<AllUserMainModal> CREATOR = new Creator<AllUserMainModal>() {
 
 
@@ -39,7 +39,7 @@ public class AllUserMainModal implements Parcelable {
     protected AllUserMainModal(Parcel in) {
         this.error = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.user, (AllUserList.class.getClassLoader()));
+        in.readList(this.allUserList, (technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUserList.class.getClassLoader()));
     }
 
     public AllUserMainModal() {
@@ -61,18 +61,18 @@ public class AllUserMainModal implements Parcelable {
         this.message = message;
     }
 
-    public List<AllUserList> getUser() {
-        return user;
+    public List<AllUserList> getAllUserList() {
+        return allUserList;
     }
 
-    public void setUser(List<AllUserList> user) {
-        this.user = user;
+    public void setAllUserList(List<AllUserList> allUserList) {
+        this.allUserList = allUserList;
     }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(error);
         dest.writeValue(message);
-        dest.writeList(user);
+        dest.writeList(allUserList);
     }
 
     public int describeContents() {

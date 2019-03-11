@@ -2,9 +2,10 @@ package technology.infobite.com.sportsforsports.ui.activity;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.media.MediaPlayer;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,6 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -97,7 +101,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
 
     private SimpleExoPlayer player;
     private PlayerView videoSurfaceView;
-    private ProgressBar mProgressBar;
+    private ProgressBar mProgressBar, imageProgress;
     private RelativeLayout rlVideoView;
 
     @Override
@@ -125,6 +129,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         recyclerViewCommentList.setItemAnimator(new DefaultItemAnimator());
 
         mProgressBar = findViewById(R.id.mProgressBar);
+        imageProgress = findViewById(R.id.imageProgress);
         llPostComment = findViewById(R.id.llPostComment);
         findViewById(R.id.llLikePost).setOnClickListener(this);
         findViewById(R.id.imgMoreMenu).setOnClickListener(this);
@@ -234,9 +239,23 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
             imgPostImage.setVisibility(View.VISIBLE);
             tvHeadline.setVisibility(View.GONE);
             rlVideoView.setVisibility(View.GONE);
+            imageProgress.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(R.drawable.app_logo)
                     .load(Constant.IMAGE_BASE_URL + newPostModel.getAlhleteImages())
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            imageProgress.setVisibility(View.GONE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                            imageProgress.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
                     .into(imgPostImage);
         } else if (!newPostModel.getAthleteVideo().isEmpty()) {
             rlVideoView.setVisibility(View.VISIBLE);
@@ -551,8 +570,8 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     /*
-    *
-    * */
+     *
+     * */
     @Override
     public void onBackPressed() {
         super.onBackPressed();

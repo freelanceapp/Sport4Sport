@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -290,8 +291,15 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         String strDateOfBirth = edtBirthday.getText().toString();
         String strCity = ((EditText) findViewById(R.id.edtCity)).getText().toString();
 
+        String regex = "(.)*(\\d)(.)*";
+        Pattern pattern = Pattern.compile(regex);
+        String msg = strName;
+        boolean containsNumber = pattern.matcher(msg).matches();
+
         if (strName.isEmpty()) {
             Alerts.show(mContext, "Please enter name first !!!");
+        } else if (containsNumber) {
+            Alerts.show(mContext, "Name contains only alphabets");
         } else if (strDateOfBirth.isEmpty()) {
             Alerts.show(mContext, "Please select date of birth !!!");
         } else if (strCity.isEmpty()) {
@@ -329,17 +337,27 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         String strCollege = ((EditText) findViewById(R.id.edtCollege)).getText().toString();
         String strOtherSport = ((EditText) findViewById(R.id.edtOtherSport)).getText().toString();
         String strCity = ((EditText) findViewById(R.id.edtCity)).getText().toString();
+        String strCountry = ((TextView) findViewById(R.id.txtCountryName)).getText().toString();
 
         strHeight = strHeight + " " + strHeightUnit;
         strWeight = strWeight + " " + strWeightUnit;
         strCollege = strCollege + " , " + strYear;
 
+        String regex = "(.)*(\\d)(.)*";
+        Pattern pattern = Pattern.compile(regex);
+        String msg = strMainSport;
+        boolean containsNumber = pattern.matcher(msg).matches();
+
         if (strCountryName.equals("Select country")) {
+            Alerts.show(mContext, "Please select country");
+        } else if (containsNumber) {
+            Alerts.show(mContext, "Main sport contains only alphabets");
+        } else if (strCountry.isEmpty()) {
             Alerts.show(mContext, "Please select country");
         } else {
             if (cd.isNetworkAvailable()) {
                 RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfile(strUserId, strName, strIsAthlete,
-                        "India", strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
+                        strCountry, strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
                         strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {

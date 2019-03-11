@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -281,8 +282,15 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         String strDateOfBirth = edtBirthday.getText().toString();
         String strCity = ((EditText) findViewById(R.id.edtCity)).getText().toString();
 
+        String regex = "(.)*(\\d)(.)*";
+        Pattern pattern = Pattern.compile(regex);
+        String msg = strName;
+        boolean containsNumber = pattern.matcher(msg).matches();
+
         if (strName.isEmpty()) {
             Alerts.show(mContext, "Please enter name first !!!");
+        } else if (containsNumber) {
+            Alerts.show(mContext, "Name contains only alphabets");
         } else if (strDateOfBirth.isEmpty()) {
             Alerts.show(mContext, "Please select date of birth !!!");
         } else if (strCity.isEmpty()) {
@@ -325,8 +333,15 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         strWeight = strWeight + " " + strWeightUnit;
         strCollege = strCollege + " , " + strYear;
 
+        String regex = "(.)*(\\d)(.)*";
+        Pattern pattern = Pattern.compile(regex);
+        String msg = strMainSport;
+        boolean containsNumber = pattern.matcher(msg).matches();
+
         if (strCountryName.equals("Select country")) {
             Alerts.show(mContext, "Please select country");
+        } else if (containsNumber) {
+            Alerts.show(mContext, "Main Sport contains only alphabets");
         } else if (strNickname.isEmpty()) {
             Alerts.show(mContext, "Please enter nickname");
         } else if (strHeight.isEmpty()) {

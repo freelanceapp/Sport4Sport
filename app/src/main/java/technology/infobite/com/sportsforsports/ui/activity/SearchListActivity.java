@@ -86,7 +86,7 @@ public class SearchListActivity extends BaseActivity implements View.OnClickList
                     if (allUserMainModal == null)
                         return;
                     if (!allUserMainModal.getError()) {
-                        allUserLists.addAll(allUserMainModal.getUser());
+                        allUserLists.addAll(allUserMainModal.getAllUserList());
                     } else {
                         Alerts.show(mContext, allUserMainModal.getMessage());
                     }

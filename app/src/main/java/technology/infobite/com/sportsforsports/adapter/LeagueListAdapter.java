@@ -56,11 +56,14 @@ public class LeagueListAdapter extends RecyclerView.Adapter<LeagueListAdapter.Vi
 
         viewHolder.tvUserName.setText(gridDetailmodels.getLeagueName());
         viewHolder.tvCategory.setText(gridDetailmodels.getCategory());
-        viewHolder.btnFollow.setText(gridDetailmodels.getStatus());
 
         if (gridDetailmodels.getStatus().equalsIgnoreCase("Unfollow")) {
+            viewHolder.btnFollow.setText("Follow");
+            viewHolder.btnFollow.setTextColor(context.getResources().getColor(R.color.white));
             viewHolder.btnFollow.setBackground(context.getResources().getDrawable(R.drawable.gridbutton_background));
         } else {
+            viewHolder.btnFollow.setText("Following");
+            viewHolder.btnFollow.setTextColor(context.getResources().getColor(R.color.black));
             viewHolder.btnFollow.setBackground(context.getResources().getDrawable(R.drawable.btn_back_b));
         }
         viewHolder.btnFollow.setOnClickListener(new View.OnClickListener() {

@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.constant.Constant;
@@ -25,14 +26,16 @@ import technology.infobite.com.sportsforsports.modal.all_user_list_modal.AllUser
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.ViewHolder> implements Filterable {
 
-    private List<AllUserList> allUserLists;
     private List<AllUserList> filteredAllUserLists;
+    private List<AllUserList> allUserLists;
     private Context context;
     private SearchAdapterListener searchAdapterListener;
 
-    public SearchListAdapter(List<AllUserList> allUserLists, Context context, SearchAdapterListener searchAdapterListener) {
-        this.allUserLists = allUserLists;
-        this.filteredAllUserLists = allUserLists;
+    public SearchListAdapter(List<AllUserList> allUser, Context context, SearchAdapterListener searchAdapterListener) {
+        filteredAllUserLists = new ArrayList<>();
+        allUserLists = new ArrayList<>();
+        this.allUserLists = allUser;
+        this.filteredAllUserLists = allUser;
         this.context = context;
         this.searchAdapterListener = searchAdapterListener;
     }
@@ -80,11 +83,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
     @Override
     public int getItemCount() {
-        if (filteredAllUserLists != null) {
-            return filteredAllUserLists.size();
-        } else {
-            return 0;
-        }
+        return filteredAllUserLists.size();
     }
 
     @Override
@@ -98,8 +97,17 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
                 } else {
                     List<AllUserList> filteredList = new ArrayList<>();
                     for (AllUserList row : allUserLists) {
-                        if (row.getUserName().toLowerCase().contains(charString.toLowerCase())) {
-                            filteredList.add(row);
+                        String regex = "(.)*(\\d)(.)*";
+                        Pattern pattern = Pattern.compile(regex);
+                        String msg = row.getUserName();
+                        boolean containsNumber = pattern.matcher(msg).matches();
+                        if (containsNumber) {
+                            //filteredList.add(row);
+                        } else {
+                            if (row.getUserName().toLowerCase().contains(charString.toLowerCase()) ||
+                                    row.getMainSport().toLowerCase().contains(charString.toLowerCase())) {
+                                filteredList.add(row);
+                            }
                         }
                     }
                     filteredAllUserLists = filteredList;
