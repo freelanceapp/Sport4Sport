@@ -54,6 +54,8 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
             Alerts.show(mContext, "Please enter name!!!");
         } else if (strEmail.isEmpty()) {
             Alerts.show(mContext, "Please enter email!!!");
+        } else if (!strEmail.matches(Constant.EmailPattern)) {
+            Alerts.show(mContext, "Enter valid email!!!");
         } else if (strPassword.isEmpty()) {
             Alerts.show(mContext, "Please enter password!!!");
         } else if (strPassword.length() < 6) {

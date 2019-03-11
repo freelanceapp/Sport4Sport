@@ -5,13 +5,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
+import java.util.Arrays;
 
 import retrofit2.Response;
 import technology.infobite.com.sportsforsports.R;
@@ -26,14 +38,13 @@ import technology.infobite.com.sportsforsports.utils.ConnectionDetector;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button buttonlogin, commentpage;
-    TextView textView, cameractiivty;
+    private static final String EMAIL = "email";
+    private CallbackManager callbackManager;
 
-    public RetrofitApiClient retrofitApiClient;
-    public ConnectionDetector cd;
-    public Context mContext;
-    private CheckBox checkBoxRemember;
-    boolean isLogin = false;
+    private RetrofitApiClient retrofitApiClient;
+    private ConnectionDetector cd;
+    private Context mContext;
+    private boolean isLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,26 +58,69 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void init() {
-        buttonlogin = findViewById(R.id.btn_login);
-        checkBoxRemember = (CheckBox) findViewById(R.id.checkBoxRemember);
+        Button buttonlogin = findViewById(R.id.btn_login);
+        CheckBox checkBoxRemember = findViewById(R.id.checkBoxRemember);
         checkBoxRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    isLogin = true;
-                } else {
-                    isLogin = false;
-                }
+                isLogin = isChecked;
             }
         });
-        String text = "<font color=#ffffff>I accept </font> <font color=#000000> Terms </font> " +
-                "<font color=#ffffff> and Privacy </font> <font color=#000000> settings ! </font>";
-        //checkBoxAccept.setText(Html.fromHtml(text));
 
-        cameractiivty = findViewById(R.id.cameradata);
+        TextView cameractiivty = findViewById(R.id.cameradata);
         cameractiivty.setOnClickListener(this);
         buttonlogin.setOnClickListener(this);
-        ((LinearLayout) findViewById(R.id.llRegister)).setOnClickListener(this);
+        findViewById(R.id.llRegister).setOnClickListener(this);
+        findViewById(R.id.btnFb).setOnClickListener(this);
+        //initFacebook();
+    }
+
+    private void initFacebook() {
+        LoginButton loginButton = null;
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+
+        //loginButton = (LoginButton) findViewById(R.id.login_button);
+        LoginManager.getInstance().logOut();
+        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+            private ProfileTracker mProfileTracker;
+
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                if (Profile.getCurrentProfile() == null) {
+                    mProfileTracker = new ProfileTracker() {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                            Log.e("facebook - profile", currentProfile.getFirstName());
+                            String strName = currentProfile.getFirstName();
+                            String strUsername = currentProfile.getFirstName();
+                            Alerts.show(mContext, strName);
+                            mProfileTracker.stopTracking();
+                            //btnFb.setText("Logout from Facebook");
+                        }
+                    };
+                } else {
+                    Profile profile = Profile.getCurrentProfile();
+                    Log.e("facebook - profile", profile.getFirstName());
+                    String strName = profile.getFirstName();
+                    String strUsername = profile.getFirstName();
+                    Alerts.show(mContext, strName);
+                }
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
     }
 
     private void loginApi() {
@@ -130,6 +184,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.llRegister:
                 Intent intentB = new Intent(LoginActivity.this, RagistrationActivity.class);
                 startActivity(intentB);
+                break;
+            case R.id.btnFb:
+                Alerts.show(mContext, "Under development !!");
+                //loginButton.performClick();
                 break;
         }
     }

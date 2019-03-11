@@ -42,6 +42,7 @@ public class Constant {
     public static final String TOKEN = "TOKEN";
 
     /************************************************************************/
+    public static final String EmailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     public static final String[] countries = new String[]{"Select country", "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola",
             "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria",
             "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin",
@@ -63,7 +64,7 @@ public class Constant {
     public static final String VIDEO_URL = "https://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4";
     public static final String VIDEO_BASE_URL = "http://codeencrypt.in/sport/images/alhlete_video/";
     public static final String PROFILE_IMAGE_BASE_URL = "http://codeencrypt.in/sport/images/profile_img/";
-    public static final String LEAGUE_IMAGE_BASE_URL = BASE_URL + "league/";
+    public static final String LEAGUE_IMAGE_BASE_URL = "http://codeencrypt.in/sport/images/league/";
     public static final String DEFAULT_IMAGE_URL = "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png";
 }
 

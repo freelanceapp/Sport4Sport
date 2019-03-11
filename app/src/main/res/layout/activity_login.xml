@@ -131,18 +131,32 @@
                         android:background="@color/white" />
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/commentpage1"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="@drawable/fb_background"
-                    android:text="@string/facebook"
-                    android:textColor="@color/white"
-                    android:textSize="16dp"
-                    android:textStyle="bold" />
+                    android:layout_height="wrap_content">
+
+                    <!--<com.facebook.login.widget.LoginButton
+                        android:id="@+id/login_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="30dp"
+                        android:visibility="gone" />-->
+
+                    <Button
+                        android:id="@+id/btnFb"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/fb_background"
+                        android:text="@string/facebook"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/llRegister"
