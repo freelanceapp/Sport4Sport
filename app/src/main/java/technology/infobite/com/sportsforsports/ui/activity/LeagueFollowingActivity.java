@@ -73,7 +73,11 @@ public class LeagueFollowingActivity extends BaseActivity implements View.OnClic
                         return;
                     if (!leagueMainModal.getError()) {
                         leagueLists.addAll(leagueMainModal.getLeagueList());
-                        findViewById(R.id.tvEmpty).setVisibility(View.GONE);
+                        if (leagueLists.size() > 0) {
+                            findViewById(R.id.tvEmpty).setVisibility(View.GONE);
+                        } else {
+                            findViewById(R.id.tvEmpty).setVisibility(View.VISIBLE);
+                        }
                     } else {
                         findViewById(R.id.tvEmpty).setVisibility(View.VISIBLE);
                         Alerts.show(mContext, leagueMainModal.getMessage());

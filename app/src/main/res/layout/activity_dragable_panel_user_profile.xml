@@ -125,7 +125,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:padding="5dp">
@@ -208,28 +208,50 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/llFollowLeague"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:orientation="horizontal">
 
+                            <LinearLayout
+                                android:id="@+id/llFollowLeague"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="8dp"
+                                    android:text="League"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp" />
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:src="@drawable/ic_league"
+                                    android:tint="@color/colorPrimary" />
+                            </LinearLayout>
+
                             <TextView
+                                android:id="@+id/tvMoreDetail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:layout_marginRight="8dp"
-                                android:text="League"
-                                android:textColor="@color/black"
-                                android:textSize="16sp" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_league"
-                                android:tint="@color/colorPrimary" />
+                                android:layout_marginLeft="16dp"
+                                android:background="@drawable/background_button"
+                                android:paddingLeft="8dp"
+                                android:paddingTop="2dp"
+                                android:paddingRight="8dp"
+                                android:paddingBottom="2dp"
+                                android:text="View more detail"
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
                         </LinearLayout>
+
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

@@ -102,6 +102,7 @@
         <activity android:name=".ui.activity.VideoGalleryActivity" />
         <activity android:name=".ui.activity.LeagueActivity" />
         <activity android:name=".ui.activity.LeagueFollowingActivity" />
+        <activity android:name=".ui.activity.UserMoreDetailActivity" />
 
         <service android:name=".firebase_utils.MyFirebaseMessagingService">
             <intent-filter>

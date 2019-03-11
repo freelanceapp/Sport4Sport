@@ -31,153 +31,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="20">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:text="Nickname"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
-
-                <EditText
-                    android:id="@+id/edtNickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
-                    android:maxLines="1"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/tvLblHeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Height"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
-
-                <EditText
-                    android:id="@+id/edtHeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/tvLblHeight"
-                    android:backgroundTint="@color/white"
-                    android:inputType="numberDecimal"
-                    android:maxLength="5"
-                    android:maxLines="1"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
-
-                <Spinner
-                    android:id="@+id/spinnerHeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:backgroundTint="@color/white" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/tvLblWeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Weight"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
-
-                <EditText
-                    android:id="@+id/edtWeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/tvLblWeight"
-                    android:layout_toRightOf="@+id/tvLblWeight"
-                    android:backgroundTint="@color/white"
-                    android:inputType="numberDecimal"
-                    android:maxLength="5"
-                    android:maxLines="1"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
-
-                <Spinner
-                    android:id="@+id/spinnerWeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:backgroundTint="@color/white" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
-                    android:text="@string/main_sport"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
-
-                <EditText
-                    android:id="@+id/edtMainSport"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
+                    android:layout_weight="15"
                     android:text="Position"
                     android:textColor="@color/white"
                     android:textSize="16sp"
@@ -187,7 +49,9 @@
                     android:id="@+id/edtPosition"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="5"
                     android:backgroundTint="@color/white"
+                    android:focusable="false"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
                     android:textColor="@color/white"
@@ -200,14 +64,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="20">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
-                    android:text="Pre-Game Rituals"
+                    android:layout_weight="15"
+                    android:text="Pre-Game"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="normal" />
@@ -216,7 +82,9 @@
                     android:id="@+id/edtRituals"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="5"
                     android:backgroundTint="@color/white"
+                    android:focusable="false"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
                     android:textColor="@color/white"
@@ -229,13 +97,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="20">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
+                    android:layout_weight="15"
                     android:text="@string/coach"
                     android:textColor="@color/white"
                     android:textSize="16sp"
@@ -245,7 +115,9 @@
                     android:id="@+id/edtCoach"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="5"
                     android:backgroundTint="@color/white"
+                    android:focusable="false"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -258,13 +130,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="20">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
+                    android:layout_weight="15"
                     android:text="@string/club"
                     android:textColor="@color/white"
                     android:textSize="16sp"
@@ -274,7 +148,9 @@
                     android:id="@+id/edtClub"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="5"
                     android:backgroundTint="@color/white"
+                    android:focusable="false"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -287,14 +163,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="20">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
-                    android:text="Other sports interests"
+                    android:layout_weight="15"
+                    android:text="Other sports"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="normal" />
@@ -303,7 +181,9 @@
                     android:id="@+id/edtOtherSport"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="5"
                     android:backgroundTint="@color/white"
+                    android:focusable="false"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -312,54 +192,38 @@
                     android:textStyle="normal" />
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/career_fragment_imageview_backgrouond"
-                android:padding="8dp">
+                android:orientation="horizontal"
+                android:weightSum="20">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="15"
+                    android:text="College/School"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
 
-                    <TextView
-                        android:id="@+id/tvLblCollege"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:text="College/High School"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:textStyle="normal" />
-
-                    <EditText
-                        android:id="@+id/edtCollege"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/transparent"
-                        android:hint="ex:- B.Tech , RGPV"
-                        android:imeOptions="actionNext"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:padding="8dp"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/gray_f"
-                        android:textSize="16sp"
-                        android:textStyle="normal" />
-                </LinearLayout>
-
-                <Spinner
-                    android:id="@+id/spinnerYear"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/edtCollege"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:backgroundTint="@color/white" />
-            </RelativeLayout>
+                    android:layout_weight="5"
+                    android:backgroundTint="@color/white"
+                    android:focusable="false"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -376,6 +240,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/career_fragment_imageview_backgrouond"
+                android:focusable="false"
                 android:gravity="top"
                 android:lines="5"
                 android:padding="16dp"

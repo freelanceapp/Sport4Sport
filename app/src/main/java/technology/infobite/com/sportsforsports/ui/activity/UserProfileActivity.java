@@ -3,6 +3,7 @@ package technology.infobite.com.sportsforsports.ui.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -123,6 +124,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         imgCamera = findViewById(R.id.imgCamera);
         imgVideoCamera = findViewById(R.id.imgVideoCamera);
 
+        findViewById(R.id.tvMoreDetail).setOnClickListener(this);
         findViewById(R.id.llFollowLeague).setOnClickListener(this);
         findViewById(R.id.imgBack).setOnClickListener(this);
         findViewById(R.id.llFollow).setOnClickListener(this);
@@ -245,6 +247,11 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvMoreDetail:
+                Intent intent = new Intent(mContext, UserMoreDetailActivity.class);
+                intent.putExtra("user_detail", (Parcelable) userDataModal.getUser());
+                startActivity(intent);
+                break;
             case R.id.llHeadline:
                 openPanelWithData(v, myTextHeadlineList, "text");
                 break;
