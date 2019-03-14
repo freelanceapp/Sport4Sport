@@ -87,7 +87,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/cameradata"
+                    android:id="@+id/txtForgotPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="40dp"

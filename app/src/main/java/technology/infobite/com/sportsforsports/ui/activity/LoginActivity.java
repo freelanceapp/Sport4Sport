@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -67,9 +66,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
 
-        TextView cameractiivty = findViewById(R.id.cameradata);
-        cameractiivty.setOnClickListener(this);
         buttonlogin.setOnClickListener(this);
+        findViewById(R.id.txtForgotPassword).setOnClickListener(this);
         findViewById(R.id.llRegister).setOnClickListener(this);
         findViewById(R.id.btnFb).setOnClickListener(this);
         //initFacebook();
@@ -188,6 +186,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btnFb:
                 Alerts.show(mContext, "Under development !!");
                 //loginButton.performClick();
+                break;
+            case R.id.txtForgotPassword:
+                startActivity(new Intent(mContext, ForgotPasswordActivity.class));
                 break;
         }
     }

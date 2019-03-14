@@ -112,4 +112,16 @@ public interface RetrofitApiClient {
     @POST(Constant.LEAGUE_FOLLOW)
     Call<ResponseBody> leagueFollow(@Field("user_id") String user_id, @Field("league_id") String league_id,
                                     @Field("status") String status);
+
+    @FormUrlEncoded
+    @POST(Constant.EMAIL_OTP)
+    Call<ResponseBody> emailOtp(@Field("email") String email);
+
+    @FormUrlEncoded
+    @POST(Constant.VERIFY_OTP)
+    Call<ResponseBody> emailVerify(@Field("email") String email, @Field("otp") String otp);
+
+    @FormUrlEncoded
+    @POST(Constant.NEW_PASSWORD)
+    Call<ResponseBody> newPassword(@Field("email") String email, @Field("password") String password);
 }
