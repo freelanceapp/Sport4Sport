@@ -220,6 +220,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         Glide.with(mContext)
                 .load(R.drawable.app_logo)
                 .load(Constant.PROFILE_IMAGE_BASE_URL + newPostModel.getPostUserImage())
+                .placeholder(R.drawable.ic_profile)
                 .into(imgUserProfile);
 
         if (!newPostModel.getAthleteArticeHeadline().isEmpty()) {

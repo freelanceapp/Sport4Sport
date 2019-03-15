@@ -46,9 +46,11 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
         if (notificationmodel.getUserImage() == null || notificationmodel.getUserImage().isEmpty()) {
             Glide.with(context).load(Constant.PROFILE_IMAGE_BASE_URL + strUserImage)
+                    .placeholder(R.drawable.ic_profile)
                     .into(viewHolder.imgUserProfile);
         } else {
             Glide.with(context).load(Constant.PROFILE_IMAGE_BASE_URL + notificationmodel.getUserImage())
+                    .placeholder(R.drawable.ic_profile)
                     .into(viewHolder.imgUserProfile);
         }
 

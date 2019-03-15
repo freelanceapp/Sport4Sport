@@ -56,6 +56,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         Glide.with(context)
                 .load(Constant.PROFILE_IMAGE_BASE_URL + notificationLists.get(i).getFanAvtarImg())
+                .placeholder(R.drawable.ic_profile)
                 .into(viewHolder.image);
     }
 

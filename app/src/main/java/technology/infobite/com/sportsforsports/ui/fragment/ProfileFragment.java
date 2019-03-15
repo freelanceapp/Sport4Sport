@@ -226,6 +226,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             Glide.with(mContext)
                     .load(Constant.PROFILE_IMAGE_BASE_URL + strAvtar)
                     .apply(new RequestOptions().optionalCenterCrop())
+                    .placeholder(R.drawable.ic_profile)
                     .into(((CircleImageView) rootView.findViewById(R.id.ic_profile_person)));
         }
     }

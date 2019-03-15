@@ -105,6 +105,14 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
 
                 final HeadlineViewHolder viewHolder = (HeadlineViewHolder) holder;
+                String strUid = AppPreference.getStringPreference(mContext, Constant.USER_ID);
+                String postUserId = feed.getPostUserId();
+                if (postUserId.equals(strUid)) {
+                    viewHolder.imgMoreMenu.setVisibility(View.GONE);
+                } else {
+                    viewHolder.imgMoreMenu.setVisibility(View.VISIBLE);
+                }
+
                 viewHolder.tvUserName.setText(feed.getPostUserName());
                 viewHolder.tvPostDescription.setText(feed.getAthleteStatus());
                 viewHolder.tvHeadline.setText(feed.getAthleteArticeHeadline());
@@ -172,6 +180,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 Glide.with(viewHolder.itemView.getContext())
                         .load(Constant.PROFILE_IMAGE_BASE_URL + feed.getPostUserImage())
                         .apply(new RequestOptions().optionalCenterCrop())
+                        .placeholder(R.drawable.ic_profile)
                         .into(viewHolder.imgUserProfile);
                 break;
             case 1:
@@ -191,6 +200,14 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
 
                 final ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
+                String AstrUid = AppPreference.getStringPreference(mContext, Constant.USER_ID);
+                String ApostUserId = imageFeed.getPostUserId();
+                if (ApostUserId.equals(AstrUid)) {
+                    imageViewHolder.imgMoreMenu.setVisibility(View.GONE);
+                } else {
+                    imageViewHolder.imgMoreMenu.setVisibility(View.VISIBLE);
+                }
+
                 imageViewHolder.tvUserName.setText(imageFeed.getPostUserName());
                 imageViewHolder.tvPostDescription.setText(imageFeed.getAthleteStatus());
 
@@ -276,6 +293,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 Glide.with(imageViewHolder.itemView.getContext())
                         .load(Constant.PROFILE_IMAGE_BASE_URL + imageFeed.getPostUserImage())
                         .apply(new RequestOptions().optionalCenterCrop())
+                        .placeholder(R.drawable.ic_profile)
                         .into(imageViewHolder.imgUserProfile);
                 break;
             case 2:
@@ -295,6 +313,14 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
 
                 final ViewHolder videoViewHolder = (ViewHolder) holder;
+                String BstrUid = AppPreference.getStringPreference(mContext, Constant.USER_ID);
+                String BpostUserId = videoFeed.getPostUserId();
+                if (BpostUserId.equals(BstrUid)) {
+                    videoViewHolder.imgMoreMenu.setVisibility(View.GONE);
+                } else {
+                    videoViewHolder.imgMoreMenu.setVisibility(View.VISIBLE);
+                }
+
                 videoViewHolder.tvUserName.setText(videoFeed.getPostUserName());
                 videoViewHolder.tvPostDescription.setText(videoFeed.getAthleteStatus());
 
@@ -364,6 +390,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 Glide.with(videoViewHolder.itemView.getContext())
                         .load(Constant.PROFILE_IMAGE_BASE_URL + videoFeed.getPostUserImage())
                         .apply(new RequestOptions().optionalCenterCrop())
+                        .placeholder(R.drawable.ic_profile)
                         .into(videoViewHolder.imgUserProfile);
 
                 videoViewHolder.progressBar.setVisibility(View.VISIBLE);

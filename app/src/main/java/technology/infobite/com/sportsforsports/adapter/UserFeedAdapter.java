@@ -206,6 +206,7 @@ public class UserFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Glide.with(imageViewHolder.itemView.getContext())
                 .load(Constant.PROFILE_IMAGE_BASE_URL + imageFeed.getPostUserImage())
                 .apply(new RequestOptions().optionalCenterCrop())
+                .placeholder(R.drawable.ic_profile)
                 .into(imageViewHolder.imgUserProfile);
     }
 

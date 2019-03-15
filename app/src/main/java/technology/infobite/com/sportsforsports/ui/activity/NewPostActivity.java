@@ -315,6 +315,7 @@ public class NewPostActivity extends BaseActivity implements View.OnClickListene
                 public void onResponseSuccess(Response<?> result) {
                     userDataModal = (UserDataModal) result.body();
                     Glide.with(mContext).load(Constant.PROFILE_IMAGE_BASE_URL + userDataModal.getUser().getAvtarImg())
+                            .placeholder(R.drawable.ic_profile)
                             .into(myprofile_img);
                 }
 

@@ -231,6 +231,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         Glide.with(mContext)
                 .load(Constant.PROFILE_IMAGE_BASE_URL + userDataModal.getUser().getAvtarImg())
                 .apply(new RequestOptions().optionalCenterCrop())
+                .placeholder(R.drawable.ic_profile)
                 .into(((CircleImageView) findViewById(R.id.ic_profile_person)));
 
         if (myTextHeadlineList.size() == 0) {

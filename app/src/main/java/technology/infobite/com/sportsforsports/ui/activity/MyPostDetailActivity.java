@@ -228,6 +228,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         Glide.with(mContext)
                 .load(R.drawable.app_logo)
                 .load(Constant.PROFILE_IMAGE_BASE_URL + newPostModel.getPostUserImage())
+                .placeholder(R.drawable.ic_profile)
                 .into(imgUserProfile);
 
         if (!newPostModel.getAthleteArticeHeadline().isEmpty()) {
@@ -546,6 +547,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void deletePostApi(final Dialog dialogCustomerInfo) {
+        removePlayer();
         RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.deletePost(postId), new WebResponse() {
             @Override
             public void onResponseSuccess(Response<?> result) {
@@ -553,7 +555,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
                 try {
                     dialogCustomerInfo.dismiss();
                     JSONObject jsonObject = new JSONObject(responseBody.string());
-                    Alerts.show(mContext, jsonObject + "");
+                    Alerts.show(mContext, jsonObject.getString("message"));
                     timelineApi("delete");
                 } catch (JSONException e) {
                     e.printStackTrace();

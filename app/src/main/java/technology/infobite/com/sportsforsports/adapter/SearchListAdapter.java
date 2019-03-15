@@ -55,6 +55,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
         Glide.with(context)
                 .load(Constant.PROFILE_IMAGE_BASE_URL + gridDetailmodels.getAvtarImg())
+                .placeholder(R.drawable.ic_profile)
                 .into(viewHolder.imgUser);
 
         viewHolder.tvUserName.setText(gridDetailmodels.getUserName());
