@@ -18,8 +18,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -141,28 +139,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onSuccess(final LoginResult loginResult) {
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
+                                try {
+                                    email = object.getString("email");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+
                 if (Profile.getCurrentProfile() == null) {
                     mProfileTracker = new ProfileTracker() {
                         @Override
                         protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-
-                            GraphRequest request = GraphRequest.newMeRequest(
-                                    loginResult.getAccessToken(),
-                                    new GraphRequest.GraphJSONObjectCallback() {
-                                        @Override
-                                        public void onCompleted(JSONObject object, GraphResponse response) {
-                                            Log.v("LoginActivity", response.toString());
-                                            try {
-                                                email = object.getString("email");
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
-                            Bundle parameters = new Bundle();
-                            parameters.putString("fields", "id,name,email,gender,birthday");
-                            request.setParameters(parameters);
-                            request.executeAsync();
 
                             /*********************************/
                             String strName = currentProfile.getFirstName();
@@ -172,6 +170,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             String socialId = currentProfile.getId();
                             mProfileTracker.stopTracking();
                             //btnFb.setText("Logout from Facebook");
+                            Log.e("facebook_profile_data:-", strName+"-"+socialId+"-"+email);
+                            Alerts.show(mContext,strName+"-"+socialId+"-"+email);
                             fbLoginApi(strName, email, profile, socialType, socialId);
                         }
                     };
@@ -179,8 +179,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Profile profile = Profile.getCurrentProfile();
                     Log.e("facebook - profile", profile.getFirstName());
                     String strName = profile.getFirstName();
-                    String strUsername = profile.getFirstName();
-                    mProfileTracker.stopTracking();
+                    Uri uri = profile.getProfilePictureUri(150, 150);
+                    String profileImage = uri.toString();
+                    String socialType = "Facebook";
+                    String socialId = profile.getId();
+                    Alerts.show(mContext,strName+"-"+socialId+"-"+email);
+                    Log.e("facebook_profile_data:-", strName+"-"+socialId+"-"+email);
+                    fbLoginApi(strName, email, profileImage, socialType, socialId);
                 }
             }
 
