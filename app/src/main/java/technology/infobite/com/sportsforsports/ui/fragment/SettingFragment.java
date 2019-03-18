@@ -9,6 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.login.LoginManager;
+
 import technology.infobite.com.sportsforsports.R;
 import technology.infobite.com.sportsforsports.retrofit_provider.RetrofitService;
 import technology.infobite.com.sportsforsports.ui.activity.LoginActivity;
@@ -52,6 +59,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        logoutFromFacebook();
                         AppPreference.clearAllPreferences(mContext);
                         Intent intent = new Intent(mContext, LoginActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -66,4 +74,20 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                 .create()
                 .show();
     }
+
+    public void logoutFromFacebook() {
+        FacebookSdk.sdkInitialize(mContext);
+        if (AccessToken.getCurrentAccessToken() == null) {
+            return; // user already logged out
+        }
+
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
+                .Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                LoginManager.getInstance().logOut();
+            }
+        }).executeAsync();
+    }
+
 }

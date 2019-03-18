@@ -5,9 +5,10 @@ public class Constant {
     /*public static final String ImageVideoBaseUrl = "http://codeencrypt.in/sport/";
     public static final String BASE_URL = "http://codeencrypt.in/sport/admin/api/";*/
 
-    public static final String ImageVideoBaseUrl = "http://pinlinx.com/";
-    public static final String BASE_URL = "http://pinlinx.com/admin/api/";
+    public static final String ImageVideoBaseUrl = "https://pinlinx.com/";
+    public static final String BASE_URL = "https://pinlinx.com/admin/api/";
 
+    public static final String FB_API = "user_social_login.php";
     public static final String LOGIN_API = "user-login.php";
     public static final String REGISTRATION_API = "user_signup.php";
     public static final String UPDATE_PROFILE_API = "update_profile.php";

@@ -1,10 +1,16 @@
 package technology.infobite.com.sportsforsports.ui.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +22,19 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import retrofit2.Response;
@@ -44,6 +57,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ConnectionDetector cd;
     private Context mContext;
     private boolean isLogin = false;
+    private LoginButton loginButton;
+
+    private String email = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,15 +86,50 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.txtForgotPassword).setOnClickListener(this);
         findViewById(R.id.llRegister).setOnClickListener(this);
         findViewById(R.id.btnFb).setOnClickListener(this);
-        //initFacebook();
+
+        String strKeyHash = printKeyHash(this);
+        Log.e("Key_Hash:-", strKeyHash);
+        initFacebook();
+    }
+
+    public static String printKeyHash(Activity context) {
+        PackageInfo packageInfo;
+        String key = null;
+        try {
+            //getting application package name, as defined in manifest
+            String packageName = context.getApplicationContext().getPackageName();
+
+            //Retriving package info
+            packageInfo = context.getPackageManager().getPackageInfo(packageName,
+                    PackageManager.GET_SIGNATURES);
+
+            Log.e("Package Name=", context.getApplicationContext().getPackageName());
+
+            for (Signature signature : packageInfo.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                key = new String(Base64.encode(md.digest(), 0));
+
+                // String key = new String(Base64.encodeBytes(md.digest()));
+                Log.e("Key Hash=", key);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("Name not found", e1.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("No such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("Exception", e.toString());
+        }
+
+        return key;
     }
 
     private void initFacebook() {
-        LoginButton loginButton = null;
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
+
+        FacebookSdk.sdkInitialize(mContext);
         callbackManager = CallbackManager.Factory.create();
 
-        //loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton = (LoginButton) findViewById(R.id.login_button);
         LoginManager.getInstance().logOut();
         loginButton.setReadPermissions(Arrays.asList(EMAIL));
 
@@ -87,17 +138,39 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             private ProfileTracker mProfileTracker;
 
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onSuccess(final LoginResult loginResult) {
                 if (Profile.getCurrentProfile() == null) {
                     mProfileTracker = new ProfileTracker() {
                         @Override
                         protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                            Log.e("facebook - profile", currentProfile.getFirstName());
+
+                            GraphRequest request = GraphRequest.newMeRequest(
+                                    loginResult.getAccessToken(),
+                                    new GraphRequest.GraphJSONObjectCallback() {
+                                        @Override
+                                        public void onCompleted(JSONObject object, GraphResponse response) {
+                                            Log.v("LoginActivity", response.toString());
+                                            try {
+                                                email = object.getString("email");
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                            Bundle parameters = new Bundle();
+                            parameters.putString("fields", "id,name,email,gender,birthday");
+                            request.setParameters(parameters);
+                            request.executeAsync();
+
+                            /*********************************/
                             String strName = currentProfile.getFirstName();
-                            String strUsername = currentProfile.getFirstName();
-                            Alerts.show(mContext, strName);
+                            Uri uri = currentProfile.getProfilePictureUri(150, 150);
+                            String profile = uri.toString();
+                            String socialType = "Facebook";
+                            String socialId = currentProfile.getId();
                             mProfileTracker.stopTracking();
                             //btnFb.setText("Logout from Facebook");
+                            fbLoginApi(strName, email, profile, socialType, socialId);
                         }
                     };
                 } else {
@@ -105,20 +178,73 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Log.e("facebook - profile", profile.getFirstName());
                     String strName = profile.getFirstName();
                     String strUsername = profile.getFirstName();
-                    Alerts.show(mContext, strName);
+                    mProfileTracker.stopTracking();
                 }
             }
 
             @Override
             public void onCancel() {
-                // App code
+                Alerts.show(mContext, "Cancle");
             }
 
             @Override
             public void onError(FacebookException exception) {
-                // App code
+                Alerts.show(mContext, exception.toString());
             }
         });
+    }
+
+    private void fbLoginApi(String name, String email, String profile, String socialType, String socialId) {
+        if (cd.isNetworkAvailable()) {
+            String strToken = AppPreference.getStringPreference(mContext, Constant.TOKEN);
+            RetrofitService.getLoginData(new Dialog(mContext), retrofitApiClient.fbLogin(name, email,
+                    profile, socialType, socialId, strToken), new WebResponse() {
+                @Override
+                public void onResponseSuccess(Response<?> result) {
+                    UserDataModal responseBody = (UserDataModal) result.body();
+                    if (!responseBody.getError()) {
+                        AppPreference.setStringPreference(mContext, Constant.USER_ID, responseBody.getUser().getUserId());
+                        AppPreference.setStringPreference(mContext, Constant.USER_NAME, responseBody.getUser().getUserName());
+                        AppPreference.setStringPreference(mContext, Constant.USER_IMAGE, responseBody.getUser().getAvtarImg());
+                        if (responseBody.getUser().getDob() == null || responseBody.getUser().getDob().isEmpty()) {
+                            Alerts.show(mContext, "Please create profile first");
+                            Intent intent = new Intent(mContext, CreateProfileActivity.class);
+                            intent.putExtra("user_id", responseBody.getUser().getUserId());
+                            intent.putExtra("name", responseBody.getUser().getUserName());
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Intent intent = new Intent(mContext, HomeActivity.class);
+                            intent.putExtra("user_id", responseBody.getUser().getUserId());
+                            startActivity(intent);
+                            finish();
+                        }
+                    } else {
+                        Alerts.show(mContext, responseBody.getMessage());
+                    }
+                }
+
+                @Override
+                public void onResponseFailed(String error) {
+                    Alerts.show(mContext, error);
+                }
+            });
+        } else {
+            cd.show(mContext);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (callbackManager.onActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+
+        /*if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleGoogleSignInResult(task);
+        }*/
     }
 
     private void loginApi() {
@@ -184,8 +310,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intentB);
                 break;
             case R.id.btnFb:
-                Alerts.show(mContext, "Under development !!");
-                //loginButton.performClick();
+                //Alerts.show(mContext, "Under development !!");
+                loginButton.performClick();
                 break;
             case R.id.txtForgotPassword:
                 startActivity(new Intent(mContext, ForgotPasswordActivity.class));

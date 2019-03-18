@@ -25,6 +25,12 @@ public interface RetrofitApiClient {
                                @Field("token") String token);
 
     @FormUrlEncoded
+    @POST(Constant.FB_API)
+    Call<UserDataModal> fbLogin(@Field("name") String name, @Field("email") String email,
+                                @Field("profile_pic") String profile_pic, @Field("social_type") String social_type,
+                                @Field("social_id") String social_id,@Field("token") String token);
+
+    @FormUrlEncoded
     @POST(Constant.REGISTRATION_API)
     Call<UserDataModal> signUp(@Field("name") String name, @Field("email") String email,
                                @Field("password") String password, @Field("token") String token);
