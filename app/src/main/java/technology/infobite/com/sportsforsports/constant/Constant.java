@@ -5,8 +5,8 @@ public class Constant {
     /*public static final String ImageVideoBaseUrl = "http://codeencrypt.in/sport/";
     public static final String BASE_URL = "http://codeencrypt.in/sport/admin/api/";*/
 
-    public static final String ImageVideoBaseUrl = "https://pinlinx.com/";
-    public static final String BASE_URL = "https://pinlinx.com/admin/api/";
+    public static final String ImageVideoBaseUrl = "http://154.0.163.191/";
+    public static final String BASE_URL = "http://154.0.163.191/admin/api/";
 
     public static final String FB_API = "user_social_login.php";
     public static final String LOGIN_API = "user-login.php";
