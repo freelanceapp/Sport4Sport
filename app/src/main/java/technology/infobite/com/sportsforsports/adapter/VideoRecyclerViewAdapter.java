@@ -571,9 +571,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public int getItemViewType(int position) {
         if (mInfoList.size() == 0) {
             return VIEW_TYPE_EMPTY;
-        } else if (!mInfoList.get(position).getAthleteVideo().isEmpty()) {
+        } else if (mInfoList.get(position).getAthleteVideo() != null && !mInfoList.get(position).getAthleteVideo().isEmpty()) {
             return VIEW_TYPE_VIDEO;
-        } else if (!mInfoList.get(position).getAlhleteImages().isEmpty()) {
+        } else if (mInfoList.get(position).getAlhleteImages() != null && !mInfoList.get(position).getAlhleteImages().isEmpty()) {
             return VIEW_TYPE_IMAGE;
         } else {
             return VIEW_TYPE_TEXT;
