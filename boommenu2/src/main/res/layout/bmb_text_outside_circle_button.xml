@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <technology.infobite.com.boommenu2.boom_menu.BMBShadow
+    <com.infobite.com.boommenu2.boom_menu.BMBShadow
         android:id="@+id/shadow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
 
         </FrameLayout>
 
-    </technology.infobite.com.boommenu2.boom_menu.BMBShadow>
+    </com.infobite.com.boommenu2.boom_menu.BMBShadow>
 
 </FrameLayout>
 

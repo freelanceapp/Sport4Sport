@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="technology.infobite.com.sportsforsports">
+    package="com.pinlinx">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -30,7 +30,7 @@
         tools:targetApi="m">
 
         <activity
-            android:name=".SplashScreen"
+            android:name="com.pinlinx.SplashScreen"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,27 +50,27 @@
         </provider>
 
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name="com.pinlinx.ui.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.activity.RagistrationActivity"
+            android:name="com.pinlinx.ui.activity.RagistrationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.activity.CreateProfileActivity"
+            android:name="com.pinlinx.ui.activity.CreateProfileActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.activity.ForgotPasswordActivity"
+            android:name="com.pinlinx.ui.activity.ForgotPasswordActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.activity.NewPostActivity"
+            android:name="com.pinlinx.ui.activity.NewPostActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.activity.PostDetailActivity"
+            android:name="com.pinlinx.ui.activity.PostDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -79,19 +79,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.GalleryActivity"
+            android:name="com.pinlinx.ui.activity.GalleryActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.activity.HomeActivity"
+            android:name="com.pinlinx.ui.activity.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".ui.activity.UpdateProfileActivity" />
-        <activity android:name=".ui.activity.VideoTrimerActivity" />
-        <activity android:name=".ui.activity.VideoActivity" />
+        <activity android:name="com.pinlinx.ui.activity.UpdateProfileActivity" />
+        <activity android:name="com.pinlinx.ui.activity.VideoTrimerActivity" />
+        <activity android:name="com.pinlinx.ui.activity.VideoActivity" />
         <activity
-            android:name=".ui.activity.UserProfileActivity"
+            android:name="com.pinlinx.ui.activity.UserProfileActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -99,15 +99,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.SearchListActivity" />
-        <activity android:name=".utils.BaseActivity" />
-        <activity android:name=".ui.activity.MyPostDetailActivity" />
-        <activity android:name=".ui.activity.VideoGalleryActivity" />
-        <activity android:name=".ui.activity.LeagueActivity" />
-        <activity android:name=".ui.activity.LeagueFollowingActivity" />
-        <activity android:name=".ui.activity.UserMoreDetailActivity" />
+        <activity android:name="com.pinlinx.ui.activity.SearchListActivity" />
+        <activity android:name="com.pinlinx.utils.BaseActivity" />
+        <activity android:name="com.pinlinx.ui.activity.MyPostDetailActivity" />
+        <activity android:name="com.pinlinx.ui.activity.VideoGalleryActivity" />
+        <activity android:name="com.pinlinx.ui.activity.LeagueActivity" />
+        <activity android:name="com.pinlinx.ui.activity.LeagueFollowingActivity" />
+        <activity android:name="com.pinlinx.ui.activity.UserMoreDetailActivity" />
 
-        <service android:name=".firebase_utils.MyFirebaseMessagingService">
+        <service android:name="com.pinlinx.firebase_utils.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

@@ -2,7 +2,7 @@
 <paths>
     <external-path
         name="my_images"
-        path="Android/data/technology.infobite.com.sportsforsports/files/Pictures" />
+        path="Android/data/com.pinlinx/files/Pictures" />
     <!-- replace com.androidwave.filepicker with your package name -->
 </paths>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<technology.infobite.com.boommenu2.boom_menu.BMBShadow xmlns:android="http://schemas.android.com/apk/res/android"
+<com.infobite.com.boommenu2.boom_menu.BMBShadow xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/shadow"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -12,4 +12,4 @@
 
     </FrameLayout>
 
-</technology.infobite.com.boommenu2.boom_menu.BMBShadow>
+</com.infobite.com.boommenu2.boom_menu.BMBShadow>
