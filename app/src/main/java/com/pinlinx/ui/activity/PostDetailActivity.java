@@ -52,17 +52,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 import com.pinlinx.R;
 import com.pinlinx.adapter.CommentListAdapter;
 import com.pinlinx.constant.Constant;
@@ -76,6 +65,17 @@ import com.pinlinx.utils.Alerts;
 import com.pinlinx.utils.AppPreference;
 import com.pinlinx.utils.BaseActivity;
 import com.pinlinx.utils.exoplayer.VideoPlayerConfig;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -115,6 +115,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private void init() {
         strId = AppPreference.getStringPreference(mContext, Constant.USER_ID);
         mProgressBar = findViewById(R.id.mProgressBar);
+        imageProgress = findViewById(R.id.imageProgress);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         strFrom = getIntent().getStringExtra("get_from");
@@ -261,14 +262,14 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         }
 
         if (newPostModel.getLikes() == null || newPostModel.getLikes().isEmpty()) {
-            tvPostLikeCount.setText("0 like");
+            tvPostLikeCount.setText("0");
         } else {
-            tvPostLikeCount.setText(newPostModel.getLikes() + " like");
+            tvPostLikeCount.setText(newPostModel.getLikes() + "");
         }
         if (newPostModel.getComment() == null || newPostModel.getComment().isEmpty()) {
-            tvCommentCount.setText("0 comment");
+            tvCommentCount.setText("0");
         } else {
-            tvCommentCount.setText(newPostModel.getComment().size() + " comment");
+            tvCommentCount.setText(newPostModel.getComment().size() + "");
         }
         if (newPostModel.getEntryDate() == null || newPostModel.getEntryDate().isEmpty()) {
             tvPostTime.setText("");
@@ -486,7 +487,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                                 imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_icon));
                             }
                             postDetailApi();
-                            textView.setText(jsonObject.getString("total_fan") + " like");
+                            textView.setText(jsonObject.getString("total_fan") + "");
                         } else {
                             Alerts.show(mContext, jsonObject.getString("message"));
                         }

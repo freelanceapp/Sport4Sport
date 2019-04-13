@@ -20,6 +20,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.pinlinx.R;
+import com.pinlinx.constant.Constant;
+import com.pinlinx.retrofit_provider.RetrofitService;
+import com.pinlinx.retrofit_provider.WebResponse;
+import com.pinlinx.utils.Alerts;
+import com.pinlinx.utils.AppProgressDialog;
+import com.pinlinx.utils.BaseActivity;
+import com.pinlinx.utils.GpsTracker;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,14 +41,6 @@ import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import com.pinlinx.R;
-import com.pinlinx.constant.Constant;
-import com.pinlinx.retrofit_provider.RetrofitService;
-import com.pinlinx.retrofit_provider.WebResponse;
-import com.pinlinx.utils.Alerts;
-import com.pinlinx.utils.AppProgressDialog;
-import com.pinlinx.utils.BaseActivity;
-import com.pinlinx.utils.GpsTracker;
 
 public class CreateProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -357,6 +358,7 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
                         try {
                             JSONObject jsonObject = new JSONObject(responseBody.string());
                             //Alerts.show(mContext, jsonObject + "");
+                            
                             Intent intent = new Intent(mContext, HomeActivity.class);
                             intent.putExtra("user_id", strUserId);
                             intent.putExtra("create_profile", true);

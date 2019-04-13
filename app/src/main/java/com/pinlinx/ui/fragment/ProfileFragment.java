@@ -27,6 +27,22 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.pinlinx.R;
+import com.pinlinx.adapter.UserFeedAdapter;
+import com.pinlinx.constant.Constant;
+import com.pinlinx.modal.daily_news_feed.UserFeed;
+import com.pinlinx.modal.user_data.UserDataModal;
+import com.pinlinx.retrofit_provider.RetrofitService;
+import com.pinlinx.retrofit_provider.WebResponse;
+import com.pinlinx.swipe_classes.SwipeLayout;
+import com.pinlinx.ui.activity.LeagueFollowingActivity;
+import com.pinlinx.ui.activity.MyFollowersActivity;
+import com.pinlinx.ui.activity.MyPostDetailActivity;
+import com.pinlinx.ui.activity.UpdateProfileActivity;
+import com.pinlinx.utils.Alerts;
+import com.pinlinx.utils.AppPreference;
+import com.pinlinx.utils.BaseFragment;
+import com.pinlinx.utils.ConnectionDetector;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,21 +60,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import com.pinlinx.R;
-import com.pinlinx.adapter.UserFeedAdapter;
-import com.pinlinx.constant.Constant;
-import com.pinlinx.modal.daily_news_feed.UserFeed;
-import com.pinlinx.modal.user_data.UserDataModal;
-import com.pinlinx.retrofit_provider.RetrofitService;
-import com.pinlinx.retrofit_provider.WebResponse;
-import com.pinlinx.swipe_classes.SwipeLayout;
-import com.pinlinx.ui.activity.LeagueFollowingActivity;
-import com.pinlinx.ui.activity.MyPostDetailActivity;
-import com.pinlinx.ui.activity.UpdateProfileActivity;
-import com.pinlinx.utils.Alerts;
-import com.pinlinx.utils.AppPreference;
-import com.pinlinx.utils.BaseFragment;
-import com.pinlinx.utils.ConnectionDetector;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -107,6 +108,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         rootView.findViewById(R.id.imgEditProfile).setOnClickListener(this);
         rootView.findViewById(R.id.rlUpdateProfile).setOnClickListener(this);
         rootView.findViewById(R.id.llFollowLeague).setOnClickListener(this);
+        rootView.findViewById(R.id.llFollowers).setOnClickListener(this);
 
         imgComment = rootView.findViewById(R.id.imgComment);
         imgCamera = rootView.findViewById(R.id.imgCamera);
@@ -297,6 +299,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 break;
             case R.id.llFollowLeague:
                 startActivity(new Intent(mContext, LeagueFollowingActivity.class));
+                break;
+            case R.id.llFollowers:
+                startActivity(new Intent(mContext, MyFollowersActivity.class));
                 break;
         }
     }

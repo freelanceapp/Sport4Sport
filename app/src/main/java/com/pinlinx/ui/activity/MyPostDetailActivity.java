@@ -266,14 +266,14 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         }
 
         if (newPostModel.getLikes() == null || newPostModel.getLikes().isEmpty()) {
-            tvPostLikeCount.setText("0 like");
+            tvPostLikeCount.setText("0");
         } else {
-            tvPostLikeCount.setText(newPostModel.getLikes() + " like");
+            tvPostLikeCount.setText(newPostModel.getLikes() + "");
         }
         if (newPostModel.getComment() == null || newPostModel.getComment().isEmpty()) {
-            tvCommentCount.setText("0 comment");
+            tvCommentCount.setText("0");
         } else {
-            tvCommentCount.setText(newPostModel.getComment().size() + " comment");
+            tvCommentCount.setText(newPostModel.getComment().size() + "");
         }
         if (newPostModel.getEntryDate() == null || newPostModel.getEntryDate().isEmpty()) {
             tvPostTime.setText("");
@@ -491,7 +491,7 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
                                 imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_icon));
                             }
                             postDetailApi();
-                            textView.setText(jsonObject.getString("total_fan") + " like");
+                            textView.setText(jsonObject.getString("total_fan") + "");
                         } else {
                             Alerts.show(mContext, jsonObject.getString("message"));
                         }

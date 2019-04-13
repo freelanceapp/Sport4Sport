@@ -24,6 +24,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pinlinx.R;
+import com.pinlinx.constant.Constant;
+import com.pinlinx.modal.daily_news_feed.DailyNewsFeedMainModal;
+import com.pinlinx.modal.daily_news_feed.UserFeed;
+import com.pinlinx.retrofit_provider.RetrofitApiClient;
+import com.pinlinx.retrofit_provider.RetrofitService;
+import com.pinlinx.retrofit_provider.WebResponse;
+import com.pinlinx.utils.Alerts;
+import com.pinlinx.utils.AppPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,15 +43,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import com.pinlinx.R;
-import com.pinlinx.constant.Constant;
-import com.pinlinx.modal.daily_news_feed.DailyNewsFeedMainModal;
-import com.pinlinx.modal.daily_news_feed.UserFeed;
-import com.pinlinx.retrofit_provider.RetrofitApiClient;
-import com.pinlinx.retrofit_provider.RetrofitService;
-import com.pinlinx.retrofit_provider.WebResponse;
-import com.pinlinx.utils.Alerts;
-import com.pinlinx.utils.AppPreference;
 
 public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -159,15 +159,15 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
 
                 if (feed.getLikes() == null || feed.getLikes().isEmpty()) {
-                    viewHolder.tvPostLikeCount.setText("0 like");
+                    viewHolder.tvPostLikeCount.setText("0");
                 } else {
-                    viewHolder.tvPostLikeCount.setText(feed.getLikes() + " like");
+                    viewHolder.tvPostLikeCount.setText(feed.getLikes()+"");
                 }
 
                 if (feed.getComment() == null || feed.getComment().isEmpty()) {
-                    viewHolder.tvCommentCount.setText("0 comment");
+                    viewHolder.tvCommentCount.setText("0");
                 } else {
-                    viewHolder.tvCommentCount.setText(feed.getComment().size() + " comment");
+                    viewHolder.tvCommentCount.setText(feed.getComment().size()+"");
                 }
 
                 if (feed.getEntryDate() == null || feed.getEntryDate().isEmpty()) {
@@ -254,15 +254,15 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
 
                 if (imageFeed.getLikes() == null || imageFeed.getLikes().isEmpty()) {
-                    imageViewHolder.tvPostLikeCount.setText("0 like");
+                    imageViewHolder.tvPostLikeCount.setText("0");
                 } else {
-                    imageViewHolder.tvPostLikeCount.setText(imageFeed.getLikes() + " like");
+                    imageViewHolder.tvPostLikeCount.setText(imageFeed.getLikes()+"");
                 }
 
                 if (imageFeed.getComment() == null || imageFeed.getComment().isEmpty()) {
-                    imageViewHolder.tvCommentCount.setText("0 comment");
+                    imageViewHolder.tvCommentCount.setText("0");
                 } else {
-                    imageViewHolder.tvCommentCount.setText(imageFeed.getComment().size() + " comment");
+                    imageViewHolder.tvCommentCount.setText(imageFeed.getComment().size()+"");
                 }
 
                 if (imageFeed.getEntryDate() == null || imageFeed.getEntryDate().isEmpty()) {
@@ -368,15 +368,15 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
 
                 if (videoFeed.getLikes() == null || videoFeed.getLikes().isEmpty()) {
-                    videoViewHolder.tvPostLikeCount.setText("0 like");
+                    videoViewHolder.tvPostLikeCount.setText("0");
                 } else {
-                    videoViewHolder.tvPostLikeCount.setText(videoFeed.getLikes() + " like");
+                    videoViewHolder.tvPostLikeCount.setText(videoFeed.getLikes()+"");
                 }
 
                 if (videoFeed.getComment() == null || videoFeed.getComment().isEmpty()) {
-                    videoViewHolder.tvCommentCount.setText("0 comment");
+                    videoViewHolder.tvCommentCount.setText("0");
                 } else {
-                    videoViewHolder.tvCommentCount.setText(videoFeed.getComment().size() + " comment");
+                    videoViewHolder.tvCommentCount.setText(videoFeed.getComment().size()+"");
                 }
 
                 if (videoFeed.getEntryDate() == null || videoFeed.getEntryDate().isEmpty()) {
@@ -523,7 +523,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                         } else {
                             imgLike.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_heart_icon));
                         }
-                        textView.setText(jsonObject.getString("total_fan") + " like");
+                        textView.setText(jsonObject.getString("total_fan"));
                         refreshTimelineApi(strId);
                     } else {
                         Alerts.show(mContext, jsonObject.getString("message"));

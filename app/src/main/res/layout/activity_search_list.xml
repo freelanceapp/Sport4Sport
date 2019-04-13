@@ -21,6 +21,17 @@
             android:padding="4dp"
             android:src="@drawable/ic_back_arrow"
             android:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="18dp"
+            android:text="Followers"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <android.support.v7.widget.CardView

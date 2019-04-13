@@ -1,5 +1,13 @@
 package com.pinlinx.retrofit_provider;
 
+import com.pinlinx.constant.Constant;
+import com.pinlinx.modal.all_user_list_modal.AllUserMainModal;
+import com.pinlinx.modal.daily_news_feed.DailyNewsFeedMainModal;
+import com.pinlinx.modal.league.LeagueMainModal;
+import com.pinlinx.modal.notification_list_modal.NotificationMainModal;
+import com.pinlinx.modal.post_comment_modal.PostCommentResponseModal;
+import com.pinlinx.modal.user_data.UserDataModal;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -9,13 +17,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import com.pinlinx.constant.Constant;
-import com.pinlinx.modal.all_user_list_modal.AllUserMainModal;
-import com.pinlinx.modal.daily_news_feed.DailyNewsFeedMainModal;
-import com.pinlinx.modal.league.LeagueMainModal;
-import com.pinlinx.modal.notification_list_modal.NotificationMainModal;
-import com.pinlinx.modal.post_comment_modal.PostCommentResponseModal;
-import com.pinlinx.modal.user_data.UserDataModal;
 
 public interface RetrofitApiClient {
 
@@ -28,7 +29,7 @@ public interface RetrofitApiClient {
     @POST(Constant.FB_API)
     Call<UserDataModal> fbLogin(@Field("name") String name, @Field("email") String email,
                                 @Field("profile_pic") String profile_pic, @Field("social_type") String social_type,
-                                @Field("social_id") String social_id,@Field("token") String token);
+                                @Field("social_id") String social_id, @Field("token") String token);
 
     @FormUrlEncoded
     @POST(Constant.REGISTRATION_API)
@@ -80,6 +81,10 @@ public interface RetrofitApiClient {
     @FormUrlEncoded
     @POST(Constant.USER_LIST)
     Call<AllUserMainModal> getAllUserList(@Field("user_id") String useId);
+
+    @FormUrlEncoded
+    @POST(Constant.MY_FANS)
+    Call<AllUserMainModal> myFans(@Field("user_id") String useId);
 
     @FormUrlEncoded
     @POST(Constant.FOLLOW_API)

@@ -88,13 +88,13 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:gravity="center"
                     android:id="@+id/llLikePost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="8dp">
 
@@ -112,16 +112,27 @@
                         android:text="Like"
                         android:textColor="@color/black"
                         android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/tvPostLikeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:text="4.261"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="normal" />
+
                 </LinearLayout>
 
                 <LinearLayout
+                    android:gravity="center"
                     android:id="@+id/llPostComment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="8dp">
 
@@ -139,35 +150,18 @@
                         android:text="Comment"
                         android:textColor="@color/black"
                         android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/tvCommentCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="16dp"
+                        android:text="5000"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="normal" />
+
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp">
-
-                <TextView
-                    android:id="@+id/tvPostLikeCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="4.261 likes"
-                    android:textColor="@color/colorAccent"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/tvCommentCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="16dp"
-                    android:text="5000 comments"
-                    android:textColor="@color/colorAccent"
-                    android:textStyle="normal" />
             </LinearLayout>
 
             <LinearLayout
