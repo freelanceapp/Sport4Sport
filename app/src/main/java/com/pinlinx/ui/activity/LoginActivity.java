@@ -10,6 +10,9 @@ import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -29,15 +32,6 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-
-import retrofit2.Response;
 import com.pinlinx.R;
 import com.pinlinx.constant.Constant;
 import com.pinlinx.modal.user_data.UserDataModal;
@@ -47,6 +41,15 @@ import com.pinlinx.retrofit_provider.WebResponse;
 import com.pinlinx.utils.Alerts;
 import com.pinlinx.utils.AppPreference;
 import com.pinlinx.utils.ConnectionDetector;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -73,6 +76,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void init() {
+        SwitchCompat switchCompat = findViewById(R.id.switchCompat);
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ((EditText) findViewById(R.id.edtPassword)).setTransformationMethod(new HideReturnsTransformationMethod());
+                } else {
+                    ((EditText) findViewById(R.id.edtPassword)).setTransformationMethod(new PasswordTransformationMethod());
+                }
+            }
+        });
+
         Button buttonlogin = findViewById(R.id.btn_login);
         CheckBox checkBoxRemember = findViewById(R.id.checkBoxRemember);
         checkBoxRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -170,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             String socialId = currentProfile.getId();
                             mProfileTracker.stopTracking();
                             //btnFb.setText("Logout from Facebook");
-                            Log.e("facebook_profile_data:-", strName+"-"+socialId+"-"+email);
+                            Log.e("facebook_profile_data:-", strName + "-" + socialId + "-" + email);
                             //Alerts.show(mContext,strName+"-"+socialId+"-"+email);
                             fbLoginApi(strName, email, profile, socialType, socialId);
                         }
@@ -184,7 +199,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     String socialType = "Facebook";
                     String socialId = profile.getId();
                     //Alerts.show(mContext,strName+"-"+socialId+"-"+email);
-                    Log.e("facebook_profile_data:-", strName+"-"+socialId+"-"+email);
+                    Log.e("facebook_profile_data:-", strName + "-" + socialId + "-" + email);
                     fbLoginApi(strName, email, profileImage, socialType, socialId);
                 }
             }

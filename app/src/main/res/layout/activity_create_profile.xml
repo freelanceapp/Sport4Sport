@@ -73,5 +73,6 @@
 
         <include layout="@layout/layout_career" />
 
+
     </ViewFlipper>
 </LinearLayout>

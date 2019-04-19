@@ -1,6 +1,5 @@
 package com.pinlinx.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -51,17 +50,16 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
     private CheckBox checkBoxAthlete;
     private String strIsAthlete = "0";
 
-    private String strUserName = "";
+    private String strUserName = "", strDiscipline = "", strLevel = "";
     private String strUserId = "";
 
-    private Spinner spinnerCountryList, spinnerHeight, spinnerWeight, spinnerYear;
+    private Spinner spinnerCountryList, spinnerHeight, spinnerWeight, spinnerYear, spinnerDiscipline, spinnerLevel;
     private String strCountryName = "", strHeightUnit = "", strWeightUnit = "", strYear = "";
 
     double latitude; // latitude
     double longitude; // longitude
     private Dialog dialog;
 
-    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +162,8 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         spinnerHeight = findViewById(R.id.spinnerHeight);
         spinnerWeight = findViewById(R.id.spinnerWeight);
         spinnerYear = findViewById(R.id.spinnerYear);
+        spinnerDiscipline = findViewById(R.id.spinnerDescipline);
+        spinnerLevel = findViewById(R.id.spinnerLevel);
 
         ArrayAdapter adapterHeight = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.heightUnit);
         adapterHeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -202,6 +202,7 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
             String strYear = String.valueOf(year);
             yearList.add(strYear);
         }
+        yearList.add(0, "Select year");
 
         ArrayAdapter adapterYear = new ArrayAdapter(this, android.R.layout.simple_spinner_item, yearList);
         adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -209,7 +210,43 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                strYear = parent.getItemAtPosition(position).toString();
+                if (position != 0) {
+                    strYear = parent.getItemAtPosition(position).toString();
+                } else {
+                    strYear = "";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        /*Discipline and Level spinner*/
+        ArrayAdapter adapterDiscipline = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, Constant.Discipline);
+        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinnerDiscipline.setAdapter(adapterDiscipline);
+        spinnerDiscipline.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strDiscipline = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ArrayAdapter adapterLevel = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, Constant.Level);
+        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinnerLevel.setAdapter(adapterLevel);
+        spinnerLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strLevel = parent.getItemAtPosition(position).toString();
+                ((TextView) findViewById(R.id.txtLevelTitle)).setText(strLevel);
             }
 
             @Override
@@ -318,7 +355,7 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         String strDateOfBirth = edtBirthday.getText().toString();
         String strMainSport = ((EditText) findViewById(R.id.edtMainSport)).getText().toString();
         String strCoach = ((EditText) findViewById(R.id.edtCoach)).getText().toString();
-        String strClub = ((EditText) findViewById(R.id.edtClub)).getText().toString();
+        String strClub = strLevel + " : " + ((EditText) findViewById(R.id.edtClub)).getText().toString();
         String strBio = ((EditText) findViewById(R.id.edtBio)).getText().toString();
 
         String strNickname = ((EditText) findViewById(R.id.edtNickname)).getText().toString();
@@ -332,7 +369,9 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
 
         strHeight = strHeight + " " + strHeightUnit;
         strWeight = strWeight + " " + strWeightUnit;
-        strCollege = strCollege + " , " + strYear;
+        if (!strYear.isEmpty()) {
+            strCollege = strCollege + " , " + strYear;
+        }
 
         String regex = "(.)*(\\d)(.)*";
         Pattern pattern = Pattern.compile(regex);
@@ -351,14 +390,14 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
             if (cd.isNetworkAvailable()) {
                 RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfile(strUserId, strName, strIsAthlete,
                         strCountryName, strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
-                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity), new WebResponse() {
+                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         ResponseBody responseBody = (ResponseBody) result.body();
                         try {
                             JSONObject jsonObject = new JSONObject(responseBody.string());
                             //Alerts.show(mContext, jsonObject + "");
-                            
+
                             Intent intent = new Intent(mContext, HomeActivity.class);
                             intent.putExtra("user_id", strUserId);
                             intent.putExtra("create_profile", true);

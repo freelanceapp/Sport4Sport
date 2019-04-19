@@ -136,6 +136,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.MyFollowersActivity" />
+        <activity android:name=".ui.activity.TermsPolicyActivity" />
 
     </application>
 

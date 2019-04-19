@@ -29,6 +29,9 @@ public class UserData implements Parcelable {
     @SerializedName("club")
     @Expose
     private String club;
+    @SerializedName("discipline")
+    @Expose
+    private String discipline;
     @SerializedName("coach")
     @Expose
     private String coach;
@@ -122,6 +125,7 @@ public class UserData implements Parcelable {
         this.dob = ((String) in.readValue((String.class.getClassLoader())));
         this.mainSport = ((String) in.readValue((String.class.getClassLoader())));
         this.club = ((String) in.readValue((String.class.getClassLoader())));
+        this.discipline = ((String) in.readValue((String.class.getClassLoader())));
         this.coach = ((String) in.readValue((String.class.getClassLoader())));
         this.bio = ((String) in.readValue((String.class.getClassLoader())));
         this.coverImg = ((String) in.readValue((String.class.getClassLoader())));
@@ -390,6 +394,14 @@ public class UserData implements Parcelable {
         this.city = city;
     }
 
+    public String getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(String discipline) {
+        this.discipline = discipline;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(userId);
         dest.writeValue(userName);
@@ -398,6 +410,7 @@ public class UserData implements Parcelable {
         dest.writeValue(dob);
         dest.writeValue(mainSport);
         dest.writeValue(club);
+        dest.writeValue(discipline);
         dest.writeValue(coach);
         dest.writeValue(bio);
         dest.writeValue(coverImg);

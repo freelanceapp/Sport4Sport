@@ -158,52 +158,65 @@
                             android:orientation="horizontal">
 
                             <LinearLayout
-                                android:layout_width="50dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Born : "
-                                    android:textStyle="normal" />
+                                    android:orientation="horizontal">
 
-                                <TextView
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Born : "
+                                        android:textStyle="normal" />
+
+                                    <TextView
+                                        android:id="@+id/txtDob"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textStyle="normal" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Coach : "
-                                    android:textStyle="normal" />
+                                    android:orientation="horizontal">
 
-                                <TextView
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Coach : "
+                                        android:textStyle="normal" />
+
+                                    <TextView
+                                        android:id="@+id/txtCoachName"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textStyle="normal" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Club : "
-                                    android:textStyle="normal" />
-                            </LinearLayout>
+                                    android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/txtSportClub"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textStyle="normal" />
 
-                                <TextView
-                                    android:id="@+id/txtDob"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textStyle="normal" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textStyle="normal" />
 
-                                <TextView
-                                    android:id="@+id/txtCoachName"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textStyle="normal" />
-
-                                <TextView
-                                    android:id="@+id/txtSportClub"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textStyle="normal" />
+                                </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
 

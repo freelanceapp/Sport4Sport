@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
@@ -15,10 +14,10 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
-
 import com.pinlinx.R;
 import com.pinlinx.retrofit_provider.RetrofitService;
 import com.pinlinx.ui.activity.LoginActivity;
+import com.pinlinx.ui.activity.TermsPolicyActivity;
 import com.pinlinx.utils.AppPreference;
 import com.pinlinx.utils.BaseFragment;
 import com.pinlinx.utils.ConnectionDetector;
@@ -40,12 +39,24 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void init() {
-        ((LinearLayout) rootView.findViewById(R.id.llLogout)).setOnClickListener(this);
+        rootView.findViewById(R.id.llTerms).setOnClickListener(this);
+        rootView.findViewById(R.id.llPrivacy).setOnClickListener(this);
+        rootView.findViewById(R.id.llLogout).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.llTerms:
+                Intent intent = new Intent(mContext, TermsPolicyActivity.class);
+                intent.putExtra("type", "terms");
+                startActivity(intent);
+                break;
+            case R.id.llPrivacy:
+                Intent intentP = new Intent(mContext, TermsPolicyActivity.class);
+                intentP.putExtra("type", "privacy");
+                startActivity(intentP);
+                break;
             case R.id.llLogout:
                 logout();
                 break;

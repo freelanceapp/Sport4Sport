@@ -19,6 +19,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.pinlinx.R;
+import com.pinlinx.constant.Constant;
+import com.pinlinx.modal.user_data.UserDataModal;
+import com.pinlinx.retrofit_provider.RetrofitService;
+import com.pinlinx.retrofit_provider.WebResponse;
+import com.pinlinx.utils.Alerts;
+import com.pinlinx.utils.AppPreference;
+import com.pinlinx.utils.AppProgressDialog;
+import com.pinlinx.utils.BaseActivity;
+import com.pinlinx.utils.GpsTracker;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,20 +42,11 @@ import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import com.pinlinx.R;
-import com.pinlinx.constant.Constant;
-import com.pinlinx.modal.user_data.UserDataModal;
-import com.pinlinx.retrofit_provider.RetrofitService;
-import com.pinlinx.retrofit_provider.WebResponse;
-import com.pinlinx.utils.Alerts;
-import com.pinlinx.utils.AppPreference;
-import com.pinlinx.utils.AppProgressDialog;
-import com.pinlinx.utils.BaseActivity;
-import com.pinlinx.utils.GpsTracker;
 
 public class UpdateProfileActivity extends BaseActivity implements View.OnClickListener {
 
     private UserDataModal userDataModal;
+    private String[] splitClub;
 
     private int mYear = 0, mMonth = 0, mDay = 0;
     private String strDob = "";
@@ -53,10 +55,10 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
     private CheckBox checkBoxAthlete;
     private String strIsAthlete = "0";
 
-    private String strUserName = "";
+    private String strUserName = "", strDiscipline = "", strLevel = "";
     private String strUserId = "";
 
-    private Spinner spinnerCountryList, spinnerHeight, spinnerWeight, spinnerYear;
+    private Spinner spinnerCountryList, spinnerHeight, spinnerWeight, spinnerYear, spinnerDiscipline, spinnerLevel;
     private String strCountryName = "", strHeightUnit = "", strWeightUnit = "", strYear = "";
     double latitude; // latitude
     double longitude; // longitude
@@ -69,9 +71,9 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         mContext = this;
         dialog = new Dialog(mContext);
 
+        getIntentData();
         init();
         getLatLong();
-        getIntentData();
     }
 
     private void getLatLong() {
@@ -88,11 +90,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses.size() > 0) {
                 AppProgressDialog.hide(dialog);
-                //address_et.setText(addresses.get(0).getAddressLine(0));
                 ((EditText) findViewById(R.id.edtCity)).setText(addresses.get(0).getLocality());
-                //((EditText) findViewById(R.id.edtState)).setText(addresses.get(0).getAdminArea());
-                //country_et.setText(addresses.get(0).getCountryName());
-                //zipcode_et.setText(addresses.get(0).getPostalCode());
             } else {
                 AppProgressDialog.show(dialog);
                 new Handler().postDelayed(new Runnable() {
@@ -122,7 +120,6 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         ((TextView) findViewById(R.id.txtCountryName)).setText(strCountryName);
         ((EditText) findViewById(R.id.edtMainSport)).setText(userDataModal.getUser().getMainSport());
         ((EditText) findViewById(R.id.edtCoach)).setText(userDataModal.getUser().getCoach());
-        ((EditText) findViewById(R.id.edtClub)).setText(userDataModal.getUser().getClub());
         ((EditText) findViewById(R.id.edtBio)).setText(userDataModal.getUser().getBio());
 
         ((EditText) findViewById(R.id.edtCity)).setText(userDataModal.getUser().getCity());
@@ -133,6 +130,15 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         ((EditText) findViewById(R.id.edtRituals)).setText(userDataModal.getUser().getPreGameRituals());
         ((EditText) findViewById(R.id.edtOtherSport)).setText(userDataModal.getUser().getCollege());
         ((EditText) findViewById(R.id.edtCollege)).setText(userDataModal.getUser().getOtherSport());
+
+        strDiscipline = userDataModal.getUser().getDiscipline();
+        String strClub = userDataModal.getUser().getClub();
+        splitClub = strClub.split(":");
+        if (splitClub.length == 2) {
+            ((EditText) findViewById(R.id.edtClub)).setText(splitClub[1]);
+        } else if (splitClub.length == 1) {
+            ((EditText) findViewById(R.id.edtClub)).setText(splitClub[0]);
+        }
     }
 
     private void init() {
@@ -185,6 +191,8 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         spinnerHeight = findViewById(R.id.spinnerHeight);
         spinnerWeight = findViewById(R.id.spinnerWeight);
         spinnerYear = findViewById(R.id.spinnerYear);
+        spinnerDiscipline = findViewById(R.id.spinnerDescipline);
+        spinnerLevel = findViewById(R.id.spinnerLevel);
 
         ArrayAdapter adapterHeight = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.heightUnit);
         adapterHeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -223,6 +231,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
             String strYear = String.valueOf(year);
             yearList.add(strYear);
         }
+        yearList.add(0, "Select year");
 
         ArrayAdapter adapterYear = new ArrayAdapter(this, android.R.layout.simple_spinner_item, yearList);
         adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -230,7 +239,57 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                strYear = parent.getItemAtPosition(position).toString();
+                if (position != 0) {
+                    strYear = parent.getItemAtPosition(position).toString();
+                } else {
+                    strYear = "";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        /*Discipline and Level spinner*/
+        ArrayAdapter adapterDiscipline = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, Constant.Discipline);
+        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinnerDiscipline.setAdapter(adapterDiscipline);
+        for (int i = 0; i < Constant.Discipline.length; i++) {
+            if (strDiscipline.equals(Constant.Discipline[i])) {
+                spinnerDiscipline.setSelection(i);
+            }
+        }
+        adapterDiscipline.notifyDataSetChanged();
+        spinnerDiscipline.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strDiscipline = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ArrayAdapter adapterLevel = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, Constant.Level);
+        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinnerLevel.setAdapter(adapterLevel);
+        for (int i = 0; i < Constant.Level.length; i++) {
+            String clubType = splitClub[0];
+            clubType = clubType.replace(" ", "");
+            if (clubType.equals(Constant.Level[i])) {
+                spinnerLevel.setSelection(i);
+            }
+        }
+        adapterLevel.notifyDataSetChanged();
+        spinnerLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strLevel = parent.getItemAtPosition(position).toString();
+                ((TextView) findViewById(R.id.txtLevelTitle)).setText(strLevel);
             }
 
             @Override
@@ -326,7 +385,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         String strDateOfBirth = edtBirthday.getText().toString();
         String strMainSport = ((EditText) findViewById(R.id.edtMainSport)).getText().toString();
         String strCoach = ((EditText) findViewById(R.id.edtCoach)).getText().toString();
-        String strClub = ((EditText) findViewById(R.id.edtClub)).getText().toString();
+        String strClub = strLevel + " : " + ((EditText) findViewById(R.id.edtClub)).getText().toString();
         String strBio = ((EditText) findViewById(R.id.edtBio)).getText().toString();
 
         String strNickname = ((EditText) findViewById(R.id.edtNickname)).getText().toString();
@@ -341,12 +400,13 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
 
         strHeight = strHeight + " " + strHeightUnit;
         strWeight = strWeight + " " + strWeightUnit;
-        strCollege = strCollege + " , " + strYear;
+        if (!strYear.isEmpty()) {
+            strCollege = strCollege + " , " + strYear;
+        }
 
         String regex = "(.)*(\\d)(.)*";
         Pattern pattern = Pattern.compile(regex);
-        String msg = strMainSport;
-        boolean containsNumber = pattern.matcher(msg).matches();
+        boolean containsNumber = pattern.matcher(strMainSport).matches();
 
         if (strCountryName.equals("Select country")) {
             Alerts.show(mContext, "Please select country");
@@ -358,7 +418,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
             if (cd.isNetworkAvailable()) {
                 RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfile(strUserId, strName, strIsAthlete,
                         strCountry, strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
-                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity), new WebResponse() {
+                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         ResponseBody responseBody = (ResponseBody) result.body();

@@ -5,8 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import retrofit2.Response;
@@ -37,6 +41,18 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
         retrofitApiClient = RetrofitService.getRetrofit();
         buttonregester = findViewById(R.id.btn_register);
         buttonregester.setOnClickListener(this);
+
+        SwitchCompat switchCompat = findViewById(R.id.switchCompat);
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ((EditText) findViewById(R.id.edtPassword)).setTransformationMethod(new HideReturnsTransformationMethod());
+                } else {
+                    ((EditText) findViewById(R.id.edtPassword)).setTransformationMethod(new PasswordTransformationMethod());
+                }
+            }
+        });
     }
 
     @Override
