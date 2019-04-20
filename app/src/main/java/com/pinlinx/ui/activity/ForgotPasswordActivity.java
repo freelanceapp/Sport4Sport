@@ -2,8 +2,12 @@ package com.pinlinx.ui.activity;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import org.json.JSONException;
@@ -32,6 +36,20 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
     }
 
     private void init() {
+        SwitchCompat switchCompat = findViewById(R.id.switchCompat);
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ((EditText) findViewById(R.id.edtNewPassword)).setTransformationMethod(new HideReturnsTransformationMethod());
+                    ((EditText) findViewById(R.id.edtConfirmPassword)).setTransformationMethod(new HideReturnsTransformationMethod());
+                } else {
+                    ((EditText) findViewById(R.id.edtNewPassword)).setTransformationMethod(new PasswordTransformationMethod());
+                    ((EditText) findViewById(R.id.edtConfirmPassword)).setTransformationMethod(new PasswordTransformationMethod());
+                }
+            }
+        });
+
         findViewById(R.id.btnSubmit).setOnClickListener(this);
         findViewById(R.id.imgBack).setOnClickListener(this);
     }

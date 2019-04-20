@@ -270,7 +270,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void loginApi() {
-        String strEmail = ((EditText) findViewById(R.id.edtEmail)).getText().toString();
+        final String strEmail = ((EditText) findViewById(R.id.edtEmail)).getText().toString();
         String strPassword = ((EditText) findViewById(R.id.edtPassword)).getText().toString();
         String strToken = AppPreference.getStringPreference(mContext, Constant.TOKEN);
 
@@ -303,7 +303,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 finish();
                             }
                         } else {
-                            Alerts.show(mContext, responseBody.getMessage());
+                            if (responseBody.getMessage().equalsIgnoreCase("User is Not Verified, Please Verify your Email Address")) {
+                                Alerts.show(mContext, responseBody.getMessage());
+                                Intent intent = new Intent(mContext, EmailVerificationActivity.class);
+                                intent.putExtra("email", strEmail);
+                                startActivity(intent);
+                            } else {
+                                Alerts.show(mContext, responseBody.getMessage());
+                            }
                         }
                     }
 

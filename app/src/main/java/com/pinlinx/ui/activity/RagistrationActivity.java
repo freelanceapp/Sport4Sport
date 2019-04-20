@@ -62,7 +62,7 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
 
     private void signUpApi() {
         String strname = ((EditText) findViewById(R.id.edtName)).getText().toString();
-        String strEmail = ((EditText) findViewById(R.id.edtEmail)).getText().toString();
+        final String strEmail = ((EditText) findViewById(R.id.edtEmail)).getText().toString();
         String strPassword = ((EditText) findViewById(R.id.edtPassword)).getText().toString();
         String strToken = AppPreference.getStringPreference(mContext, Constant.TOKEN);
 
@@ -96,6 +96,14 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
                             startActivity(intent);
                             finish();
                         } else {
+                            if (responseBody.getMessage().equalsIgnoreCase("User is Not Verified, Please Verify your Email Address")) {
+                                Alerts.show(mContext, responseBody.getMessage());
+                                Intent intent = new Intent(mContext, EmailVerificationActivity.class);
+                                intent.putExtra("email", strEmail);
+                                startActivity(intent);
+                            } else {
+                                Alerts.show(mContext, responseBody.getMessage());
+                            }
                             Alerts.show(mContext, responseBody.getMessage());
                         }
                     }

@@ -133,6 +133,10 @@ public interface RetrofitApiClient {
     Call<ResponseBody> emailVerify(@Field("email") String email, @Field("otp") String otp);
 
     @FormUrlEncoded
+    @POST(Constant.VERIFY_EMAIL)
+    Call<ResponseBody> emailVerification(@Field("email") String email, @Field("otp") String otp);
+
+    @FormUrlEncoded
     @POST(Constant.NEW_PASSWORD)
     Call<ResponseBody> newPassword(@Field("email") String email, @Field("password") String password);
 }

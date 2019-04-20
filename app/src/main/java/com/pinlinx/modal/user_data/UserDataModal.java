@@ -1,15 +1,14 @@
 package com.pinlinx.modal.user_data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import com.pinlinx.modal.daily_news_feed.UserFeed;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDataModal implements Parcelable {
 
@@ -19,6 +18,9 @@ public class UserDataModal implements Parcelable {
     @SerializedName("message")
     @Expose
     private String message;
+    @SerializedName("email_status")
+    @Expose
+    private boolean email_status;
     @SerializedName("user")
     @Expose
     private UserData user;
@@ -46,6 +48,7 @@ public class UserDataModal implements Parcelable {
 
     protected UserDataModal(Parcel in) {
         this.error = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
+        this.email_status = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.message = ((String) in.readValue((String.class.getClassLoader())));
         this.user = ((UserData) in.readValue((UserData.class.getClassLoader())));
         in.readList(this.feed, (UserFeed.class.getClassLoader()));
@@ -95,8 +98,17 @@ public class UserDataModal implements Parcelable {
         this.fan = fan;
     }
 
+    public boolean isEmail_status() {
+        return email_status;
+    }
+
+    public void setEmail_status(boolean email_status) {
+        this.email_status = email_status;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(error);
+        dest.writeValue(email_status);
         dest.writeValue(message);
         dest.writeValue(user);
         dest.writeList(feed);

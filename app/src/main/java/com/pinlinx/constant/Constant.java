@@ -32,6 +32,7 @@ public class Constant {
 
     public static final String EMAIL_OTP = "user-resend-otp.php";
     public static final String VERIFY_OTP = "otp_match.php";
+    public static final String VERIFY_EMAIL = "email_verify.php";
     public static final String NEW_PASSWORD = "change_password.php";
 
     /* Fragment tag */
