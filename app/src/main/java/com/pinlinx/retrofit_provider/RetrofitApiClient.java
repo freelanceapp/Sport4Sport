@@ -46,7 +46,8 @@ public interface RetrofitApiClient {
                                      @Field("height") String height, @Field("weight") String weight,
                                      @Field("position") String position, @Field("pre_game_rituals") String pre_game_rituals,
                                      @Field("college") String college, @Field("other_sport") String other_sport,
-                                     @Field("city") String city, @Field("discipline") String discipline);
+                                     @Field("city") String city, @Field("discipline") String discipline,
+                                     @Field("gender") String gender);
 
     @Multipart
     @POST(Constant.UPDATE_PROFILE_IMAGE)

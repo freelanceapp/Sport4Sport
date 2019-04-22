@@ -14,7 +14,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -59,6 +60,9 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
     double latitude; // latitude
     double longitude; // longitude
     private Dialog dialog;
+
+    private RadioGroup rgGender;
+    private RadioButton rbGender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +118,8 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
     }
 
     private void init() {
+        rgGender = findViewById(R.id.rgGender);
+
         spinnerCountryList = findViewById(R.id.spinnerCountryList);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.countries);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -335,7 +341,7 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
             Alerts.show(mContext, "Please enter city");
         } else {
             // Animation in = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
-            ((LinearLayout) findViewById(R.id.llCreateProfile)).setBackground(
+            findViewById(R.id.llCreateProfile).setBackground(
                     getResources().getDrawable(R.drawable.textview_back_a));
             // viewFlipper.setAnimation(in);
             viewFlipper.showNext();
@@ -344,7 +350,7 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
 
     private void clickBack() {
         // Animation out = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
-        ((LinearLayout) findViewById(R.id.llCreateProfile)).setBackground(
+        findViewById(R.id.llCreateProfile).setBackground(
                 getResources().getDrawable(R.drawable.layout_back_a));
         //viewFlipper.setAnimation(out);
         viewFlipper.showPrevious();
@@ -366,6 +372,10 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         String strCollege = ((EditText) findViewById(R.id.edtCollege)).getText().toString();
         String strOtherSport = ((EditText) findViewById(R.id.edtOtherSport)).getText().toString();
         String strCity = ((EditText) findViewById(R.id.edtCity)).getText().toString();
+
+        int selectedId = rgGender.getCheckedRadioButtonId();
+        rbGender = findViewById(selectedId);
+        String strGender = rbGender.getText().toString();
 
         strHeight = strHeight + " " + strHeightUnit;
         strWeight = strWeight + " " + strWeightUnit;
@@ -390,7 +400,7 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
             if (cd.isNetworkAvailable()) {
                 RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfile(strUserId, strName, strIsAthlete,
                         strCountryName, strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
-                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline), new WebResponse() {
+                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline, strGender), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         ResponseBody responseBody = (ResponseBody) result.body();

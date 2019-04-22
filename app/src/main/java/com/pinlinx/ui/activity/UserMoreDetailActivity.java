@@ -40,6 +40,7 @@ public class UserMoreDetailActivity extends BaseActivity implements View.OnClick
             return;
         userData = getIntent().getParcelableExtra("user_detail");
 
+        ((EditText) findViewById(R.id.edtGender)).setText(userData.getGender());
         ((EditText) findViewById(R.id.edtName)).setText(userData.getUserName());
         ((EditText) findViewById(R.id.edtBirthday)).setText(userData.getDob());
         ((EditText) findViewById(R.id.edtCity)).setText(userData.getCity());

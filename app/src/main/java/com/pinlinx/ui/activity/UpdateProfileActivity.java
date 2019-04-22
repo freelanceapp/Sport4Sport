@@ -15,6 +15,8 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -63,6 +65,9 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
     double latitude; // latitude
     double longitude; // longitude
     private Dialog dialog;
+
+    private RadioGroup rgGender;
+    private RadioButton rbGender, rbMale, rbFemale, rbOther;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +147,26 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
     }
 
     private void init() {
+        rgGender = findViewById(R.id.rgGender);
+        rbMale = findViewById(R.id.rbMale);
+        rbFemale = findViewById(R.id.rbFemale);
+        rbOther = findViewById(R.id.rbOther);
+
+        String strGender = userDataModal.getUser().getGender();
+        if (strGender.equalsIgnoreCase("Male")) {
+            rbMale.setChecked(true);
+            rbFemale.setChecked(false);
+            rbOther.setChecked(false);
+        } else if (strGender.equalsIgnoreCase("Female")) {
+            rbMale.setChecked(false);
+            rbFemale.setChecked(true);
+            rbOther.setChecked(false);
+        } else if (strGender.equalsIgnoreCase("Other")) {
+            rbMale.setChecked(false);
+            rbFemale.setChecked(false);
+            rbOther.setChecked(true);
+        }
+
         spinnerCountryList = findViewById(R.id.spinnerCountryList);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.countries);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -398,6 +423,10 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         String strCity = ((EditText) findViewById(R.id.edtCity)).getText().toString();
         String strCountry = ((TextView) findViewById(R.id.txtCountryName)).getText().toString();
 
+        int selectedId = rgGender.getCheckedRadioButtonId();
+        rbGender = findViewById(selectedId);
+        String strGender = rbGender.getText().toString();
+
         strHeight = strHeight + " " + strHeightUnit;
         strWeight = strWeight + " " + strWeightUnit;
         if (!strYear.isEmpty()) {
@@ -418,7 +447,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
             if (cd.isNetworkAvailable()) {
                 RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfile(strUserId, strName, strIsAthlete,
                         strCountry, strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
-                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline), new WebResponse() {
+                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline, strGender), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         ResponseBody responseBody = (ResponseBody) result.body();

@@ -179,6 +179,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             /*********************************/
                             String strName = currentProfile.getFirstName();
+                            String strGender = currentProfile.getFirstName();
                             Uri uri = currentProfile.getProfilePictureUri(150, 150);
                             String profile = uri.toString();
                             String socialType = "Facebook";
@@ -206,7 +207,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onCancel() {
-                Alerts.show(mContext, "Cancle");
+                Alerts.show(mContext, "Cancel");
             }
 
             @Override

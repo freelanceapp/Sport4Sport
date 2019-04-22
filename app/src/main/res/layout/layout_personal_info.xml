@@ -160,6 +160,49 @@
                     android:backgroundTint="@color/white" />
             </RelativeLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Gender"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="normal" />
+
+            <RadioGroup
+                android:id="@+id/rgGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Male"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <RadioButton
+                    android:id="@+id/rbFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:text="Female"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <RadioButton
+                    android:id="@+id/rbOther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:text="Other"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+            </RadioGroup>
+
             <CheckBox
                 android:id="@+id/checkBoxAthlete"
                 android:layout_width="match_parent"
