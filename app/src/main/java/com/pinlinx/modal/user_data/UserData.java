@@ -104,6 +104,18 @@ public class UserData implements Parcelable {
     @SerializedName("city")
     @Expose
     private String city;
+    @SerializedName("surname")
+    @Expose
+    private String surname;
+    @SerializedName("profession")
+    @Expose
+    private String profession;
+    @SerializedName("contact")
+    @Expose
+    private String contact;
+    @SerializedName("insurance")
+    @Expose
+    private String insurance;
     public final static Parcelable.Creator<UserData> CREATOR = new Creator<UserData>() {
 
 
@@ -121,6 +133,10 @@ public class UserData implements Parcelable {
     };
 
     protected UserData(Parcel in) {
+        this.surname = ((String) in.readValue((String.class.getClassLoader())));
+        this.profession = ((String) in.readValue((String.class.getClassLoader())));
+        this.contact = ((String) in.readValue((String.class.getClassLoader())));
+        this.insurance = ((String) in.readValue((String.class.getClassLoader())));
         this.userId = ((String) in.readValue((String.class.getClassLoader())));
         this.userName = ((String) in.readValue((String.class.getClassLoader())));
         this.email = ((String) in.readValue((String.class.getClassLoader())));
@@ -414,6 +430,38 @@ public class UserData implements Parcelable {
         this.gender = gender;
     }
 
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getInsurance() {
+        return insurance;
+    }
+
+    public void setInsurance(String insurance) {
+        this.insurance = insurance;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(userId);
         dest.writeValue(userName);
@@ -447,6 +495,10 @@ public class UserData implements Parcelable {
         dest.writeValue(otherSport);
         dest.writeValue(college);
         dest.writeValue(city);
+        dest.writeValue(surname);
+        dest.writeValue(profession);
+        dest.writeValue(contact);
+        dest.writeValue(insurance);
     }
 
     public int describeContents() {

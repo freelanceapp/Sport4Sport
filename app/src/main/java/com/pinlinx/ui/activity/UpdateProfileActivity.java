@@ -127,6 +127,11 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         ((EditText) findViewById(R.id.edtCoach)).setText(userDataModal.getUser().getCoach());
         ((EditText) findViewById(R.id.edtBio)).setText(userDataModal.getUser().getBio());
 
+        ((EditText) findViewById(R.id.edtSurname)).setText(userDataModal.getUser().getSurname());
+        ((EditText) findViewById(R.id.edtProfession)).setText(userDataModal.getUser().getProfession());
+        ((EditText) findViewById(R.id.edtMobile)).setText(userDataModal.getUser().getContact());
+        ((EditText) findViewById(R.id.edtHealthInsurance)).setText(userDataModal.getUser().getInsurance());
+
         ((EditText) findViewById(R.id.edtCity)).setText(userDataModal.getUser().getCity());
         ((EditText) findViewById(R.id.edtNickname)).setText(userDataModal.getUser().getNickname());
         ((EditText) findViewById(R.id.edtHeight)).setText(userDataModal.getUser().getHeight());
@@ -168,8 +173,8 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         }
 
         spinnerCountryList = findViewById(R.id.spinnerCountryList);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.countries);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinner_layout, Constant.countries);
+        adapter.setDropDownViewResource(R.layout.spinner_layout);
         spinnerCountryList.setAdapter(adapter);
         spinnerCountryList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -219,8 +224,8 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         spinnerDiscipline = findViewById(R.id.spinnerDescipline);
         spinnerLevel = findViewById(R.id.spinnerLevel);
 
-        ArrayAdapter adapterHeight = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.heightUnit);
-        adapterHeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapterHeight = new ArrayAdapter(this, R.layout.spinner_layout, Constant.heightUnit);
+        adapterHeight.setDropDownViewResource(R.layout.spinner_layout);
         spinnerHeight.setAdapter(adapterHeight);
         spinnerHeight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -234,8 +239,8 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        ArrayAdapter adapterWeight = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.weightUnit);
-        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapterWeight = new ArrayAdapter(this, R.layout.spinner_layout, Constant.weightUnit);
+        adapterWeight.setDropDownViewResource(R.layout.spinner_layout);
         spinnerWeight.setAdapter(adapterWeight);
         spinnerWeight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -249,17 +254,18 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        List<String> yearList = new ArrayList<>();
+        ArrayList<String> yearList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             int year = 1930;
             year = year + i;
             String strYear = String.valueOf(year);
             yearList.add(strYear);
         }
+
         yearList.add(0, "Select year");
 
-        ArrayAdapter adapterYear = new ArrayAdapter(this, android.R.layout.simple_spinner_item, yearList);
-        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapterYear = new ArrayAdapter(this, R.layout.spinner_layout, yearList);
+        adapterWeight.setDropDownViewResource(R.layout.spinner_layout);
         spinnerYear.setAdapter(adapterYear);
         spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -278,8 +284,8 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         });
 
         /*Discipline and Level spinner*/
-        ArrayAdapter adapterDiscipline = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, Constant.Discipline);
-        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapterDiscipline = new ArrayAdapter(mContext, R.layout.spinner_layout, Constant.Discipline);
+        adapterWeight.setDropDownViewResource(R.layout.spinner_layout);
         spinnerDiscipline.setAdapter(adapterDiscipline);
         for (int i = 0; i < Constant.Discipline.length; i++) {
             if (strDiscipline.equals(Constant.Discipline[i])) {
@@ -299,8 +305,8 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        ArrayAdapter adapterLevel = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, Constant.Level);
-        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapterLevel = new ArrayAdapter(mContext, R.layout.spinner_layout, Constant.Level);
+        adapterWeight.setDropDownViewResource(R.layout.spinner_layout);
         spinnerLevel.setAdapter(adapterLevel);
         for (int i = 0; i < Constant.Level.length; i++) {
             String clubType = splitClub[0];
@@ -406,12 +412,18 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
     }
 
     private void clickContinueB() {
+
         String strName = ((EditText) findViewById(R.id.edtName)).getText().toString();
         String strDateOfBirth = edtBirthday.getText().toString();
         String strMainSport = ((EditText) findViewById(R.id.edtMainSport)).getText().toString();
         String strCoach = ((EditText) findViewById(R.id.edtCoach)).getText().toString();
         String strClub = strLevel + " : " + ((EditText) findViewById(R.id.edtClub)).getText().toString();
         String strBio = ((EditText) findViewById(R.id.edtBio)).getText().toString();
+
+        String strSurname = ((EditText) findViewById(R.id.edtSurname)).getText().toString();
+        String strProfession = ((EditText) findViewById(R.id.edtProfession)).getText().toString();
+        String strContact = ((EditText) findViewById(R.id.edtMobile)).getText().toString();
+        String strInsurance = ((EditText) findViewById(R.id.edtHealthInsurance)).getText().toString();
 
         String strNickname = ((EditText) findViewById(R.id.edtNickname)).getText().toString();
         String strHeight = ((EditText) findViewById(R.id.edtHeight)).getText().toString();
@@ -439,6 +451,10 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
 
         if (strCountryName.equals("Select country")) {
             Alerts.show(mContext, "Please select country");
+        } else if (strSurname.isEmpty()) {
+            Alerts.show(mContext, "Enter surname");
+        } else if (strProfession.isEmpty()) {
+            Alerts.show(mContext, "Enter profession");
         } else if (containsNumber) {
             Alerts.show(mContext, "Main sport contains only alphabets");
         } else if (strCountry.isEmpty()) {
@@ -447,7 +463,8 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
             if (cd.isNetworkAvailable()) {
                 RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfile(strUserId, strName, strIsAthlete,
                         strCountry, strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
-                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline, strGender), new WebResponse() {
+                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline, strGender,
+                        strSurname, strProfession, strContact, strInsurance), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         ResponseBody responseBody = (ResponseBody) result.body();

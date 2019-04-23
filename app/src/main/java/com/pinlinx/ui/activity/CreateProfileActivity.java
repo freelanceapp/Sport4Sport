@@ -121,8 +121,8 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         rgGender = findViewById(R.id.rgGender);
 
         spinnerCountryList = findViewById(R.id.spinnerCountryList);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.countries);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinner_layout, Constant.countries);
+        adapter.setDropDownViewResource(R.layout.spinner_layout);
         spinnerCountryList.setAdapter(adapter);
         spinnerCountryList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -171,8 +171,8 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         spinnerDiscipline = findViewById(R.id.spinnerDescipline);
         spinnerLevel = findViewById(R.id.spinnerLevel);
 
-        ArrayAdapter adapterHeight = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.heightUnit);
-        adapterHeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapterHeight = new ArrayAdapter(this, R.layout.spinner_layout, Constant.heightUnit);
+        adapterHeight.setDropDownViewResource(R.layout.spinner_layout);
         spinnerHeight.setAdapter(adapterHeight);
         spinnerHeight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -186,8 +186,8 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        ArrayAdapter adapterWeight = new ArrayAdapter(this, android.R.layout.simple_spinner_item, Constant.weightUnit);
-        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapterWeight = new ArrayAdapter(this, R.layout.spinner_layout, Constant.weightUnit);
+        adapterWeight.setDropDownViewResource(R.layout.spinner_layout);
         spinnerWeight.setAdapter(adapterWeight);
         spinnerWeight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -201,17 +201,18 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        List<String> yearList = new ArrayList<>();
+        ArrayList<String> yearList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             int year = 1930;
             year = year + i;
             String strYear = String.valueOf(year);
             yearList.add(strYear);
         }
+
         yearList.add(0, "Select year");
 
-        ArrayAdapter adapterYear = new ArrayAdapter(this, android.R.layout.simple_spinner_item, yearList);
-        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapterYear = new ArrayAdapter(this, R.layout.spinner_layout, yearList);
+        adapterWeight.setDropDownViewResource(R.layout.spinner_layout);
         spinnerYear.setAdapter(adapterYear);
         spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -230,8 +231,8 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         });
 
         /*Discipline and Level spinner*/
-        ArrayAdapter adapterDiscipline = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, Constant.Discipline);
-        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapterDiscipline = new ArrayAdapter(mContext, R.layout.spinner_layout, Constant.Discipline);
+        adapterWeight.setDropDownViewResource(R.layout.spinner_layout);
         spinnerDiscipline.setAdapter(adapterDiscipline);
         spinnerDiscipline.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -245,8 +246,8 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        ArrayAdapter adapterLevel = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, Constant.Level);
-        adapterWeight.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter adapterLevel = new ArrayAdapter(mContext, R.layout.spinner_layout, Constant.Level);
+        adapterWeight.setDropDownViewResource(R.layout.spinner_layout);
         spinnerLevel.setAdapter(adapterLevel);
         spinnerLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -364,6 +365,11 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
         String strClub = strLevel + " : " + ((EditText) findViewById(R.id.edtClub)).getText().toString();
         String strBio = ((EditText) findViewById(R.id.edtBio)).getText().toString();
 
+        String strSurname = ((EditText) findViewById(R.id.edtSurname)).getText().toString();
+        String strProfession = ((EditText) findViewById(R.id.edtProfession)).getText().toString();
+        String strContact = ((EditText) findViewById(R.id.edtMobile)).getText().toString();
+        String strInsurance = ((EditText) findViewById(R.id.edtHealthInsurance)).getText().toString();
+
         String strNickname = ((EditText) findViewById(R.id.edtNickname)).getText().toString();
         String strHeight = ((EditText) findViewById(R.id.edtHeight)).getText().toString();
         String strWeight = ((EditText) findViewById(R.id.edtWeight)).getText().toString();
@@ -390,6 +396,10 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
 
         if (strCountryName.equals("Select country")) {
             Alerts.show(mContext, "Please select country");
+        } else if (strSurname.isEmpty()) {
+            Alerts.show(mContext, "Enter surname");
+        } else if (strProfession.isEmpty()) {
+            Alerts.show(mContext, "Enter profession");
         } else if (containsNumber) {
             Alerts.show(mContext, "Main Sport contains only alphabets");
         } else if (strNickname.isEmpty()) {
@@ -400,19 +410,22 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
             if (cd.isNetworkAvailable()) {
                 RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfile(strUserId, strName, strIsAthlete,
                         strCountryName, strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
-                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline, strGender), new WebResponse() {
+                        strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline, strGender,
+                        strSurname, strProfession, strContact, strInsurance), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         ResponseBody responseBody = (ResponseBody) result.body();
                         try {
                             JSONObject jsonObject = new JSONObject(responseBody.string());
-                            //Alerts.show(mContext, jsonObject + "");
-
-                            Intent intent = new Intent(mContext, HomeActivity.class);
-                            intent.putExtra("user_id", strUserId);
-                            intent.putExtra("create_profile", true);
-                            startActivity(intent);
-                            finish();
+                            if (!jsonObject.getBoolean("error")) {
+                                Intent intent = new Intent(mContext, HomeActivity.class);
+                                intent.putExtra("user_id", strUserId);
+                                intent.putExtra("create_profile", true);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Alerts.show(mContext, jsonObject.getString("message"));
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (IOException e) {

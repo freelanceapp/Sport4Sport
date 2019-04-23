@@ -93,7 +93,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:backgroundTint="@color/white" />
+                    android:backgroundTint="@color/white"
+                    android:popupBackground="@color/colorPrimary" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -135,7 +136,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:backgroundTint="@color/white" />
+                    android:backgroundTint="@color/white"
+                    android:popupBackground="@color/colorPrimary" />
             </RelativeLayout>
 
             <LinearLayout
@@ -191,7 +193,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/txtDiscipline"
-                    android:backgroundTint="@color/white" />
+                    android:backgroundTint="@color/white"
+                    android:popupBackground="@color/colorPrimary" />
 
                 <View
                     android:layout_width="wrap_content"
@@ -225,7 +228,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/txtLevel"
-                    android:backgroundTint="@color/white" />
+                    android:backgroundTint="@color/white"
+                    android:popupBackground="@color/colorPrimary" />
 
                 <View
                     android:layout_width="wrap_content"
@@ -409,8 +413,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:background="@color/transparent"
-                        android:hint="ex:- B.Tech , RGPV"
+                        android:backgroundTint="@color/white"
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         android:maxLines="1"
@@ -421,13 +424,28 @@
                         android:textStyle="normal" />
                 </LinearLayout>
 
-                <Spinner
-                    android:id="@+id/spinnerYear"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:backgroundTint="@color/white" />
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/spinnerYear"
+                        android:text="Year"
+                        android:textColor="@color/white" />
+
+                    <Spinner
+                        android:id="@+id/spinnerYear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:backgroundTint="@color/white"
+                        android:popupBackground="@color/colorPrimary" />
+                </RelativeLayout>
+
             </RelativeLayout>
 
             <TextView

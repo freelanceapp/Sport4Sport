@@ -50,6 +50,11 @@ public class UserMoreDetailActivity extends BaseActivity implements View.OnClick
         ((EditText) findViewById(R.id.edtWeight)).setText(userData.getWeight());
         ((EditText) findViewById(R.id.edtMainSport)).setText(userData.getMainSport());
 
+        ((EditText) findViewById(R.id.edtSurname)).setText(userData.getSurname());
+        ((EditText) findViewById(R.id.edtProfession)).setText(userData.getProfession());
+        ((EditText) findViewById(R.id.edtMobile)).setText(userData.getContact());
+        ((EditText) findViewById(R.id.edtHealthInsurance)).setText(userData.getInsurance());
+
         ((EditText) findViewById(R.id.edtPosition)).setText(userData.getPosition());
         ((EditText) findViewById(R.id.edtRituals)).setText(userData.getPreGameRituals());
         ((EditText) findViewById(R.id.edtCoach)).setText(userData.getCoach());
