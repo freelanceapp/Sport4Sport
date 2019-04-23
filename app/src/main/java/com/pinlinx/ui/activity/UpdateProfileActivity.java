@@ -127,7 +127,6 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         ((EditText) findViewById(R.id.edtCoach)).setText(userDataModal.getUser().getCoach());
         ((EditText) findViewById(R.id.edtBio)).setText(userDataModal.getUser().getBio());
 
-        ((EditText) findViewById(R.id.edtSurname)).setText(userDataModal.getUser().getSurname());
         ((EditText) findViewById(R.id.edtProfession)).setText(userDataModal.getUser().getProfession());
         ((EditText) findViewById(R.id.edtMobile)).setText(userDataModal.getUser().getContact());
         ((EditText) findViewById(R.id.edtHealthInsurance)).setText(userDataModal.getUser().getInsurance());
@@ -420,7 +419,6 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         String strClub = strLevel + " : " + ((EditText) findViewById(R.id.edtClub)).getText().toString();
         String strBio = ((EditText) findViewById(R.id.edtBio)).getText().toString();
 
-        String strSurname = ((EditText) findViewById(R.id.edtSurname)).getText().toString();
         String strProfession = ((EditText) findViewById(R.id.edtProfession)).getText().toString();
         String strContact = ((EditText) findViewById(R.id.edtMobile)).getText().toString();
         String strInsurance = ((EditText) findViewById(R.id.edtHealthInsurance)).getText().toString();
@@ -451,8 +449,6 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
 
         if (strCountryName.equals("Select country")) {
             Alerts.show(mContext, "Please select country");
-        } else if (strSurname.isEmpty()) {
-            Alerts.show(mContext, "Enter surname");
         } else if (strProfession.isEmpty()) {
             Alerts.show(mContext, "Enter profession");
         } else if (containsNumber) {
@@ -464,7 +460,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
                 RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfile(strUserId, strName, strIsAthlete,
                         strCountry, strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
                         strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline, strGender,
-                        strSurname, strProfession, strContact, strInsurance), new WebResponse() {
+                         strProfession, strContact, strInsurance), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         ResponseBody responseBody = (ResponseBody) result.body();

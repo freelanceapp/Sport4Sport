@@ -3,7 +3,6 @@ package com.pinlinx.ui.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ViewFlipper;
 
 import com.pinlinx.R;
@@ -11,8 +10,6 @@ import com.pinlinx.modal.user_data.UserData;
 import com.pinlinx.utils.BaseActivity;
 
 public class UserMoreDetailActivity extends BaseActivity implements View.OnClickListener {
-
-    private UserData userData;
 
     private ViewFlipper viewFlipper;
 
@@ -38,7 +35,7 @@ public class UserMoreDetailActivity extends BaseActivity implements View.OnClick
     private void getIntentData() {
         if (getIntent() == null)
             return;
-        userData = getIntent().getParcelableExtra("user_detail");
+        UserData userData = getIntent().getParcelableExtra("user_detail");
 
         ((EditText) findViewById(R.id.edtGender)).setText(userData.getGender());
         ((EditText) findViewById(R.id.edtName)).setText(userData.getUserName());
@@ -50,7 +47,6 @@ public class UserMoreDetailActivity extends BaseActivity implements View.OnClick
         ((EditText) findViewById(R.id.edtWeight)).setText(userData.getWeight());
         ((EditText) findViewById(R.id.edtMainSport)).setText(userData.getMainSport());
 
-        ((EditText) findViewById(R.id.edtSurname)).setText(userData.getSurname());
         ((EditText) findViewById(R.id.edtProfession)).setText(userData.getProfession());
         ((EditText) findViewById(R.id.edtMobile)).setText(userData.getContact());
         ((EditText) findViewById(R.id.edtHealthInsurance)).setText(userData.getInsurance());
@@ -82,17 +78,14 @@ public class UserMoreDetailActivity extends BaseActivity implements View.OnClick
     }
 
     private void clickContinue() {
-        ((LinearLayout) findViewById(R.id.llCreateProfile)).setBackground(
+        findViewById(R.id.llCreateProfile).setBackground(
                 getResources().getDrawable(R.drawable.textview_back_a));
-        // viewFlipper.setAnimation(in);
         viewFlipper.showNext();
     }
 
     private void clickBack() {
-        // Animation out = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
-        ((LinearLayout) findViewById(R.id.llCreateProfile)).setBackground(
+        findViewById(R.id.llCreateProfile).setBackground(
                 getResources().getDrawable(R.drawable.layout_back_a));
-        //viewFlipper.setAnimation(out);
         viewFlipper.showPrevious();
     }
 }

@@ -104,9 +104,6 @@ public class UserData implements Parcelable {
     @SerializedName("city")
     @Expose
     private String city;
-    @SerializedName("surname")
-    @Expose
-    private String surname;
     @SerializedName("profession")
     @Expose
     private String profession;
@@ -133,7 +130,6 @@ public class UserData implements Parcelable {
     };
 
     protected UserData(Parcel in) {
-        this.surname = ((String) in.readValue((String.class.getClassLoader())));
         this.profession = ((String) in.readValue((String.class.getClassLoader())));
         this.contact = ((String) in.readValue((String.class.getClassLoader())));
         this.insurance = ((String) in.readValue((String.class.getClassLoader())));
@@ -430,13 +426,6 @@ public class UserData implements Parcelable {
         this.gender = gender;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
 
     public String getProfession() {
         return profession;
@@ -495,7 +484,6 @@ public class UserData implements Parcelable {
         dest.writeValue(otherSport);
         dest.writeValue(college);
         dest.writeValue(city);
-        dest.writeValue(surname);
         dest.writeValue(profession);
         dest.writeValue(contact);
         dest.writeValue(insurance);
