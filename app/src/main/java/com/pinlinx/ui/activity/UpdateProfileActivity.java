@@ -137,8 +137,9 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
         ((EditText) findViewById(R.id.edtWeight)).setText(userDataModal.getUser().getWeight());
         ((EditText) findViewById(R.id.edtPosition)).setText(userDataModal.getUser().getPosition());
         ((EditText) findViewById(R.id.edtRituals)).setText(userDataModal.getUser().getPreGameRituals());
-        ((EditText) findViewById(R.id.edtOtherSport)).setText(userDataModal.getUser().getCollege());
-        ((EditText) findViewById(R.id.edtCollege)).setText(userDataModal.getUser().getOtherSport());
+
+        ((EditText) findViewById(R.id.edtCollege)).setText(userDataModal.getUser().getCollege());
+        ((EditText) findViewById(R.id.edtOtherSport)).setText(userDataModal.getUser().getOtherSport());
 
         strDiscipline = userDataModal.getUser().getDiscipline();
         String strClub = userDataModal.getUser().getClub();
@@ -319,7 +320,6 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 strLevel = parent.getItemAtPosition(position).toString();
-                ((TextView) findViewById(R.id.txtLevelTitle)).setText(strLevel);
             }
 
             @Override
@@ -460,7 +460,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
                 RetrofitService.getContentData(new Dialog(mContext), retrofitApiClient.updateProfile(strUserId, strName, strIsAthlete,
                         strCountry, strMainSport, strClub, strBio, strDateOfBirth, strCoach, strNickname, strHeight,
                         strWeight, strPosition, strRituals, strCollege, strOtherSport, strCity, strDiscipline, strGender,
-                         strProfession, strContact, strInsurance), new WebResponse() {
+                        strProfession, strContact, strInsurance), new WebResponse() {
                     @Override
                     public void onResponseSuccess(Response<?> result) {
                         ResponseBody responseBody = (ResponseBody) result.body();

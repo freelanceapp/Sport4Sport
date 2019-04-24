@@ -1,6 +1,7 @@
 package com.pinlinx.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -19,6 +20,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 
+import com.infobite.com.boommenu2.boom_menu.BoomButtons.HamButton;
+import com.infobite.com.boommenu2.boom_menu.BoomButtons.OnBMClickListener;
+import com.infobite.com.boommenu2.boom_menu.BoomMenuButton;
+import com.infobite.com.boommenu2.boom_menu.ButtonEnum;
+import com.infobite.com.boommenu2.boom_menu.Util;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -26,6 +32,18 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.pinlinx.BuildConfig;
+import com.pinlinx.R;
+import com.pinlinx.constant.Constant;
+import com.pinlinx.retrofit_provider.RetrofitService;
+import com.pinlinx.retrofit_provider.WebResponse;
+import com.pinlinx.ui.fragment.NotificationFragment;
+import com.pinlinx.ui.fragment.ProfileFragment;
+import com.pinlinx.ui.fragment.SettingFragment;
+import com.pinlinx.ui.fragment.TimelineFragment;
+import com.pinlinx.utils.Alerts;
+import com.pinlinx.utils.AppPreference;
+import com.pinlinx.utils.BaseActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,23 +59,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import com.infobite.com.boommenu2.boom_menu.BoomButtons.HamButton;
-import com.infobite.com.boommenu2.boom_menu.BoomButtons.OnBMClickListener;
-import com.infobite.com.boommenu2.boom_menu.BoomMenuButton;
-import com.infobite.com.boommenu2.boom_menu.ButtonEnum;
-import com.infobite.com.boommenu2.boom_menu.Util;
-import com.pinlinx.BuildConfig;
-import com.pinlinx.R;
-import com.pinlinx.constant.Constant;
-import com.pinlinx.retrofit_provider.RetrofitService;
-import com.pinlinx.retrofit_provider.WebResponse;
-import com.pinlinx.ui.fragment.NotificationFragment;
-import com.pinlinx.ui.fragment.ProfileFragment;
-import com.pinlinx.ui.fragment.SettingFragment;
-import com.pinlinx.ui.fragment.TimelineFragment;
-import com.pinlinx.utils.Alerts;
-import com.pinlinx.utils.AppPreference;
-import com.pinlinx.utils.BaseActivity;
 
 public class HomeActivity extends BaseActivity implements OnBMClickListener, View.OnClickListener {
 
@@ -289,8 +290,15 @@ public class HomeActivity extends BaseActivity implements OnBMClickListener, Vie
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_TAKE_PHOTO) {
-            newPostFeedApi(mPhotoFile);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_TAKE_PHOTO) {
+                newPostFeedApi(mPhotoFile);
+            } else {
+                Alerts.show(mContext, "Please select image");
+            }
+        } else {
+            Alerts.show(mContext, "Please click image");
         }
     }
 

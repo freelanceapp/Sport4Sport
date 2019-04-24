@@ -2,11 +2,12 @@ package com.pinlinx.modal.user_data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+import android.os.Parcelable.Creator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserData implements Parcelable {
+public class UserData implements Parcelable
+{
 
     @SerializedName("user_id")
     @Expose
@@ -14,6 +15,15 @@ public class UserData implements Parcelable {
     @SerializedName("user_name")
     @Expose
     private String userName;
+    @SerializedName("insurance")
+    @Expose
+    private String insurance;
+    @SerializedName("contact")
+    @Expose
+    private String contact;
+    @SerializedName("profession")
+    @Expose
+    private String profession;
     @SerializedName("email")
     @Expose
     private String email;
@@ -23,12 +33,12 @@ public class UserData implements Parcelable {
     @SerializedName("dob")
     @Expose
     private String dob;
-    @SerializedName("main_sport")
-    @Expose
-    private String mainSport;
     @SerializedName("gender")
     @Expose
     private String gender;
+    @SerializedName("main_sport")
+    @Expose
+    private String mainSport;
     @SerializedName("club")
     @Expose
     private String club;
@@ -74,12 +84,6 @@ public class UserData implements Parcelable {
     @SerializedName("fans")
     @Expose
     private String fans;
-    @SerializedName("social_id")
-    @Expose
-    private String socialId;
-    @SerializedName("social_type")
-    @Expose
-    private String socialType;
     @SerializedName("nickname")
     @Expose
     private String nickname;
@@ -104,15 +108,6 @@ public class UserData implements Parcelable {
     @SerializedName("city")
     @Expose
     private String city;
-    @SerializedName("profession")
-    @Expose
-    private String profession;
-    @SerializedName("contact")
-    @Expose
-    private String contact;
-    @SerializedName("insurance")
-    @Expose
-    private String insurance;
     public final static Parcelable.Creator<UserData> CREATOR = new Creator<UserData>() {
 
 
@@ -127,19 +122,20 @@ public class UserData implements Parcelable {
             return (new UserData[size]);
         }
 
-    };
+    }
+            ;
 
     protected UserData(Parcel in) {
-        this.profession = ((String) in.readValue((String.class.getClassLoader())));
-        this.contact = ((String) in.readValue((String.class.getClassLoader())));
-        this.insurance = ((String) in.readValue((String.class.getClassLoader())));
         this.userId = ((String) in.readValue((String.class.getClassLoader())));
         this.userName = ((String) in.readValue((String.class.getClassLoader())));
+        this.insurance = ((String) in.readValue((String.class.getClassLoader())));
+        this.contact = ((String) in.readValue((String.class.getClassLoader())));
+        this.profession = ((String) in.readValue((String.class.getClassLoader())));
         this.email = ((String) in.readValue((String.class.getClassLoader())));
         this.country = ((String) in.readValue((String.class.getClassLoader())));
         this.dob = ((String) in.readValue((String.class.getClassLoader())));
-        this.mainSport = ((String) in.readValue((String.class.getClassLoader())));
         this.gender = ((String) in.readValue((String.class.getClassLoader())));
+        this.mainSport = ((String) in.readValue((String.class.getClassLoader())));
         this.club = ((String) in.readValue((String.class.getClassLoader())));
         this.discipline = ((String) in.readValue((String.class.getClassLoader())));
         this.coach = ((String) in.readValue((String.class.getClassLoader())));
@@ -155,8 +151,6 @@ public class UserData implements Parcelable {
         this.blog = ((String) in.readValue((String.class.getClassLoader())));
         this.isAthlete = ((String) in.readValue((String.class.getClassLoader())));
         this.fans = ((String) in.readValue((String.class.getClassLoader())));
-        this.socialId = ((String) in.readValue((String.class.getClassLoader())));
-        this.socialType = ((String) in.readValue((String.class.getClassLoader())));
         this.nickname = ((String) in.readValue((String.class.getClassLoader())));
         this.height = ((String) in.readValue((String.class.getClassLoader())));
         this.weight = ((String) in.readValue((String.class.getClassLoader())));
@@ -186,6 +180,30 @@ public class UserData implements Parcelable {
         this.userName = userName;
     }
 
+    public String getInsurance() {
+        return insurance;
+    }
+
+    public void setInsurance(String insurance) {
+        this.insurance = insurance;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -210,6 +228,14 @@ public class UserData implements Parcelable {
         this.dob = dob;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public String getMainSport() {
         return mainSport;
     }
@@ -224,6 +250,14 @@ public class UserData implements Parcelable {
 
     public void setClub(String club) {
         this.club = club;
+    }
+
+    public String getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(String discipline) {
+        this.discipline = discipline;
     }
 
     public String getCoach() {
@@ -330,22 +364,6 @@ public class UserData implements Parcelable {
         this.fans = fans;
     }
 
-    public String getSocialId() {
-        return socialId;
-    }
-
-    public void setSocialId(String socialId) {
-        this.socialId = socialId;
-    }
-
-    public String getSocialType() {
-        return socialType;
-    }
-
-    public void setSocialType(String socialType) {
-        this.socialType = socialType;
-    }
-
     public String getNickname() {
         return nickname;
     }
@@ -410,55 +428,17 @@ public class UserData implements Parcelable {
         this.city = city;
     }
 
-    public String getDiscipline() {
-        return discipline;
-    }
-
-    public void setDiscipline(String discipline) {
-        this.discipline = discipline;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-
-    public String getProfession() {
-        return profession;
-    }
-
-    public void setProfession(String profession) {
-        this.profession = profession;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public String getInsurance() {
-        return insurance;
-    }
-
-    public void setInsurance(String insurance) {
-        this.insurance = insurance;
-    }
-
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(userId);
         dest.writeValue(userName);
+        dest.writeValue(insurance);
+        dest.writeValue(contact);
+        dest.writeValue(profession);
         dest.writeValue(email);
         dest.writeValue(country);
         dest.writeValue(dob);
-        dest.writeValue(mainSport);
         dest.writeValue(gender);
+        dest.writeValue(mainSport);
         dest.writeValue(club);
         dest.writeValue(discipline);
         dest.writeValue(coach);
@@ -474,19 +454,14 @@ public class UserData implements Parcelable {
         dest.writeValue(blog);
         dest.writeValue(isAthlete);
         dest.writeValue(fans);
-        dest.writeValue(socialId);
-        dest.writeValue(socialType);
         dest.writeValue(nickname);
         dest.writeValue(height);
         dest.writeValue(weight);
         dest.writeValue(position);
         dest.writeValue(preGameRituals);
-        dest.writeValue(otherSport);
         dest.writeValue(college);
+        dest.writeValue(otherSport);
         dest.writeValue(city);
-        dest.writeValue(profession);
-        dest.writeValue(contact);
-        dest.writeValue(insurance);
     }
 
     public int describeContents() {

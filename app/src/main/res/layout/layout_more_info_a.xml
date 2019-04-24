@@ -123,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="15"
-                    android:text="Health Insurance"
+                    android:text="Health Insurer"
                     android:textColor="@color/white"
                     android:textSize="16dp"
                     android:textStyle="normal" />

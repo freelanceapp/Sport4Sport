@@ -54,11 +54,12 @@ public class UserMoreDetailActivity extends BaseActivity implements View.OnClick
         ((EditText) findViewById(R.id.edtPosition)).setText(userData.getPosition());
         ((EditText) findViewById(R.id.edtRituals)).setText(userData.getPreGameRituals());
         ((EditText) findViewById(R.id.edtCoach)).setText(userData.getCoach());
-        ((EditText) findViewById(R.id.edtClub)).setText(userData.getClub());
-        ((EditText) findViewById(R.id.edtDiscipline)).setText(userData.getDiscipline());
-        ((EditText) findViewById(R.id.edtOtherSport)).setText(userData.getCollege());
-        ((EditText) findViewById(R.id.edtCollege)).setText(userData.getOtherSport());
+        ((EditText) findViewById(R.id.edtClub)).setText(userData.getDiscipline());
+        ((EditText) findViewById(R.id.edtDiscipline)).setText(userData.getMainSport());
         ((EditText) findViewById(R.id.edtBio)).setText(userData.getBio());
+
+        ((EditText) findViewById(R.id.edtOtherSport)).setText(userData.getOtherSport());
+        ((EditText) findViewById(R.id.edtCollege)).setText(userData.getCollege());
     }
 
     @Override

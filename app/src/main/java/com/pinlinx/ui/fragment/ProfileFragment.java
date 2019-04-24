@@ -27,6 +27,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.pinlinx.R;
 import com.pinlinx.adapter.UserFeedAdapter;
 import com.pinlinx.constant.Constant;
@@ -171,15 +173,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             AppPreference.setStringPreference(mContext, Constant.USER_IMAGE, userDataModal.getUser().getAvtarImg());
                             rootView.findViewById(R.id.llProfile).setVisibility(View.VISIBLE);
 
+                            Gson gson = new GsonBuilder().setLenient().create();
+                            String data = gson.toJson(userDataModal);
+                            AppPreference.setStringPreference(mContext, Constant.USER_DATA, data);
+
                             if (userDataModal.getFeed() != null) {
                                 if (userDataModal.getFeed().size() > 0) {
-                                    //((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.GONE);
                                     originalTimeline.addAll(userDataModal.getFeed());
-                                } else {
-                                    //((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.VISIBLE);
                                 }
-                            } else {
-                                //((TextView) findViewById(R.id.tvEmpty)).setVisibility(View.VISIBLE);
                             }
 
                             if (originalTimeline.size() > 0) {

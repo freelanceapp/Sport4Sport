@@ -44,6 +44,7 @@ public class Constant {
     public static final String VideoTrimmerFragment = "VideoTrimmerFragment";
 
     /* Preference */
+    public static final String USER_DATA = "USER_DATA";
     public static final String USER_ID = "USER_ID";
     public static final String USER_NAME = "USER_NAME";
     public static final String USER_IMAGE = "USER_IMAGE";

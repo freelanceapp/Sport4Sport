@@ -253,7 +253,6 @@ public class CreateProfileActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 strLevel = parent.getItemAtPosition(position).toString();
-                ((TextView) findViewById(R.id.txtLevelTitle)).setText(strLevel);
             }
 
             @Override
