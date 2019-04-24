@@ -297,8 +297,6 @@ public class HomeActivity extends BaseActivity implements OnBMClickListener, Vie
             } else {
                 Alerts.show(mContext, "Please select image");
             }
-        } else {
-            Alerts.show(mContext, "Please click image");
         }
     }
 

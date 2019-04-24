@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-import retrofit2.Response;
 import com.pinlinx.R;
 import com.pinlinx.constant.Constant;
 import com.pinlinx.modal.user_data.UserDataModal;
@@ -23,6 +22,8 @@ import com.pinlinx.retrofit_provider.WebResponse;
 import com.pinlinx.utils.Alerts;
 import com.pinlinx.utils.AppPreference;
 import com.pinlinx.utils.ConnectionDetector;
+
+import retrofit2.Response;
 
 
 public class RagistrationActivity extends AppCompatActivity implements View.OnClickListener {
@@ -41,6 +42,7 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
         retrofitApiClient = RetrofitService.getRetrofit();
         buttonregester = findViewById(R.id.btn_register);
         buttonregester.setOnClickListener(this);
+        findViewById(R.id.txtLogin).setOnClickListener(this);
 
         SwitchCompat switchCompat = findViewById(R.id.switchCompat);
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -57,7 +59,14 @@ public class RagistrationActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        signUpApi();
+        switch (v.getId()) {
+            case R.id.btn_register:
+                signUpApi();
+                break;
+            case R.id.txtLogin:
+                finish();
+                break;
+        }
     }
 
     private void signUpApi() {
