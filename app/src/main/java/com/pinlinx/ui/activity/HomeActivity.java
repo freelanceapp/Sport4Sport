@@ -294,8 +294,6 @@ public class HomeActivity extends BaseActivity implements OnBMClickListener, Vie
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO) {
                 newPostFeedApi(mPhotoFile);
-            } else {
-                Alerts.show(mContext, "Please select image");
             }
         }
     }

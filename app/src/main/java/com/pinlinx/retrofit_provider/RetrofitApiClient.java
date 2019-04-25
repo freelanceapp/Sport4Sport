@@ -72,7 +72,6 @@ public interface RetrofitApiClient {
     @FormUrlEncoded
     @POST(Constant.POST_COMMENT_API)
     Call<PostCommentResponseModal> newPostComment(@Field("post_id") String postId, @Field("user_id") String useId,
-
                                                   @Field("comment") String comment);
 
     @FormUrlEncoded

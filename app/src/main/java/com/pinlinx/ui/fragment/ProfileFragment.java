@@ -7,10 +7,12 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,11 +24,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pinlinx.R;
@@ -84,6 +91,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private ImageView imgComment, imgCamera, imgVideoCamera;
     private SwipeLayout sample1;
     private String strListType = "text";
+    private ProgressBar imgProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,9 +107,25 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void initView() {
+        imgProgressBar = rootView.findViewById(R.id.imgProgressBar);
+        imgProgressBar.setVisibility(View.VISIBLE);
         Glide.with(mContext)
                 .load(Constant.DEFAULT_IMAGE_URL)
                 .apply(new RequestOptions().optionalCenterCrop())
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        imgProgressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        imgProgressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .placeholder(R.drawable.ic_profile)
                 .into(((CircleImageView) rootView.findViewById(R.id.ic_profile_person)));
 
         recyclerViewHeadlines = rootView.findViewById(R.id.recyclerViewHeadlines);
@@ -226,10 +250,24 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         String strAvtar = userDataModal.getUser().getAvtarImg();
         if (strAvtar != null) {
+            imgProgressBar.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(Constant.PROFILE_IMAGE_BASE_URL + strAvtar)
                     .apply(new RequestOptions().optionalCenterCrop())
                     .placeholder(R.drawable.ic_profile)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            imgProgressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            imgProgressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
                     .into(((CircleImageView) rootView.findViewById(R.id.ic_profile_person)));
         }
     }
@@ -367,7 +405,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         JSONObject jsonObject = new JSONObject(responseBody.string());
                         Log.e("Profile_data:- ", jsonObject + "");
                         Alerts.show(mContext, "Profile pic updated");
-                        //init();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -376,6 +413,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 } else {
                     Alerts.show(mContext, "Error in submit");
                 }
+                init();
             }
 
             @Override
@@ -398,9 +436,4 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 break;
         }
     }
-
-    /*************************************************************************/
-    /*
-     *
-     * */
 }

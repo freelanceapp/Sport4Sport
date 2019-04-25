@@ -87,6 +87,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center">
 
+                        <ProgressBar
+                            android:id="@+id/imgProgressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:elevation="4dp"
+                            android:visibility="gone" />
+
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/ic_profile_person"
                             android:layout_width="100dp"
