@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -35,9 +36,6 @@ import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.squareup.picasso.Picasso;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 import com.pinlinx.R;
 import com.pinlinx.constant.Constant;
 import com.pinlinx.modal.daily_news_feed.UserFeed;
@@ -45,6 +43,8 @@ import com.pinlinx.retrofit_provider.RetrofitService;
 import com.pinlinx.utils.BaseFragment;
 import com.pinlinx.utils.ConnectionDetector;
 import com.pinlinx.utils.exoplayer.VideoPlayerConfig;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -115,7 +115,7 @@ public class DraggabbleTopFragment extends BaseFragment {
         tvPostTime.setText(imageFeed.getEntryDate());
 
         rootView.findViewById(R.id.llTopFrag).setVisibility(GONE);
-        Picasso.with(mContext)
+        Glide.with(mContext)
                 .load(Constant.PROFILE_IMAGE_BASE_URL + imageFeed.getPostUserImage())
                 .placeholder(R.drawable.app_logo)
                 .into(imgUserProfile);
@@ -132,7 +132,7 @@ public class DraggabbleTopFragment extends BaseFragment {
             imgPostImage.setVisibility(View.VISIBLE);
             rlVideoView.setVisibility(GONE);
             rootView.findViewById(R.id.tvHeadline).setVisibility(GONE);
-            Picasso.with(mContext)
+            Glide.with(mContext)
                     .load(Constant.IMAGE_BASE_URL + imageFeed.getAlhleteImages())
                     .placeholder(R.drawable.app_logo)
                     .into(imgPostImage);
