@@ -405,14 +405,14 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         if (dialogCustomerInfo.getWindow() != null)
             dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        ((TextView) dialogCustomerInfo.findViewById(R.id.tvOk)).setOnClickListener(new View.OnClickListener() {
+        dialogCustomerInfo.findViewById(R.id.tvOk).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteCommentApi(commentId, dialogCustomerInfo);
             }
         });
 
-        ((TextView) dialogCustomerInfo.findViewById(R.id.tvCancel)).setOnClickListener(new View.OnClickListener() {
+        dialogCustomerInfo.findViewById(R.id.tvCancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogCustomerInfo.dismiss();
@@ -464,11 +464,11 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
                 likeApi(newPostModel, ((ImageView) findViewById(R.id.imgLike)), ((TextView) findViewById(R.id.tvPostLikeCount)));
                 break;
             case R.id.llPostComment:
-                ((CardView) findViewById(R.id.cardViewComment)).setVisibility(View.VISIBLE);
+                findViewById(R.id.cardViewComment).setVisibility(View.VISIBLE);
                 break;
             case R.id.post_comment_send:
                 postCommentApi();
-                LinearLayout mainLayout = (LinearLayout) findViewById(R.id.myLinearLayout);
+                LinearLayout mainLayout = findViewById(R.id.myLinearLayout);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
                 break;
@@ -597,14 +597,14 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         if (dialogCustomerInfo.getWindow() != null)
             dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        ((TextView) dialogCustomerInfo.findViewById(R.id.tvOk)).setOnClickListener(new View.OnClickListener() {
+        dialogCustomerInfo.findViewById(R.id.tvOk).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deletePostApi(dialogCustomerInfo);
             }
         });
 
-        ((TextView) dialogCustomerInfo.findViewById(R.id.tvCancel)).setOnClickListener(new View.OnClickListener() {
+        dialogCustomerInfo.findViewById(R.id.tvCancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogCustomerInfo.dismiss();
