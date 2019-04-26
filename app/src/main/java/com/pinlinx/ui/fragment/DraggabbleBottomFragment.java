@@ -4,28 +4,19 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 import com.pinlinx.R;
 import com.pinlinx.adapter.CommentListAdapter;
 import com.pinlinx.constant.Constant;
@@ -39,6 +30,16 @@ import com.pinlinx.utils.Alerts;
 import com.pinlinx.utils.AppPreference;
 import com.pinlinx.utils.BaseFragment;
 import com.pinlinx.utils.ConnectionDetector;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class DraggabbleBottomFragment extends BaseFragment implements View.OnClickListener {
 
@@ -153,9 +154,79 @@ public class DraggabbleBottomFragment extends BaseFragment implements View.OnCli
     }
 
     private void setCommentList() {
-        commentListAdapter = new CommentListAdapter(commentList, mContext);
+        commentListAdapter = new CommentListAdapter(commentList, mContext, new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int pos = Integer.parseInt(v.getTag().toString());
+                if (strId.equals(commentList.get(pos).getUserId())) {
+                    deleteCommentDialog(commentList.get(pos).getCommentId());
+                }
+                return false;
+            }
+        });
         recyclerViewCommentList.setAdapter(commentListAdapter);
         commentListAdapter.notifyDataSetChanged();
+    }
+
+    private void deleteCommentDialog(final String commentId) {
+        final Dialog dialogCustomerInfo = new Dialog(mContext);
+        dialogCustomerInfo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogCustomerInfo.setContentView(R.layout.dialog_delete_comment);
+
+        dialogCustomerInfo.setCanceledOnTouchOutside(true);
+        dialogCustomerInfo.setCancelable(true);
+        if (dialogCustomerInfo.getWindow() != null)
+            dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        dialogCustomerInfo.findViewById(R.id.tvOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteCommentApi(commentId, dialogCustomerInfo);
+            }
+        });
+
+        dialogCustomerInfo.findViewById(R.id.tvCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogCustomerInfo.dismiss();
+            }
+        });
+
+       /* Window window = dialogCustomerInfo.getWindow();
+        window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);*/
+        dialogCustomerInfo.show();
+    }
+
+    private void deleteCommentApi(String commentId, final Dialog dialogCustomerInfo) {
+        String strPostId = imageFeed.getFeedId();
+
+        if (!commentId.isEmpty()) {
+            RetrofitService.postCommentResponse(retrofitApiClient.deletePostComment(strPostId, commentId), new WebResponse() {
+                @Override
+                public void onResponseSuccess(Response<?> result) {
+                    PostCommentResponseModal commentResponseModal = (PostCommentResponseModal) result.body();
+                    commentList.clear();
+                    if (strFrom.equals("user")) {
+                        AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, false);
+                    } else {
+                        AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, true);
+                    }
+                    if (commentResponseModal == null)
+                        return;
+                    commentList.addAll(commentResponseModal.getComment());
+                    commentListAdapter.notifyDataSetChanged();
+                    dialogCustomerInfo.dismiss();
+                }
+
+                @Override
+                public void onResponseFailed(String error) {
+                    AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, false);
+                    Alerts.show(mContext, error);
+                }
+            });
+        } else {
+            Alerts.show(mContext, "Enter some comments!!!");
+        }
     }
 
     @Override
@@ -166,11 +237,11 @@ public class DraggabbleBottomFragment extends BaseFragment implements View.OnCli
                         ((TextView) rootView.findViewById(R.id.tvPostLikeCount)));
                 break;
             case R.id.llPostComment:
-                ((CardView) rootView.findViewById(R.id.cardViewComment)).setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.cardViewComment).setVisibility(View.VISIBLE);
                 break;
             case R.id.post_comment_send:
                 postCommentApi();
-                LinearLayout mainLayout = (LinearLayout) rootView.findViewById(R.id.myLinearLayout);
+                LinearLayout mainLayout = rootView.findViewById(R.id.myLinearLayout);
                 InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
                 break;

@@ -75,6 +75,10 @@ public interface RetrofitApiClient {
                                                   @Field("comment") String comment);
 
     @FormUrlEncoded
+    @POST(Constant.DELETE_COMMENT_API)
+    Call<PostCommentResponseModal> deletePostComment(@Field("post_id") String postId, @Field("comment_id") String comment_id);
+
+    @FormUrlEncoded
     @POST(Constant.PostLikeAPI)
     Call<ResponseBody> postLike(@Field("post_id") String postId, @Field("user_id") String useId,
                                 @Field("status") String status);

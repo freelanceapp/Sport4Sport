@@ -16,6 +16,7 @@ public class Constant {
     public static final String NEWPOST_API = "post_feed.php";
     public static final String TIMELINE_API = "timeline.php";
     public static final String POST_COMMENT_API = "post_comment.php";
+    public static final String DELETE_COMMENT_API = "delete_comment.php";
     public static final String PostLikeAPI = "post_like.php";
     public static final String USER_LIST = "athlete.php";
     public static final String MY_FANS = "my_fans.php";

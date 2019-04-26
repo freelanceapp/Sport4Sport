@@ -52,17 +52,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 import com.pinlinx.R;
 import com.pinlinx.adapter.CommentListAdapter;
 import com.pinlinx.constant.Constant;
@@ -76,6 +65,17 @@ import com.pinlinx.utils.Alerts;
 import com.pinlinx.utils.AppPreference;
 import com.pinlinx.utils.BaseActivity;
 import com.pinlinx.utils.exoplayer.VideoPlayerConfig;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -118,10 +118,6 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
         swipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         strFrom = getIntent().getStringExtra("get_from");
         postId = getIntent().getStringExtra("post_id");
-
-        /*Gson gson = new Gson();
-        String strPostDetail = AppPreference.getStringPreference(mContext, Constant.POST_DETAIL);
-        newPostModel = gson.fromJson(strPostDetail, UserFeed.class);*/
 
         recyclerViewCommentList = findViewById(R.id.recyclerViewCommentList);
         recyclerViewCommentList.setHasFixedSize(true);
@@ -381,9 +377,84 @@ public class MyPostDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void setCommentList() {
-        commentListAdapter = new CommentListAdapter(commentList, this);
+        commentListAdapter = new CommentListAdapter(commentList, this, new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int pos = Integer.parseInt(v.getTag().toString());
+                /*if (strId.equals(commentList.get(pos).getUserId())) {
+                    deleteCommentApi(commentList.get(pos).getCommentId());
+                }*/
+                deleteCommentDialog(commentList.get(pos).getCommentId());
+                return false;
+            }
+        });
         recyclerViewCommentList.setAdapter(commentListAdapter);
         commentListAdapter.notifyDataSetChanged();
+    }
+
+    /*
+     * Delete comment
+     * */
+    private void deleteCommentDialog(final String commentId) {
+        final Dialog dialogCustomerInfo = new Dialog(mContext);
+        dialogCustomerInfo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogCustomerInfo.setContentView(R.layout.dialog_delete_comment);
+
+        dialogCustomerInfo.setCanceledOnTouchOutside(true);
+        dialogCustomerInfo.setCancelable(true);
+        if (dialogCustomerInfo.getWindow() != null)
+            dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        ((TextView) dialogCustomerInfo.findViewById(R.id.tvOk)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteCommentApi(commentId, dialogCustomerInfo);
+            }
+        });
+
+        ((TextView) dialogCustomerInfo.findViewById(R.id.tvCancel)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogCustomerInfo.dismiss();
+            }
+        });
+
+       /* Window window = dialogCustomerInfo.getWindow();
+        window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);*/
+        dialogCustomerInfo.show();
+    }
+
+    private void deleteCommentApi(String commentId, final Dialog dialogCustomerInfo) {
+        String strPostId = newPostModel.getFeedId();
+
+        if (!commentId.isEmpty()) {
+            RetrofitService.postCommentResponse(retrofitApiClient.deletePostComment(strPostId, commentId), new WebResponse() {
+                @Override
+                public void onResponseSuccess(Response<?> result) {
+                    PostCommentResponseModal commentResponseModal = (PostCommentResponseModal) result.body();
+                    commentList.clear();
+                    if (strFrom.equals("user")) {
+                        AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, false);
+                    } else {
+                        AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, true);
+                    }
+                    timelineApi("comment");
+                    if (commentResponseModal == null)
+                        return;
+                    commentList.addAll(commentResponseModal.getComment());
+                    commentListAdapter.notifyDataSetChanged();
+                    dialogCustomerInfo.dismiss();
+                }
+
+                @Override
+                public void onResponseFailed(String error) {
+                    AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, false);
+                    Alerts.show(mContext, error);
+                }
+            });
+        } else {
+            Alerts.show(mContext, "Enter some comments!!!");
+        }
     }
 
     @Override

@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -380,9 +379,84 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     private void setCommentList() {
-        commentListAdapter = new CommentListAdapter(commentList, this);
+        commentListAdapter = new CommentListAdapter(commentList, this, new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int pos = Integer.parseInt(v.getTag().toString());
+                if (strId.equals(commentList.get(pos).getUserId())) {
+                    deleteCommentDialog(commentList.get(pos).getCommentId());
+                }
+                return false;
+            }
+        });
         recyclerViewCommentList.setAdapter(commentListAdapter);
         commentListAdapter.notifyDataSetChanged();
+    }
+
+    /*
+     * Delete comment
+     * */
+    private void deleteCommentDialog(final String commentId) {
+        final Dialog dialogCustomerInfo = new Dialog(mContext);
+        dialogCustomerInfo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogCustomerInfo.setContentView(R.layout.dialog_delete_comment);
+
+        dialogCustomerInfo.setCanceledOnTouchOutside(true);
+        dialogCustomerInfo.setCancelable(true);
+        if (dialogCustomerInfo.getWindow() != null)
+            dialogCustomerInfo.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        dialogCustomerInfo.findViewById(R.id.tvOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteCommentApi(commentId, dialogCustomerInfo);
+            }
+        });
+
+        dialogCustomerInfo.findViewById(R.id.tvCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogCustomerInfo.dismiss();
+            }
+        });
+
+       /* Window window = dialogCustomerInfo.getWindow();
+        window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);*/
+        dialogCustomerInfo.show();
+    }
+
+    private void deleteCommentApi(String commentId, final Dialog dialogCustomerInfo) {
+        String strPostId = newPostModel.getFeedId();
+
+        if (!commentId.isEmpty()) {
+            RetrofitService.postCommentResponse(retrofitApiClient.deletePostComment(strPostId, commentId), new WebResponse() {
+                @Override
+                public void onResponseSuccess(Response<?> result) {
+                    PostCommentResponseModal commentResponseModal = (PostCommentResponseModal) result.body();
+                    commentList.clear();
+                    if (strFrom.equals("user")) {
+                        AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, false);
+                    } else {
+                        AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, true);
+                    }
+
+                    timelineApi();
+                    if (commentResponseModal == null)
+                        return;
+                    commentList.addAll(commentResponseModal.getComment());
+                    commentListAdapter.notifyDataSetChanged();
+                    dialogCustomerInfo.dismiss();
+                }
+
+                @Override
+                public void onResponseFailed(String error) {
+                    AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, false);
+                    Alerts.show(mContext, error);
+                }
+            });
+        } else {
+            Alerts.show(mContext, "Enter some comments!!!");
+        }
     }
 
     @Override
@@ -392,11 +466,11 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 likeApi(newPostModel, ((ImageView) findViewById(R.id.imgLike)), ((TextView) findViewById(R.id.tvPostLikeCount)));
                 break;
             case R.id.llPostComment:
-                ((CardView) findViewById(R.id.cardViewComment)).setVisibility(View.VISIBLE);
+                findViewById(R.id.cardViewComment).setVisibility(View.VISIBLE);
                 break;
             case R.id.post_comment_send:
                 postCommentApi();
-                LinearLayout mainLayout = (LinearLayout) findViewById(R.id.myLinearLayout);
+                LinearLayout mainLayout = findViewById(R.id.myLinearLayout);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
                 break;
@@ -419,9 +493,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                     commentList.clear();
                     if (strFrom.equals("user")) {
                         AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, false);
-                    }/* else if (strFrom.equals("notification")) {
-                        AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, true);
-                    }*/ else {
+                    } else {
                         AppPreference.setBooleanPreference(mContext, Constant.IS_DATA_UPDATE, true);
                     }
                     timelineApi();
@@ -552,7 +624,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
         ((TextView) dialogCustomerInfo.findViewById(R.id.tvUsername)).setText(strName);
         ((TextView) dialogCustomerInfo.findViewById(R.id.tvFollow)).setText(strStatus);
-        ((TextView) dialogCustomerInfo.findViewById(R.id.tvFollow)).setOnClickListener(new View.OnClickListener() {
+        dialogCustomerInfo.findViewById(R.id.tvFollow).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 followUser(strFanId, dialogCustomerInfo);

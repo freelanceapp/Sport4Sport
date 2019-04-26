@@ -6,26 +6,29 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 import com.pinlinx.R;
 import com.pinlinx.constant.Constant;
 import com.pinlinx.modal.daily_news_feed.Comment;
 import com.pinlinx.utils.AppPreference;
 
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.ViewHolder> {
 
     private List<Comment> notificationModels;
     private Context context;
+    private View.OnLongClickListener onLongClickListener;
 
-    public CommentListAdapter(List<Comment> notificationModels, Context context) {
+    public CommentListAdapter(List<Comment> notificationModels, Context context, View.OnLongClickListener onLongClickListener) {
         this.notificationModels = notificationModels;
         this.context = context;
+        this.onLongClickListener = onLongClickListener;
     }
 
     @NonNull
@@ -57,6 +60,9 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         viewHolder.tvUserName.setText(notificationmodel.getUserName());
         viewHolder.tvCommentTime.setText(notificationmodel.getDate());
         viewHolder.tvComment.setText(notificationmodel.getComment());
+
+        viewHolder.llComment.setTag(i);
+        viewHolder.llComment.setOnLongClickListener(onLongClickListener);
     }
 
     @Override
@@ -66,12 +72,14 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        CircleImageView imgUserProfile;
-        TextView tvUserName, tvCommentTime, tvComment;
+        private CircleImageView imgUserProfile;
+        private TextView tvUserName, tvCommentTime, tvComment;
+        private LinearLayout llComment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            llComment = itemView.findViewById(R.id.llComment);
             imgUserProfile = itemView.findViewById(R.id.imgUserProfile);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             tvCommentTime = itemView.findViewById(R.id.tvCommentTime);
